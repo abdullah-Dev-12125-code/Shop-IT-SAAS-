@@ -1,0 +1,9 @@
+# Ignore the entire mac environment folder
+mac/
+
+# Ignore standard Python compiled files
+*.pyc
+__pycache__/
+
+# Ignore the Django local database
+db.sqlite3
