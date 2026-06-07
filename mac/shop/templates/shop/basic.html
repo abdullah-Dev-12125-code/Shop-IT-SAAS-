@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+
+  <title>{% block title %}My Awesome Cart{% endblock %}</title>
+
+  <style>
+    /* ================= PREMIUM GOLDEN NAVBAR ================= */
+
+    .modern-navbar {
+      background: #125b4c;
+      padding: 0 28px;
+      height: 64px;
+      border-bottom: 1px solid #ddff00;
+    }
+
+    .modern-navbar .container-fluid {
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .navbar-brand {
+      color: #ffffff !important;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-link {
+      color: #ffffff !important;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 6px 14px !important;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: #cdf100 !important;
+      background: rgba(245, 200, 66, 0.10);
+    }
+
+    .nav-item.active .nav-link {
+      color: #ffffff !important;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: #3a2e10;
+      margin: 0 8px;
+      align-self: center;
+    }
+
+    .cart-link {
+      position: relative;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: 2px;
+      right: 6px;
+      background: #f5c842;
+      color: #12100a;
+      font-size: 10px;
+      font-weight: 600;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      background: #1c1608;
+      border: 1px solid #c8be9e;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-left: 14px;
+    }
+
+    .search-box {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      color: #fffefa !important;
+      font-size: 13px;
+      padding: 8px 14px;
+      width: 200px;
+    }
+
+    .search-box::placeholder {
+      color: #6b5318;
+    }
+
+    .search-btn {
+      background: #f9df6a;
+      border: none;
+      padding: 8px 16px;
+      color: #12100a;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-radius: 0 !important;
+    }
+
+    .search-btn:hover {
+      background: #f9df6a;
+      color: #12100a;
+    }
+
+    .navbar-toggler {
+      border-color: #c49a10;
+    }
+
+    .navbar-toggler-icon {
+      filter: invert(75%) sepia(60%) saturate(400%) hue-rotate(5deg);
+    }
+
+    @media (max-width: 991px) {
+      .modern-navbar {
+        height: auto;
+        padding: 12px 16px;
+      }
+
+      .search-wrap {
+        width: 100%;
+        margin: 10px 0 4px;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .nav-divider {
+        display: none;
+      }
+    }
+
+    {% block css %}{% endblock %}
+  </style>
+</head>
+
+<body>
+
+  <!-- ================= NAVBAR ================= -->
+
+  <nav class="navbar navbar-expand-lg modern-navbar">
+    <div class="container-fluid">
+
+      <!-- BRAND (FAR LEFT) -->
+      <a class="navbar-brand" href="#">
+        🛍 My Awesome Cart
+      </a>
+
+      <!-- MOBILE TOGGLER -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- RIGHT SIDE: LINKS + CART + SEARCH -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+
+        <ul class="navbar-nav align-items-center">
+
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Shop</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Categories</a>
+          </li>
+
+          <!-- Divider -->
+          <li class="nav-item d-none d-lg-flex">
+            <div class="nav-divider"></div>
+          </li>
+
+          <!-- Cart with badge -->
+          <li class="nav-item cart-link">
+            <a class="nav-link" href="#">
+              🛒 Cart
+              <span class="cart-badge">3</span>
+            </a>
+          </li>
+
+        </ul>
+
+        <!-- SEARCH -->
+        <div class="search-wrap">
+          <input class="form-control search-box" type="search" placeholder="Search products...">
+          <button class="btn search-btn" type="submit">Search</button>
+        </div>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ================= PAGE CONTENT ================= -->
+
+  {% block body %}{% endblock %}
+
+  <!-- ================= SCRIPTS ================= -->
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

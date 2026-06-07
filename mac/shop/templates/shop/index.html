@@ -1,0 +1,220 @@
+{% extends 'shop/basic.html' %}
+{% load static %}
+
+{% block css %}
+
+/* ---- heading ---- */
+.heading {
+    text-align: center;
+    margin: 25px 0 15px;
+}
+
+.heading h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: 1px;
+    display: inline-block;
+    position: relative;
+}
+
+.heading h1::after {
+    content: "";
+    display: block;
+    width: 55%;
+    height: 3px;
+    margin: 8px auto 0;
+    background: linear-gradient(90deg, #ff6a00, #ee0979);
+    border-radius: 10px;
+}
+
+/* ---- category section heading ---- */
+.category-heading {
+    margin: 40px 0 8px;
+    padding-left: 5px;
+}
+
+.category-heading h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: inline-block;
+    border-bottom: 2px solid #ff6a00;
+    padding-bottom: 4px;
+}
+
+/* ---- carousel container ---- */
+.hero-carousel {
+    padding: 10px 0 30px;
+}
+
+.hero-carousel .carousel-inner {
+    overflow: hidden;
+}
+
+.hero-carousel .carousel-item {
+    padding: 10px 0;
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+.hero-carousel .card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease;
+    will-change: transform;
+}
+
+.hero-carousel .card:hover {
+    transform: translateY(-4px);
+}
+
+.hero-carousel .card-img-top {
+    height: 210px;
+    object-fit: cover;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.hero-carousel .card-body {
+    padding: 0.9rem;
+}
+
+.hero-carousel .card-title {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.hero-carousel .card-text {
+    font-size: 12px;
+    color: #666;
+}
+
+.hero-carousel .btn-primary {
+    background: linear-gradient(90deg, #ff6a00, #ee0979);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.hero-carousel .btn-primary:hover {
+    opacity: 0.9;
+}
+
+.carousel-indicators li {
+    background-color: #bbb;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.carousel-indicators .active {
+    background-color: #ff6a00;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.6);
+    background-size: 45%;
+}
+
+.carousel-control-prev {
+    left: -48px;
+}
+
+.carousel-control-next {
+    right: -48px;
+}
+
+/* smooth scrolling */
+.hero-carousel * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    <!-- ===== MAIN HEADING ===== -->
+    <div class="heading">
+        <h1>Welcome to Shop It</h1>
+    </div>
+
+    <!-- ===== ONE CAROUSEL PER CATEGORY ===== -->
+    {% for cat_name, slides in allprods %}
+
+    <div class="category-heading">
+        <h2>{{ cat_name }}</h2>
+    </div>
+
+    {% with carousel_id="carousel_"|add:forloop.counter0|stringformat:"s" %}
+    <div id="{{ carousel_id }}" class="carousel slide hero-carousel" data-ride="carousel" data-interval="4000">
+
+        <!-- indicators -->
+        <ul class="carousel-indicators">
+            {% for slide in slides %}
+            <li data-target="#{{ carousel_id }}"
+                data-slide-to="{{ forloop.counter0 }}"
+                class="{% if forloop.first %}active{% endif %}">
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- slides -->
+        <div class="carousel-inner">
+            {% for slide in slides %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="row justify-content-center">
+                    {% for item in slide %}
+                    <div class="col-12 col-sm-6 col-lg-3 product-col">
+                        <div class="card">
+
+                            {% if item.image_url %}
+                                <img src="{{ item.image_url }}" class="card-img-top" loading="lazy" alt="{{ item.Product_name }}">
+                            {% elif item.has_image_file %}
+                                <img src="{{ item.image.url }}" class="card-img-top" loading="lazy" alt="{{ item.Product_name }}">
+                            {% else %}
+                                <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" loading="lazy" alt="{{ item.Product_name }}">
+                            {% endif %}
+
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ item.Product_name }}</h5>
+                                <p class="card-text flex-grow-1">{{ item.desc }}</p>
+                                <a href="#" class="btn btn-primary mt-auto">Add to Cart</a>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- prev / next controls (bound to this carousel id) -->
+        <a class="carousel-control-prev" href="#{{ carousel_id }}" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#{{ carousel_id }}" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+
+    </div>
+    {% endwith %}
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

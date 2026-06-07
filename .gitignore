@@ -1,5 +1,5 @@
 # Ignore the entire mac environment folder
-mac/
+macdjango/
 
 # Ignore standard Python compiled files
 *.pyc
