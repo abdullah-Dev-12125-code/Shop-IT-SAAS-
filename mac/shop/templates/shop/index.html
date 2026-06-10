@@ -3,218 +3,623 @@
 
 {% block css %}
 
-/* ---- heading ---- */
-.heading {
-    text-align: center;
-    margin: 25px 0 15px;
+/* ============================================================
+   SHOP IT — PREMIUM STOREFRONT
+   Design: dark ink + electric orange accent, card-first layout
+   ============================================================ */
+
+/* ---------- TOKENS ---------- */
+:root {
+  --ink:        #0d0d0d;
+  --ink-soft:   #1a1a1a;
+  --surface:    #ffffff;
+  --border:     #ebebeb;
+  --muted:      #6b7280;
+  --accent:     #ff5a1f;
+  --accent-2:   #e8002d;
+  --grad:       linear-gradient(135deg, #ff5a1f 0%, #e8002d 100%);
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md:  0 8px 28px rgba(0,0,0,0.10);
+  --shadow-lg:  0 20px 55px rgba(0,0,0,0.16);
+  --radius:     16px;
+  --radius-sm:  10px;
+  --font:       'Inter', system-ui, -apple-system, sans-serif;
+  --ease:       cubic-bezier(.22,.68,0,1.2);
 }
 
-.heading h1 {
-    font-size: 38px;
-    font-weight: 800;
-    color: #1a1a1a;
-    letter-spacing: 1px;
-    display: inline-block;
-    position: relative;
+/* ---------- BASE ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: var(--font);
+  background: #f8f8f9;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
 }
 
-.heading h1::after {
-    content: "";
-    display: block;
-    width: 55%;
-    height: 3px;
-    margin: 8px auto 0;
-    background: linear-gradient(90deg, #ff6a00, #ee0979);
-    border-radius: 10px;
+/* ---------- HERO HEADING ---------- */
+.shop-hero {
+  text-align: center;
+  padding: 52px 0 36px;
 }
 
-/* ---- category section heading ---- */
-.category-heading {
-    margin: 40px 0 8px;
-    padding-left: 5px;
+.shop-hero h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  color: var(--ink);
+  line-height: 1.1;
+  margin: 0;
 }
 
-.category-heading h2 {
-    font-size: 26px;
-    font-weight: 700;
-    color: #1a1a1a;
-    display: inline-block;
-    border-bottom: 2px solid #ff6a00;
-    padding-bottom: 4px;
+.shop-hero h1 span {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* ---- carousel container ---- */
+.shop-hero p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* ---------- DIVIDER BAR ---------- */
+.hero-bar {
+  display: block;
+  width: 56px;
+  height: 4px;
+  background: var(--grad);
+  border-radius: 99px;
+  margin: 16px auto 0;
+}
+
+/* ---------- SECTION LABEL ---------- */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 52px 0 18px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 28px;
+  background: var(--grad);
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.section-label h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.section-label .cat-count {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--border);
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+/* ---------- CAROUSEL TRACK ---------- */
 .hero-carousel {
-    padding: 10px 0 30px;
+  padding: 8px 0 52px;
+  overflow: visible !important;
+  position: relative;
 }
 
-.hero-carousel .carousel-inner {
-    overflow: hidden;
-}
-
-.hero-carousel .carousel-item {
-    padding: 10px 0;
-    will-change: transform;
-    backface-visibility: hidden;
-}
-
+/* ---------- CARD SHELL ---------- */
 .hero-carousel .card {
-    border: none;
-    border-radius: 16px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    transition: transform 0.2s ease;
-    will-change: transform;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.32s var(--ease), box-shadow 0.32s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .hero-carousel .card:hover {
-    transform: translateY(-4px);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+
+/* ---------- CARD IMAGE ---------- */
+.hero-carousel .card-img-wrap {
+  overflow: hidden;
+  height: 220px;
+  background: #f0f0f2;
+  position: relative;
 }
 
 .hero-carousel .card-img-top {
-    height: 210px;
-    object-fit: cover;
-    transform: translateZ(0);
-    backface-visibility: hidden;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+  display: block;
 }
 
-.hero-carousel .card-body {
-    padding: 0.9rem;
+.hero-carousel .card:hover .card-img-top {
+  transform: scale(1.07);
 }
 
-.hero-carousel .card-title {
-    font-weight: 700;
-    font-size: 15px;
+/* Badge overlay */
+.img-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--grad);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  text-transform: uppercase;
 }
 
-.hero-carousel .card-text {
-    font-size: 12px;
-    color: #666;
+/* ---------- CARD BODY ---------- */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px 16px 18px;
+  gap: 6px;
 }
 
-.hero-carousel .btn-primary {
-    background: linear-gradient(90deg, #ff6a00, #ee0979);
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    padding: 6px 12px;
-    font-size: 13px;
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.hero-carousel .btn-primary:hover {
-    opacity: 0.9;
+.card-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
 }
 
-.carousel-indicators li {
-    background-color: #bbb;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+.card-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 4px 0 0;
+  letter-spacing: -0.5px;
 }
 
-.carousel-indicators .active {
-    background-color: #ff6a00;
+.card-price span {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-right: 2px;
+  letter-spacing: 0;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: rgba(0,0,0,0.6);
-    background-size: 45%;
+/* ---------- BUTTON ROW ---------- */
+.btn-group-custom {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
 }
 
-.carousel-control-prev {
-    left: -48px;
+/* Add to Cart */
+.btn-cart {
+  flex: 1;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-.carousel-control-next {
-    right: -48px;
+.btn-cart:hover {
+  background: #000;
+  transform: translateY(-1px);
 }
 
-/* smooth scrolling */
-.hero-carousel * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+.btn-cart:active { transform: scale(0.97); }
+
+/* Buy Now */
+.btn-buy {
+  flex: 1;
+  background: var(--grad);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 10px 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-buy:hover {
+  opacity: 0.9;
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.btn-buy:active { transform: scale(0.97); }
+
+/* ---------- CAROUSEL ARROWS ---------- */
+.carousel-arrow-out {
+  width: 44px;
+  height: 44px;
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 20;
+  background: var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+  border: 2px solid rgba(255,255,255,0.08);
+  transition: background 0.22s ease, transform 0.22s var(--ease), box-shadow 0.22s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.carousel-arrow-out:hover {
+  background: #000;
+  transform: translateY(-50%) scale(1.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.32);
+}
+
+.carousel-arrow-out.carousel-control-prev { left: -58px; }
+.carousel-arrow-out.carousel-control-next { right: -58px; }
+
+/* Chevron icon override */
+.carousel-arrow-out .carousel-control-prev-icon,
+.carousel-arrow-out .carousel-control-next-icon {
+  background-image: none;
+  width: 9px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2.5px 2.5px 0;
+  display: inline-block;
+  margin: 0;
+}
+
+.carousel-arrow-out .carousel-control-prev-icon { transform: rotate(135deg); margin-left: 2px; }
+.carousel-arrow-out .carousel-control-next-icon { transform: rotate(-45deg); margin-right: 2px; }
+
+/* ---------- CART POPOVER (hover preview) ---------- */
+.cart-popover-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-popover-box {
+  display: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 300px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  z-index: 9999;
+  padding: 0;
+  overflow: hidden;
+  animation: popFadeIn 0.18s ease;
+}
+
+@keyframes popFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cart-popover-wrap:hover .cart-popover-box { display: block; }
+
+.cpop-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cpop-header .cpop-count {
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--grad);
+  color: #fff;
+  padding: 2px 9px;
+  border-radius: 99px;
+}
+
+.cpop-items {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px 16px;
+}
+
+.cpop-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  padding: 5px 0;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.cpop-item:last-child { border-bottom: none; }
+.cpop-item .cpop-qty { color: var(--muted); font-size: 11px; }
+
+.cpop-empty {
+  padding: 18px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.cpop-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: #fafafa;
+}
+
+.cpop-footer a {
+  display: block;
+  text-align: center;
+  background: var(--grad);
+  color: #fff;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.cpop-footer a:hover { opacity: 0.9; }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .carousel-arrow-out.carousel-control-prev { left: 4px; }
+  .carousel-arrow-out.carousel-control-next { right: 4px; }
+  .carousel-arrow-out { width: 36px; height: 36px; }
+  .section-label { margin-top: 36px; }
+}
+
+@media (max-width: 576px) {
+  .shop-hero { padding: 32px 0 24px; }
+  .cart-popover-box { width: 260px; right: -10px; }
+}
+
+/* ---------- SKELETON shimmer (polish) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-carousel .card { will-change: transform; }
 }
 
 {% endblock %}
+
 
 {% block body %}
 
 <div class="container">
 
-    <!-- ===== MAIN HEADING ===== -->
-    <div class="heading">
-        <h1>Welcome to Shop It</h1>
-    </div>
+  <!-- ═══ HERO HEADING ═══ -->
+  <div class="shop-hero">
+    <h1>Welcome to <span>Shop IT</span></h1>
+    <p>Discover curated collections, delivered fast.</p>
+    <span class="hero-bar"></span>
+  </div>
 
-    <!-- ===== ONE CAROUSEL PER CATEGORY ===== -->
-    {% for cat_name, slides in allprods %}
+  <!-- ═══ CATEGORIES ═══ -->
+  {% for cat_name, slides in allprods %}
 
-    <div class="category-heading">
-        <h2>{{ cat_name }}</h2>
-    </div>
+  <div class="section-label">
+    <h2>{{ cat_name }}</h2>
+    <span class="cat-count">Browse all →</span>
+  </div>
 
-    {% with carousel_id="carousel_"|add:forloop.counter0|stringformat:"s" %}
-    <div id="{{ carousel_id }}" class="carousel slide hero-carousel" data-ride="carousel" data-interval="4000">
+  <div id="carousel{{ forloop.counter0 }}"
+       class="carousel slide hero-carousel"
+       data-ride="carousel"
+       data-interval="4800">
 
-        <!-- indicators -->
-        <ul class="carousel-indicators">
-            {% for slide in slides %}
-            <li data-target="#{{ carousel_id }}"
-                data-slide-to="{{ forloop.counter0 }}"
-                class="{% if forloop.first %}active{% endif %}">
-            </li>
-            {% endfor %}
-        </ul>
+    <div class="carousel-inner">
 
-        <!-- slides -->
-        <div class="carousel-inner">
-            {% for slide in slides %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <div class="row justify-content-center">
-                    {% for item in slide %}
-                    <div class="col-12 col-sm-6 col-lg-3 product-col">
-                        <div class="card">
+      {% for slide in slides %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <div class="row justify-content-center">
 
-                            {% if item.image_url %}
-                                <img src="{{ item.image_url }}" class="card-img-top" loading="lazy" alt="{{ item.Product_name }}">
-                            {% elif item.has_image_file %}
-                                <img src="{{ item.image.url }}" class="card-img-top" loading="lazy" alt="{{ item.Product_name }}">
-                            {% else %}
-                                <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" loading="lazy" alt="{{ item.Product_name }}">
-                            {% endif %}
+          {% for item in slide %}
+          <div class="col-12 col-sm-6 col-lg-3 d-flex mb-3">
+            <div class="card w-100">
 
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ item.Product_name }}</h5>
-                                <p class="card-text flex-grow-1">{{ item.desc }}</p>
-                                <a href="#" class="btn btn-primary mt-auto">Add to Cart</a>
-                            </div>
+              <!-- IMAGE -->
+              <div class="card-img-wrap">
+                {% if item.image_url %}
+                <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.Product_name }}">
+                {% elif item.has_image_file %}
+                <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.Product_name }}">
+                {% else %}
+                <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.Product_name }}">
+                {% endif %}
+                <span class="img-badge">New</span>
+              </div>
 
-                        </div>
-                    </div>
-                    {% endfor %}
+              <!-- BODY -->
+              <div class="card-body">
+                <h5 class="card-title">{{ item.Product_name }}</h5>
+                <p class="card-desc">{{ item.desc }}</p>
+                <p class="card-price"><span>$</span>{{ item.price }}</p>
+
+                <div class="btn-group-custom">
+                  <button id="pr{{ item.id }}" class="btn-cart cart">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    Add to Cart
+                  </button>
+                  <a href="#" class="btn-buy">Buy Now</a>
                 </div>
-            </div>
-            {% endfor %}
-        </div>
+              </div>
 
-        <!-- prev / next controls (bound to this carousel id) -->
-        <a class="carousel-control-prev" href="#{{ carousel_id }}" data-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </a>
-        <a class="carousel-control-next" href="#{{ carousel_id }}" data-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </a>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+      {% endfor %}
 
     </div>
-    {% endwith %}
 
-    {% endfor %}
+    <!-- PREV ARROW -->
+    <a class="carousel-control-prev carousel-arrow-out"
+       href="#carousel{{ forloop.counter0 }}"
+       role="button"
+       data-slide="prev"
+       aria-label="Previous">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </a>
+
+    <!-- NEXT ARROW -->
+    <a class="carousel-control-next carousel-arrow-out"
+       href="#carousel{{ forloop.counter0 }}"
+       role="button"
+       data-slide="next"
+       aria-label="Next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </a>
+
+  </div>
+
+  {% endfor %}
 
 </div>
 
+<!-- ═══ CART POPOVER WIDGET ═══
+     Wraps whatever cart icon element already exists in basic.html.
+     JS below injects the popover markup next to the cart icon. -->
+<div id="cart-popover-portal" style="display:none;">
+  <div class="cart-popover-box" id="cpop-box">
+    <div class="cpop-header">
+      Your Cart
+      <span class="cpop-count" id="cpop-count-badge">0 items</span>
+    </div>
+    <div class="cpop-items" id="cpop-items-list">
+      <div class="cpop-empty">Your cart is empty.</div>
+    </div>
+    <div class="cpop-footer">
+      <a href="/cart">View Cart &amp; Checkout</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+<script>
+/* ── EXISTING CART LOGIC (untouched) ── */
+$('.cart').click(function () {
+  let cart = getCart();
+  let idstr = this.id;
+  if (cart[idstr] != undefined) {
+    cart[idstr] += 1;
+  } else {
+    cart[idstr] = 1;
+  }
+  saveCart(cart);
+  updateCart();
+  refreshPopover();
+});
+
+/* ── CART POPOVER ── */
+function refreshPopover() {
+  try {
+    const cart = getCart();           // from basic.html
+    const keys = Object.keys(cart);
+    const badge = document.getElementById('cpop-count-badge');
+    const list  = document.getElementById('cpop-items-list');
+    if (!badge || !list) return;
+
+    const total = keys.reduce((s, k) => s + cart[k], 0);
+    badge.textContent = total + (total === 1 ? ' item' : ' items');
+
+    if (keys.length === 0) {
+      list.innerHTML = '<div class="cpop-empty">Your cart is empty.</div>';
+      return;
+    }
+
+    list.innerHTML = keys.map(k => {
+      const id  = k.replace('pr','');
+      const qty = cart[k];
+      return `<div class="cpop-item">
+        <span>Product #${id}</span>
+        <span class="cpop-qty">× ${qty}</span>
+      </div>`;
+    }).join('');
+  } catch(e) {}
+}
+
+/* Attach popover to cart icon on page load */
+$(document).ready(function () {
+  refreshPopover();
+
+  // Find the cart icon/link — try common selectors used in basic.html
+  const $cartIcon = $('#cart-icon, .cart-icon, [href*="cart"], .navbar .fa-shopping-cart')
+                    .filter(':visible').first();
+
+  const $portal  = $('#cart-popover-portal');
+  const $popBox  = $portal.find('.cart-popover-box');
+
+  if ($cartIcon.length) {
+    // Wrap cart icon in popover wrapper if not already wrapped
+    if (!$cartIcon.closest('.cart-popover-wrap').length) {
+      $cartIcon.wrap('<span class="cart-popover-wrap"></span>');
+      $cartIcon.closest('.cart-popover-wrap').append($popBox);
+      $popBox.show();
+    }
+  }
+});
+</script>
 {% endblock %}

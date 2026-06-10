@@ -1,10 +1,429 @@
 {% extends 'shop/basic.html' %}
+{% load static %}
 
-{% block title %}About - My Awesome Cart{% endblock %}
-{% block css %}{% endblock %}
+{% block css %}
+
+/* ============================================================
+   SHOP IT — index.html styles
+   ============================================================ */
+
+:root {
+  --ink:       #0d0d0d;
+  --surface:   #ffffff;
+  --border:    #e8e8eb;
+  --muted:     #6b7280;
+  --accent:    #ff5a1f;
+  --accent2:   #e8002d;
+  --grad:      linear-gradient(135deg, #ff5a1f 0%, #e8002d 100%);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 28px rgba(0,0,0,0.10);
+  --shadow-lg: 0 22px 55px rgba(0,0,0,0.15);
+  --radius:    16px;
+  --radius-sm: 10px;
+  --ease:      cubic-bezier(.22,.68,0,1.2);
+}
+
+/* ---------- HERO ---------- */
+.shop-hero {
+  text-align: center;
+  padding: 52px 0 36px;
+}
+
+.shop-hero h1 {
+  font-size: clamp(30px, 5vw, 50px);
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  color: var(--ink);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.shop-hero h1 .grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.shop-hero p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.hero-bar {
+  display: block;
+  width: 54px;
+  height: 4px;
+  background: var(--grad);
+  border-radius: 99px;
+  margin: 16px auto 0;
+}
+
+/* ---------- SECTION LABEL ---------- */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 50px 0 18px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 26px;
+  background: var(--grad);
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.section-label h2 {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* ---------- CAROUSEL ---------- */
+.hero-carousel {
+  padding: 6px 0 50px;
+  overflow: visible !important;
+  position: relative;
+}
+
+/* ---------- CARD ---------- */
+.hero-carousel .card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s ease, border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hero-carousel .card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+
+/* image wrapper */
+.card-img-wrap {
+  overflow: hidden;
+  height: 210px;
+  background: #f2f2f4;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.42s ease;
+}
+
+.hero-carousel .card:hover .card-img-wrap img {
+  transform: scale(1.07);
+}
+
+.img-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--grad);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  text-transform: uppercase;
+}
+
+/* card body */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 15px 15px 17px;
+  gap: 5px;
+}
+
+.card-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  flex-grow: 1;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 4px 0 0;
+  letter-spacing: -0.5px;
+}
+
+.card-price .price-sym {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* ---------- BUTTONS ---------- */
+.btn-group-custom {
+  margin-top: 13px;
+  display: flex;
+  gap: 8px;
+}
+
+.btn-cart {
+  flex: 1;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-cart:hover { background: #000; transform: translateY(-1px); }
+.btn-cart:active { transform: scale(0.97); }
+
+.btn-buy {
+  flex: 1;
+  background: var(--grad);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-buy:hover { opacity: 0.88; color: #fff; text-decoration: none; transform: translateY(-1px); }
+.btn-buy:active { transform: scale(0.97); }
+
+/* ---------- CAROUSEL ARROWS ---------- */
+.carousel-arrow-out {
+  width: 44px;
+  height: 44px;
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 20;
+  background: #111;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+  border: none;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.22s var(--ease), box-shadow 0.22s ease;
+}
+
+.carousel-arrow-out:hover {
+  background: #000;
+  transform: translateY(-50%) scale(1.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.32);
+  text-decoration: none;
+}
+
+.carousel-arrow-out.carousel-control-prev { left: -58px; }
+.carousel-arrow-out.carousel-control-next { right: -58px; }
+
+/* Pure CSS chevrons — no background-image */
+.carousel-arrow-out .carousel-control-prev-icon,
+.carousel-arrow-out .carousel-control-next-icon {
+  background-image: none !important;
+  width: 9px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2.5px 2.5px 0;
+  display: inline-block;
+}
+
+.carousel-arrow-out .carousel-control-prev-icon {
+  transform: rotate(135deg);
+  margin-left: 3px;
+}
+
+.carousel-arrow-out .carousel-control-next-icon {
+  transform: rotate(-45deg);
+  margin-right: 3px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .carousel-arrow-out.carousel-control-prev { left: 4px; }
+  .carousel-arrow-out.carousel-control-next { right: 4px; }
+  .carousel-arrow-out { width: 36px; height: 36px; }
+  .section-label { margin-top: 36px; }
+}
+
+@media (max-width: 576px) {
+  .shop-hero { padding: 30px 0 22px; }
+  .card-img-wrap { height: 180px; }
+}
+
+{% endblock %}
+
+
 {% block body %}
-<div class="container mt-4">
-	<h1>About</h1>
-	<p>This is the about page for My Awesome Cart.</p>
-	</div>
+
+<div class="container">
+
+  <!-- ═══ HERO ═══ -->
+  <div class="shop-hero">
+    <h1>Welcome to <span class="grad-text">Shop IT</span></h1>
+    <p>Discover curated collections, delivered fast.</p>
+    <span class="hero-bar"></span>
+  </div>
+
+  <!-- ═══ CATEGORY CAROUSELS ═══ -->
+  {% for cat_name, slides in allprods %}
+
+  <div class="section-label">
+    <h2>{{ cat_name }}</h2>
+  </div>
+
+  <div id="carousel{{ forloop.counter0 }}"
+       class="carousel slide hero-carousel"
+       data-ride="carousel"
+       data-interval="4800">
+
+    <div class="carousel-inner">
+
+      {% for slide in slides %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <div class="row justify-content-center">
+
+          {% for item in slide %}
+          <div class="col-12 col-sm-6 col-lg-3 d-flex mb-3">
+            <div class="card w-100">
+
+              <!-- IMAGE -->
+              <div class="card-img-wrap">
+                {% if item.image_url %}
+                  <img src="{{ item.image_url }}" alt="{{ item.Product_name }}">
+                {% elif item.has_image_file %}
+                  <img src="{{ item.image.url }}" alt="{{ item.Product_name }}">
+                {% else %}
+                  <img src="{% static 'shop/assets/logo.png' %}" alt="{{ item.Product_name }}">
+                {% endif %}
+                <span class="img-badge">New</span>
+              </div>
+
+              <!-- BODY -->
+              <div class="card-body">
+                <h5 class="card-title">{{ item.Product_name }}</h5>
+                <p class="card-desc">{{ item.desc }}</p>
+                <p class="card-price">
+                  <span class="price-sym">$</span>{{ item.price }}
+                </p>
+
+                <div class="btn-group-custom">
+                  <button id="pr{{ item.id }}"
+                          class="btn-cart cart"
+                          data-name="{{ item.Product_name }}">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5"
+                         stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="9" cy="21" r="1"/>
+                      <circle cx="20" cy="21" r="1"/>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    Add to Cart
+                  </button>
+                  <a href="#" class="btn-buy">Buy Now</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <!-- ARROWS -->
+    <a class="carousel-control-prev carousel-arrow-out"
+       href="#carousel{{ forloop.counter0 }}"
+       role="button" data-slide="prev" aria-label="Previous">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </a>
+
+    <a class="carousel-control-next carousel-arrow-out"
+       href="#carousel{{ forloop.counter0 }}"
+       role="button" data-slide="next" aria-label="Next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </a>
+
+  </div>
+
+  {% endfor %}
+
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+<script>
+/* ── ADD TO CART (existing logic, untouched) ── */
+$('.cart').click(function () {
+  let cart = getCart();
+  let idstr = this.id;
+  if (cart[idstr] != undefined) {
+    cart[idstr] += 1;
+  } else {
+    cart[idstr] = 1;
+  }
+  saveCart(cart);
+  updateCart();
+});
+</script>
 {% endblock %}

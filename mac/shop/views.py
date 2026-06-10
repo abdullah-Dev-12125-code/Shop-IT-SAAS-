@@ -28,14 +28,20 @@ def index(request):
 
     return render(request, 'shop/index.html', params)
 
+def shops(request):
+    return render(request, 'shop/shops.html')
+
+def categories(request):
+    return render(request, 'shop/categories.html')
+
 def about(request):
     return render(request, 'shop/about.html')
 
 def contact(request):
-    return render("We are contact")
+    return render(request, 'shop/contact.html')
 
 def tracker(request):
-    return render("We are tracker")
+    return render(request, 'shop/tracker.html')
 
 def search(request):
     return render("We are search")
@@ -51,8 +57,5 @@ def products(request):
         'product': Product.objects.all()
     }
     return render(request, 'shop/product.html', context)
-
-
-
 
 

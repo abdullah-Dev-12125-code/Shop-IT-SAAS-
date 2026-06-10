@@ -1,157 +1,392 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-
-  <title>{% block title %}My Awesome Cart{% endblock %}</title>
+  <title>{% block title %}Welcome-Shop IT{% endblock %}</title>
 
   <style>
-    /* ================= PREMIUM GOLDEN NAVBAR ================= */
+    /* ================= RESET ================= */
+    *, *::before, *::after { box-sizing: border-box; }
 
+    html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #f8f8f9;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+}
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f8f8f9;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ================= NAVBAR ================= */
     .modern-navbar {
-      background: #125b4c;
-      padding: 0 28px;
+      background: #E2E6EA;
+      padding: 0 24px;
       height: 64px;
-      border-bottom: 1px solid #ddff00;
+      border-bottom: 1px solid #CED4DA;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
     .modern-navbar .container-fluid {
       padding: 0;
+      height: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      height: 100%;
     }
 
+    /* BRAND */
     .navbar-brand {
-      color: #ffffff !important;
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
       padding: 0;
-      margin: 0;
+      margin: 0 20px 0 0;
+      flex-shrink: 0;
     }
 
-    .nav-link {
-      color: #ffffff !important;
-      font-size: 14px;
-      font-weight: 400;
-      padding: 6px 14px !important;
+    .navbar-brand img {
+      height: 250px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* TOGGLER */
+    .navbar-toggler {
+      border: 1px solid #adb5bd;
       border-radius: 6px;
-      transition: background 0.2s, color 0.2s;
+      padding: 4px 8px;
     }
 
-    .nav-link:hover {
-      color: #cdf100 !important;
-      background: rgba(245, 200, 66, 0.10);
+    .navbar-toggler:focus { outline: none; box-shadow: none; }
+
+    /* NAV LINKS */
+    .navbar-nav .nav-link {
+      color: #1F2937 !important;
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 6px 12px !important;
+      border-radius: 6px;
+      transition: background 0.18s ease, color 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .navbar-nav .nav-link:hover {
+      background: rgba(0,0,0,0.07);
+      color: #000 !important;
     }
 
     .nav-item.active .nav-link {
-      color: #ffffff !important;
+      font-weight: 700;
+      color: #000 !important;
     }
 
+    /* DIVIDER */
     .nav-divider {
       width: 1px;
       height: 20px;
-      background: #3a2e10;
-      margin: 0 8px;
-      align-self: center;
+      background: #adb5bd;
+      margin: 0 6px;
+      flex-shrink: 0;
     }
 
+    /* CART */
     .cart-link {
       position: relative;
     }
 
     .cart-badge {
       position: absolute;
-      top: 2px;
-      right: 6px;
-      background: #f5c842;
-      color: #12100a;
-      font-size: 10px;
-      font-weight: 600;
-      width: 16px;
+      top: 0px;
+      right: 4px;
+      background: #e8002d;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      min-width: 16px;
       height: 16px;
-      border-radius: 50%;
+      border-radius: 99px;
+      padding: 0 4px;
       display: flex;
       align-items: center;
       justify-content: center;
       line-height: 1;
     }
 
+    /* ── CART POPOVER ── */
+    .cart-pop-wrap {
+      position: relative;
+    }
+
+    .cart-pop-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 14px);
+      right: 0;
+      width: 300px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      box-shadow: 0 20px 55px rgba(0,0,0,0.16);
+      z-index: 9999;
+      overflow: hidden;
+      animation: cpopIn 0.18s ease;
+    }
+
+    @keyframes cpopIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .cart-pop-wrap:hover .cart-pop-panel { display: block; }
+
+    .cpp-header {
+      padding: 13px 16px 11px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cpp-header strong {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0d0d0d;
+    }
+
+    .cpp-badge {
+      font-size: 10px;
+      font-weight: 700;
+      background: linear-gradient(135deg,#ff5a1f,#e8002d);
+      color: #fff;
+      padding: 2px 9px;
+      border-radius: 99px;
+    }
+
+    .cpp-list {
+      max-height: 190px;
+      overflow-y: auto;
+      padding: 8px 16px;
+    }
+
+    .cpp-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      color: #1a1a1a;
+      padding: 6px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .cpp-row:last-child { border-bottom: none; }
+
+    .cpp-row .cpp-qty {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-left: 8px;
+    }
+
+    .cpp-empty {
+      padding: 20px 16px;
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .cpp-footer {
+      padding: 11px 16px;
+      border-top: 1px solid #f0f0f0;
+      background: #fafafa;
+    }
+
+    .cpp-footer a {
+      display: block;
+      text-align: center;
+      background: linear-gradient(135deg,#ff5a1f,#e8002d);
+      color: #fff !important;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .cpp-footer a:hover { opacity: 0.88; }
+
+
+
+/* ================= FOOTER ================= */
+
+.site-footer {
+    background: #E2E6EA;
+    border-top: 1px solid #CED4DA;
+    margin-top: auto;
+    color: #1F2937;
+}
+
+.footer-container {
+    max-width: 1300px;
+    margin: auto;
+    padding: 50px 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 220px;
+}
+
+.footer-section h5 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #111827;
+}
+
+.footer-section p {
+    color: #4B5563;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.footer-section a {
+    display: block;
+    color: #4B5563;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+}
+
+.footer-section a:hover {
+    color: #000;
+    transform: translateX(4px);
+}
+
+.footer-bottom {
+    border-top: 1px solid #CED4DA;
+    text-align: center;
+    padding: 18px;
+    font-size: 13px;
+    color: #6B7280;
+}
+
+/* Optional social icons */
+.footer-social {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.footer-social a {
+    width: 38px;
+    height: 38px;
+    background: white;
+    border: 1px solid #CED4DA;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #374151;
+    transition: all 0.2s ease;
+}
+
+.footer-social a:hover {
+    background: #1F2937;
+    color: white;
+    transform: translateY(-3px);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        gap: 30px;
+        padding: 35px 20px;
+    }
+
+    .footer-section {
+        min-width: 100%;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        gap: 30px;
+        padding: 35px 20px;
+    }
+
+    .footer-section {
+        min-width: 100%;
+    }
+}
+
+
+    /* SEARCH */
     .search-wrap {
       display: flex;
       align-items: center;
-      background: #1c1608;
-      border: 1px solid #c8be9e;
+      background: #f1f3f5;
+      border: 1px solid #ced4da;
       border-radius: 8px;
       overflow: hidden;
       margin-left: 14px;
     }
 
     .search-box {
-      background: transparent !important;
       border: none !important;
       outline: none !important;
       box-shadow: none !important;
-      color: #fffefa !important;
+      background: transparent;
       font-size: 13px;
-      padding: 8px 14px;
+      padding: 8px 12px;
       width: 200px;
     }
 
-    .search-box::placeholder {
-      color: #6b5318;
-    }
-
     .search-btn {
-      background: #f9df6a;
+      background: #3d444b;
       border: none;
-      padding: 8px 16px;
-      color: #12100a;
-      font-weight: 600;
+      padding: 8px 14px;
+      color: white;
       font-size: 13px;
       cursor: pointer;
-      transition: background 0.2s;
-      border-radius: 0 !important;
+      transition: background 0.18s;
     }
 
-    .search-btn:hover {
-      background: #f9df6a;
-      color: #12100a;
-    }
+    .search-btn:hover { background: #495057; }
 
-    .navbar-toggler {
-      border-color: #c49a10;
-    }
-
-    .navbar-toggler-icon {
-      filter: invert(75%) sepia(60%) saturate(400%) hue-rotate(5deg);
-    }
-
+    /* MOBILE */
     @media (max-width: 991px) {
-      .modern-navbar {
-        height: auto;
-        padding: 12px 16px;
-      }
-
-      .search-wrap {
-        width: 100%;
-        margin: 10px 0 4px;
-      }
-
-      .search-box {
-        width: 100%;
-      }
-
-      .nav-divider {
-        display: none;
-      }
+      .modern-navbar { height: auto; padding: 10px 16px; }
+      .search-wrap    { width: 100%; margin: 10px 0 4px; }
+      .search-box     { width: 100%; }
+      .nav-divider    { display: none; }
+      .cart-pop-panel { right: -20px; width: 270px; }
     }
 
     {% block css %}{% endblock %}
@@ -160,74 +395,183 @@
 
 <body>
 
-  <!-- ================= NAVBAR ================= -->
-
+  <!-- ═══ NAVBAR ═══ -->
   <nav class="navbar navbar-expand-lg modern-navbar">
     <div class="container-fluid">
 
-      <!-- BRAND (FAR LEFT) -->
+      <!-- BRAND -->
       <a class="navbar-brand" href="#">
-        🛍 My Awesome Cart
+        <img src="{% static 'shop/assets/logo.png' %}" alt="Shop IT Logo">
       </a>
 
-      <!-- MOBILE TOGGLER -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <!-- TOGGLER -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- RIGHT SIDE: LINKS + CART + SEARCH -->
+      <!-- LINKS -->
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
 
         <ul class="navbar-nav align-items-center">
 
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home</a>
+            <a class="nav-link" href="/shop/index">Home</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Shop</a>
+            <a class="nav-link" href="/shop/shops">Shop</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Categories</a>
+            <a class="nav-link" href="/shop/categories">Categories</a>
           </li>
 
-          <!-- Divider -->
-          <li class="nav-item d-none d-lg-flex">
+          <li class="nav-item">
+            <a class="nav-link" href="/shop/tracker">Tracker</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/shop/contact">Contact</a>
+          </li>
+
+
+          <li class="nav-item d-none d-lg-flex align-items-center">
             <div class="nav-divider"></div>
           </li>
 
-          <!-- Cart with badge -->
-          <li class="nav-item cart-link">
-            <a class="nav-link" href="#">
+          <!-- CART with hover popover -->
+          <li class="nav-item cart-link cart-pop-wrap">
+            <a class="nav-link" href="#" id="cart-icon-link">
               🛒 Cart
-              <span class="cart-badge">3</span>
+              <span id="cart" class="cart-badge">0</span>
             </a>
+
+            <!-- Popover panel -->
+            <div class="cart-pop-panel" id="cart-pop-panel">
+              <div class="cpp-header">
+                <strong>Your Cart</strong>
+                <span class="cpp-badge" id="cpp-total-badge">0 items</span>
+              </div>
+              <div class="cpp-list" id="cpp-list">
+                <div class="cpp-empty">Your cart is empty.</div>
+              </div>
+              <div class="cpp-footer">
+                <a href="/cart">View Cart &amp; Checkout →</a>
+              </div>
+            </div>
           </li>
 
         </ul>
 
         <!-- SEARCH -->
         <div class="search-wrap">
-          <input class="form-control search-box" type="search" placeholder="Search products...">
-          <button class="btn search-btn" type="submit">Search</button>
+          <input class="search-box" type="search" placeholder="Search products...">
+          <button class="search-btn">Search</button>
         </div>
 
-      </div>
 
+     
+      </div>
     </div>
   </nav>
 
-  <!-- ================= PAGE CONTENT ================= -->
+  
+ 
+  
 
-  {% block body %}{% endblock %}
 
-  <!-- ================= SCRIPTS ================= -->
+  <!-- ═══ PAGE CONTENT ═══ -->
+<main class="main-content">
+    {% block body %}{% endblock %}
+</main>
+<footer class="site-footer">
+    <div class="footer-container">
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <div class="footer-section">
+            <h5>Shop IT</h5>
+            <p>Your trusted online shopping destination.</p>
+        </div>
+
+        <div class="footer-section">
+            <h5>Quick Links</h5>
+            <a href="/shop/index">Home</a>
+            <a href="/shop/shops">Shop</a>
+            <a href="/shop/categories">Categories</a>
+            <a href="/shop/contact">Contact</a>
+            <a href="/shop/about">About US</a>
+        </div>
+
+        <div class="footer-section">
+            <h5>Support</h5>
+            <a href="/shop/tracker">Track Order</a>
+            <a href="/shop/contact">Help Center</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 Shop IT. All Rights Reserved.
+    </div>
+</footer>
+
+  <!-- ═══ SCRIPTS ═══ -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
-</body>
+  {% block js %}{% endblock %}
 
+  <script>
+    /* ── CART STORAGE ── */
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cart') || '{}');
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function updateCart() {
+      const cart  = getCart();
+      let   total = 0;
+      for (let key in cart) total += cart[key];
+      document.getElementById('cart').innerText = total;
+      refreshCartPopover();
+    }
+
+    /* ── CART POPOVER ── */
+    function refreshCartPopover() {
+      const cart    = getCart();
+      const keys    = Object.keys(cart);
+      const total   = keys.reduce((s, k) => s + cart[k], 0);
+      const badge   = document.getElementById('cpp-total-badge');
+      const list    = document.getElementById('cpp-list');
+      if (!badge || !list) return;
+
+      badge.textContent = total + (total === 1 ? ' item' : ' items');
+
+      if (keys.length === 0) {
+        list.innerHTML = '<div class="cpp-empty">Your cart is empty.</div>';
+        return;
+      }
+
+      list.innerHTML = keys.map(k => {
+        const qty = cart[k];
+        /* Product name lookup: reads data attribute set by index.html buttons */
+        const btn  = document.getElementById(k);
+        const name = btn ? (btn.dataset.name || 'Product #' + k.replace('pr','')) : 'Product #' + k.replace('pr','');
+        return `<div class="cpp-row">
+          <span>${name}</span>
+          <span class="cpp-qty">× ${qty}</span>
+        </div>`;
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCart);
+  </script>
+
+</body>
 </html>
