@@ -1,11 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Contact US
-</body>
-</html>
+{% extends 'shop/basic.html' %}
+{% block css %}
+<style>
+
+body{
+    background-color: #ffffff;
+
+}
+
+.contact-page{
+    margin-bottom: 80px;
+}
+
+.container{
+    max-width: 700px;
+    background: white;
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+   
+}
+
+.heading{
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.heading span{
+    color: red;
+}
+
+.heading h2{
+    color: #222;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.heading p{
+    color:rgb(71, 70, 70);
+    font-weight: bold;
+}
+
+
+.form-control{
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid #dddddd;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus{
+    border-color: #343a40;
+    box-shadow: 0 0 8px rgba(52,58,64,0.25);
+}
+
+.btn-dark{
+    width: 100%;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-dark:hover{
+    transform: translateY(-2px);
+}
+
+
+</style>
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<div class="contact-page">
+<div class="container mt-5">
+    <div class="heading">
+        <h2>Contact <span>Us</span></h2>
+        <p>If you have any questions, send us a message below.</p>
+    </div>
+    <form action="{% url 'contact' %}" method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" placeholder="Your Name" id="name">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="form-control" placeholder="Your Email" id="email">
+        </div>
+
+        <div class="form-group">
+            <label for="ph">Phone Number</label>
+            <input type="text" name="phone" id="ph" class="form-control" placeholder="Your Phone Number">
+        </div>
+
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea name="message" class="form-control" id="message" rows="5" placeholder="Your Message"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-dark">Send</button>
+    </form>
+    </div>
+</div>
+
+{% endblock %}  

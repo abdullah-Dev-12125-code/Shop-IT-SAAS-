@@ -2,502 +2,331 @@
 {% load static %}
 
 {% block css %}
-
-/* ============================================================
-   SHOP IT — PREMIUM STOREFRONT
-   Design: dark ink + electric orange accent, card-first layout
-   ============================================================ */
-
-/* ---------- TOKENS ---------- */
+<style>
 :root {
-  --ink:        #0d0d0d;
-  --ink-soft:   #1a1a1a;
-  --surface:    #ffffff;
-  --border:     #ebebeb;
-  --muted:      #6b7280;
-  --accent:     #ff5a1f;
-  --accent-2:   #e8002d;
-  --grad:       linear-gradient(135deg, #ff5a1f 0%, #e8002d 100%);
-  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
-  --shadow-md:  0 8px 28px rgba(0,0,0,0.10);
-  --shadow-lg:  0 20px 55px rgba(0,0,0,0.16);
-  --radius:     16px;
-  --radius-sm:  10px;
-  --font:       'Inter', system-ui, -apple-system, sans-serif;
-  --ease:       cubic-bezier(.22,.68,0,1.2);
+  --grad: linear-gradient(135deg, #ff5a1f, #e8002d);
+  --border: #e8e8e8;
+  --muted: #6b7280;
+  --radius: 16px;
+  --shadow: 0 10px 30px rgba(0,0,0,.09);
 }
 
-/* ---------- BASE ---------- */
-*, *::before, *::after { box-sizing: border-box; }
-
-body {
-  font-family: var(--font);
-  background: #f8f8f9;
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ---------- HERO HEADING ---------- */
+/* ── HERO ── */
 .shop-hero {
   text-align: center;
   padding: 52px 0 36px;
 }
 
 .shop-hero h1 {
-  font-size: clamp(32px, 5vw, 52px);
-  font-weight: 900;
+  font-size: clamp(32px, 5vw, 50px);
+  font-weight: 800;
   letter-spacing: -1.5px;
-  color: var(--ink);
-  line-height: 1.1;
-  margin: 0;
+  margin-bottom: 8px;
 }
 
 .shop-hero h1 span {
   background: var(--grad);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .shop-hero p {
-  margin: 12px 0 0;
   color: var(--muted);
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 1rem;
+  margin: 0;
 }
 
-/* ---------- DIVIDER BAR ---------- */
-.hero-bar {
-  display: block;
-  width: 56px;
-  height: 4px;
-  background: var(--grad);
-  border-radius: 99px;
-  margin: 16px auto 0;
-}
-
-/* ---------- SECTION LABEL ---------- */
+/* ── SECTION LABEL ── */
 .section-label {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 52px 0 18px;
+  margin: 44px 0 20px;
 }
 
 .section-label::before {
-  content: '';
-  display: block;
+  content: "";
   width: 5px;
-  height: 28px;
+  height: 26px;
   background: var(--grad);
-  border-radius: 99px;
+  border-radius: 20px;
   flex-shrink: 0;
 }
 
-.section-label h2 {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--ink);
+.section-label h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
   margin: 0;
-  letter-spacing: -0.3px;
 }
 
-.section-label .cat-count {
-  margin-left: auto;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  background: var(--border);
-  padding: 3px 10px;
-  border-radius: 99px;
-}
-
-/* ---------- CAROUSEL TRACK ---------- */
-.hero-carousel {
-  padding: 8px 0 52px;
-  overflow: visible !important;
-  position: relative;
-}
-
-/* ---------- CARD SHELL ---------- */
-.hero-carousel .card {
+/* ── CARD ── */
+.card {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.32s var(--ease), box-shadow 0.32s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  background: #fff;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.hero-carousel .card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-  border-color: transparent;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
 }
 
-/* ---------- CARD IMAGE ---------- */
-.hero-carousel .card-img-wrap {
+.card-img-wrap {
+  height: 200px;
   overflow: hidden;
-  height: 220px;
-  background: #f0f0f2;
-  position: relative;
+  background: #f5f5f5;
 }
 
-.hero-carousel .card-img-top {
+.card-img-top {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.45s ease;
-  display: block;
+  transition: transform 0.3s ease;
 }
 
-.hero-carousel .card:hover .card-img-top {
-  transform: scale(1.07);
+.card:hover .card-img-top {
+  transform: scale(1.04);
 }
 
-/* Badge overlay */
-.img-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: var(--grad);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 3px 9px;
-  border-radius: 99px;
-  text-transform: uppercase;
-}
-
-/* ---------- CARD BODY ---------- */
 .card-body {
+  padding: 14px 16px 16px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 16px 16px 18px;
-  gap: 6px;
 }
 
 .card-title {
-  font-size: 15px;
   font-weight: 700;
-  color: var(--ink);
-  line-height: 1.35;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  font-size: 14.5px;
+  margin-bottom: 4px;
+  color: #111;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-desc {
-  font-size: 12.5px;
   color: var(--muted);
+  font-size: 12.5px;
   line-height: 1.5;
-  flex-grow: 1;
+  margin-bottom: 10px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin: 0;
 }
 
 .card-price {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 800;
-  color: var(--ink);
-  margin: 4px 0 0;
-  letter-spacing: -0.5px;
+  color: #111;
+  margin-top: auto;
+  margin-bottom: 0;
 }
 
-.card-price span {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--muted);
-  margin-right: 2px;
-  letter-spacing: 0;
-}
-
-/* ---------- BUTTON ROW ---------- */
-.btn-group-custom {
-  margin-top: 14px;
+/* ── BUTTONS ── */
+.btn-row {
   display: flex;
-  gap: 8px;
+  gap: 7px;
+  margin-top: 12px;
+  align-items: stretch;
 }
 
-/* Add to Cart */
+.btn-view {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+  text-decoration: none;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.btn-view:hover {
+  background: #111;
+  border-color: #111;
+}
+
 .btn-cart {
   flex: 1;
-  background: var(--ink);
+  background: #111;
   color: #fff;
   border: none;
-  border-radius: var(--radius-sm);
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 10px 10px;
+  border-radius: 9px;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  transition: opacity 0.18s, background 0.2s;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 10px;
+  height: 38px;
 }
 
-.btn-cart:hover {
-  background: #000;
-  transform: translateY(-1px);
+.btn-cart:hover { opacity: 0.88; }
+
+.btn-cart.added {
+  background: #1a9e3a;
 }
 
-.btn-cart:active { transform: scale(0.97); }
-
-/* Buy Now */
 .btn-buy {
   flex: 1;
   background: var(--grad);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 10px 10px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.15s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-buy:hover {
-  opacity: 0.9;
-  color: #fff;
-  text-decoration: none;
-  transform: translateY(-1px);
-}
-
-.btn-buy:active { transform: scale(0.97); }
-
-/* ---------- CAROUSEL ARROWS ---------- */
-.carousel-arrow-out {
-  width: 44px;
-  height: 44px;
-  position: absolute;
-  top: 42%;
-  transform: translateY(-50%);
-  z-index: 20;
-  background: var(--ink);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.22);
-  border: 2px solid rgba(255,255,255,0.08);
-  transition: background 0.22s ease, transform 0.22s var(--ease), box-shadow 0.22s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.carousel-arrow-out:hover {
-  background: #000;
-  transform: translateY(-50%) scale(1.12);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.32);
-}
-
-.carousel-arrow-out.carousel-control-prev { left: -58px; }
-.carousel-arrow-out.carousel-control-next { right: -58px; }
-
-/* Chevron icon override */
-.carousel-arrow-out .carousel-control-prev-icon,
-.carousel-arrow-out .carousel-control-next-icon {
-  background-image: none;
-  width: 9px;
-  height: 9px;
-  border: solid #fff;
-  border-width: 0 2.5px 2.5px 0;
-  display: inline-block;
-  margin: 0;
-}
-
-.carousel-arrow-out .carousel-control-prev-icon { transform: rotate(135deg); margin-left: 2px; }
-.carousel-arrow-out .carousel-control-next-icon { transform: rotate(-45deg); margin-right: 2px; }
-
-/* ---------- CART POPOVER (hover preview) ---------- */
-.cart-popover-wrap {
-  position: relative;
-  display: inline-block;
-}
-
-.cart-popover-box {
-  display: none;
-  position: absolute;
-  top: calc(100% + 12px);
-  right: 0;
-  width: 300px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--shadow-lg);
-  z-index: 9999;
-  padding: 0;
-  overflow: hidden;
-  animation: popFadeIn 0.18s ease;
-}
-
-@keyframes popFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.cart-popover-wrap:hover .cart-popover-box { display: block; }
-
-.cpop-header {
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.cpop-header .cpop-count {
-  font-size: 11px;
-  font-weight: 600;
-  background: var(--grad);
-  color: #fff;
-  padding: 2px 9px;
-  border-radius: 99px;
-}
-
-.cpop-items {
-  max-height: 200px;
-  overflow-y: auto;
-  padding: 10px 16px;
-}
-
-.cpop-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12.5px;
-  color: var(--ink-soft);
-  padding: 5px 0;
-  border-bottom: 1px solid #f4f4f4;
-}
-
-.cpop-item:last-child { border-bottom: none; }
-.cpop-item .cpop-qty { color: var(--muted); font-size: 11px; }
-
-.cpop-empty {
-  padding: 18px 16px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.cpop-footer {
-  padding: 12px 16px;
-  border-top: 1px solid var(--border);
-  background: #fafafa;
-}
-
-.cpop-footer a {
-  display: block;
-  text-align: center;
-  background: var(--grad);
-  color: #fff;
   border-radius: 9px;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 9px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  transition: opacity 0.2s;
+  font-size: 13px;
+  font-weight: 600;
+  height: 38px;
+  transition: opacity 0.18s;
 }
 
-.cpop-footer a:hover { opacity: 0.9; }
+.btn-buy:hover { opacity: 0.88; color: #fff; }
 
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 768px) {
-  .carousel-arrow-out.carousel-control-prev { left: 4px; }
-  .carousel-arrow-out.carousel-control-next { right: 4px; }
-  .carousel-arrow-out { width: 36px; height: 36px; }
-  .section-label { margin-top: 36px; }
+/* ── CAROUSEL ── */
+.hero-carousel {
+  position: relative;
+  margin-bottom: 10px;
 }
 
-@media (max-width: 576px) {
-  .shop-hero { padding: 32px 0 24px; }
-  .cart-popover-box { width: 260px; right: -10px; }
+.carousel-inner { padding: 8px 0 12px; }
+
+.carousel-item .row { justify-content: center; }
+
+.carousel-arrow-out {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #111;
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border: none;
+  transition: opacity 0.18s;
 }
 
-/* ---------- SKELETON shimmer (polish) ---------- */
-@media (prefers-reduced-motion: no-preference) {
-  .hero-carousel .card { will-change: transform; }
+.carousel-arrow-out:hover { opacity: 0.8; }
+
+.carousel-control-prev.carousel-arrow-out { left: -56px; }
+.carousel-control-next.carousel-arrow-out { right: -56px; }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon { filter: invert(1); }
+
+/* ── TOAST NOTIFICATION ── */
+#cart-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #111;
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  z-index: 99999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
 }
 
+#cart-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── CART BUTTON FLASH ── */
+.btn-cart {
+  transition: opacity 0.18s, background 0.15s, transform 0.1s !important;
+}
+
+.btn-cart.flash-added {
+  background: #16a34a !important;
+  transform: scale(0.97);
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width: 768px) {
+  .carousel-control-prev.carousel-arrow-out { left: 6px; }
+  .carousel-control-next.carousel-arrow-out { right: 6px; }
+}
+</style>
 {% endblock %}
 
 
 {% block body %}
-
 <div class="container">
 
-  <!-- ═══ HERO HEADING ═══ -->
   <div class="shop-hero">
     <h1>Welcome to <span>Shop IT</span></h1>
-    <p>Discover curated collections, delivered fast.</p>
-    <span class="hero-bar"></span>
+    <p>Curated collections, delivered fast.</p>
   </div>
 
-  <!-- ═══ CATEGORIES ═══ -->
   {% for cat_name, slides in allprods %}
 
   <div class="section-label">
-    <h2>{{ cat_name }}</h2>
-    <span class="cat-count">Browse all →</span>
+    <h3>{{ cat_name }}</h3>
   </div>
 
-  <div id="carousel{{ forloop.counter0 }}"
-       class="carousel slide hero-carousel"
-       data-ride="carousel"
-       data-interval="4800">
-
+  <div id="carousel{{ forloop.counter0 }}" class="carousel slide hero-carousel" data-ride="carousel">
     <div class="carousel-inner">
 
       {% for slide in slides %}
       <div class="carousel-item {% if forloop.first %}active{% endif %}">
         <div class="row justify-content-center">
-
           {% for item in slide %}
           <div class="col-12 col-sm-6 col-lg-3 d-flex mb-3">
-            <div class="card w-100">
+            <div class="card">
 
-              <!-- IMAGE -->
               <div class="card-img-wrap">
                 {% if item.image_url %}
-                <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.Product_name }}">
-                {% elif item.has_image_file %}
-                <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.Product_name }}">
+                  <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.Product_name }}">
+                {% elif item.image %}
+                  <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.Product_name }}">
                 {% else %}
-                <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.Product_name }}">
+                  <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.Product_name }}">
                 {% endif %}
-                <span class="img-badge">New</span>
               </div>
 
-              <!-- BODY -->
               <div class="card-body">
                 <h5 class="card-title">{{ item.Product_name }}</h5>
                 <p class="card-desc">{{ item.desc }}</p>
-                <p class="card-price"><span>$</span>{{ item.price }}</p>
+                <p class="card-price">${{ item.price }}</p>
 
-                <div class="btn-group-custom">
-                  <button id="pr{{ item.id }}" class="btn-cart cart">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                <div class="btn-row">
+                  <a href="/shop/product/{{ item.id }}" class="btn-view" title="View product">👁</a>
+
+                  <!--
+                    data-id, data-name, data-price are read by JS below
+                    to build the cart object and save to localStorage.
+                  -->
+                  <button
+                    class="btn-cart"
+                    data-id="{{ item.id }}"
+                    data-name="{{ item.Product_name|escapejs }}"
+                    data-price="{{ item.price }}"
+                  >
                     Add to Cart
                   </button>
+
                   <a href="#" class="btn-buy">Buy Now</a>
                 </div>
               </div>
@@ -505,121 +334,94 @@ body {
             </div>
           </div>
           {% endfor %}
-
         </div>
       </div>
       {% endfor %}
 
     </div>
 
-    <!-- PREV ARROW -->
-    <a class="carousel-control-prev carousel-arrow-out"
-       href="#carousel{{ forloop.counter0 }}"
-       role="button"
-       data-slide="prev"
-       aria-label="Previous">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <a class="carousel-control-prev carousel-arrow-out" href="#carousel{{ forloop.counter0 }}" data-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
     </a>
-
-    <!-- NEXT ARROW -->
-    <a class="carousel-control-next carousel-arrow-out"
-       href="#carousel{{ forloop.counter0 }}"
-       role="button"
-       data-slide="next"
-       aria-label="Next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <a class="carousel-control-next carousel-arrow-out" href="#carousel{{ forloop.counter0 }}" data-slide="next">
+      <span class="carousel-control-next-icon"></span>
     </a>
-
   </div>
 
   {% endfor %}
 
 </div>
 
-<!-- ═══ CART POPOVER WIDGET ═══
-     Wraps whatever cart icon element already exists in basic.html.
-     JS below injects the popover markup next to the cart icon. -->
-<div id="cart-popover-portal" style="display:none;">
-  <div class="cart-popover-box" id="cpop-box">
-    <div class="cpop-header">
-      Your Cart
-      <span class="cpop-count" id="cpop-count-badge">0 items</span>
-    </div>
-    <div class="cpop-items" id="cpop-items-list">
-      <div class="cpop-empty">Your cart is empty.</div>
-    </div>
-    <div class="cpop-footer">
-      <a href="/cart">View Cart &amp; Checkout</a>
-    </div>
-  </div>
-</div>
-
+<!-- Toast notification -->
+<div id="cart-toast">Added to cart ✓</div>
 {% endblock %}
 
 
 {% block js %}
 <script>
-/* ── EXISTING CART LOGIC (untouched) ── */
-$('.cart').click(function () {
-  let cart = getCart();
-  let idstr = this.id;
-  if (cart[idstr] != undefined) {
-    cart[idstr] += 1;
-  } else {
-    cart[idstr] = 1;
+(function () {
+  var CART_KEY = "shopIT_cart";
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    catch (e) { return []; }
   }
-  saveCart(cart);
-  updateCart();
-  refreshPopover();
-});
 
-/* ── CART POPOVER ── */
-function refreshPopover() {
-  try {
-    const cart = getCart();           // from basic.html
-    const keys = Object.keys(cart);
-    const badge = document.getElementById('cpop-count-badge');
-    const list  = document.getElementById('cpop-items-list');
-    if (!badge || !list) return;
+  function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    window.dispatchEvent(new Event("cartUpdated"));
+  }
 
-    const total = keys.reduce((s, k) => s + cart[k], 0);
-    badge.textContent = total + (total === 1 ? ' item' : ' items');
+  function showToast(msg) {
+    var t = document.getElementById("cart-toast");
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(t._tid);
+    t._tid = setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
 
-    if (keys.length === 0) {
-      list.innerHTML = '<div class="cpop-empty">Your cart is empty.</div>';
-      return;
+  function flashButton(btn) {
+    btn.textContent = "Added \u2713";
+    btn.style.background = "#16a34a";
+    btn.style.transform = "scale(0.97)";
+    btn.disabled = true;
+    setTimeout(function () {
+      btn.textContent = "Add to Cart";
+      btn.style.background = "";
+      btn.style.transform = "";
+      btn.disabled = false;
+    }, 1200);
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest ? e.target.closest(".btn-cart") : null;
+    if (!btn) return;
+
+    var id    = String(btn.getAttribute("data-id") || "");
+    var name  = String(btn.getAttribute("data-name") || "Item");
+    var price = parseFloat(btn.getAttribute("data-price")) || 0;
+    if (!id) return;
+
+    var cart = getCart();
+    var found = false;
+    for (var i = 0; i < cart.length; i++) {
+      if (String(cart[i].id) === id) {
+        cart[i].qty = (cart[i].qty || 1) + 1;
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      cart.push({ id: id, name: name, price: price, qty: 1 });
     }
 
-    list.innerHTML = keys.map(k => {
-      const id  = k.replace('pr','');
-      const qty = cart[k];
-      return `<div class="cpop-item">
-        <span>Product #${id}</span>
-        <span class="cpop-qty">× ${qty}</span>
-      </div>`;
-    }).join('');
-  } catch(e) {}
-}
+    saveCart(cart);
+    flashButton(btn);
+    showToast(name + " added to cart");
+    if (typeof updateCartUI === "function") updateCartUI();
+  });
 
-/* Attach popover to cart icon on page load */
-$(document).ready(function () {
-  refreshPopover();
-
-  // Find the cart icon/link — try common selectors used in basic.html
-  const $cartIcon = $('#cart-icon, .cart-icon, [href*="cart"], .navbar .fa-shopping-cart')
-                    .filter(':visible').first();
-
-  const $portal  = $('#cart-popover-portal');
-  const $popBox  = $portal.find('.cart-popover-box');
-
-  if ($cartIcon.length) {
-    // Wrap cart icon in popover wrapper if not already wrapped
-    if (!$cartIcon.closest('.cart-popover-wrap').length) {
-      $cartIcon.wrap('<span class="cart-popover-wrap"></span>');
-      $cartIcon.closest('.cart-popover-wrap').append($popBox);
-      $popBox.show();
-    }
-  }
-});
+})();
 </script>
 {% endblock %}

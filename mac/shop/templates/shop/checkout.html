@@ -1,0 +1,909 @@
+{% extends 'shop/basic.html' %}
+{% load static %}
+
+{% block title %}Checkout — Shop IT{% endblock %}
+
+{% block css %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --grad: linear-gradient(135deg, #ff5a1f, #e8002d);
+  --border: #e8e8e8;
+  --muted: #6b7280;
+  --radius: 14px;
+  --shadow: 0 4px 20px rgba(0,0,0,.06);
+  --green: #16a34a;
+  --red: #e8002d;
+}
+
+body { font-family: "Inter", system-ui, sans-serif; background: #f4f4f6; color: #111; }
+
+/* ── TOP BAR ── */
+.co-topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.co-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #111; text-decoration: none; }
+.co-logo span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.co-secure { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.co-secure svg { width: 14px; height: 14px; fill: var(--green); }
+
+/* ── STEP INDICATOR ── */
+.co-steps {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+}
+.co-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #bbb;
+  padding: 0 20px;
+  position: relative;
+}
+.co-step::after {
+  content: "›";
+  position: absolute;
+  right: -4px;
+  color: #ddd;
+  font-size: 18px;
+}
+.co-step:last-child::after { display: none; }
+.co-step.done { color: var(--green); }
+.co-step.active { color: #111; }
+.co-step-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #eee;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.co-step.done .co-step-num { background: var(--green); color: #fff; }
+.co-step.active .co-step-num { background: #111; color: #fff; }
+
+/* ── LAYOUT ── */
+.co-layout {
+  max-width: 1060px;
+  margin: 32px auto;
+  padding: 0 20px 60px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ── PANELS ── */
+.co-panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.co-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: #fafafa;
+}
+.co-panel-head h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.co-panel-head h2 span {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+.co-panel-head .edit-link {
+  font-size: 12px;
+  color: #007185;
+  text-decoration: none;
+  font-weight: 500;
+}
+.co-panel-head .edit-link:hover { text-decoration: underline; }
+
+.co-panel-body { padding: 20px; }
+
+/* COMPLETED PANEL */
+.co-panel.done-panel .co-panel-head { background: #f0faf0; }
+.co-panel.done-panel .co-panel-head h2 span { background: var(--green); }
+.co-panel.done-panel .done-summary {
+  padding: 12px 20px;
+  font-size: 13px;
+  color: #374151;
+}
+
+/* ── FIELDS ── */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field { margin-bottom: 16px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.field input,
+.field select {
+  width: 100%;
+  height: 42px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #111;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+}
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+}
+.field input.err,
+.field select.err {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(232,0,45,0.1);
+}
+.field .err-msg {
+  display: block;
+  font-size: 11px;
+  color: var(--red);
+  margin-top: 4px;
+  min-height: 14px;
+}
+
+/* ── RADIO CARDS (payment / delivery) ── */
+.radio-cards { display: flex; flex-direction: column; gap: 10px; }
+.radio-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 11px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.radio-card:has(input:checked) { border-color: #111; background: #fafafa; }
+.radio-card input[type="radio"] { margin-top: 2px; accent-color: #111; flex-shrink: 0; }
+.radio-card-label { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.radio-card-sub   { font-size: 12px; color: var(--muted); }
+
+/* ── CARD FORM ── */
+.card-details { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.card-details.hidden { display: none; }
+
+.card-icons { display: flex; gap: 6px; margin-bottom: 14px; }
+.c-badge {
+  height: 24px; padding: 0 7px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 9px; font-weight: 800;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #fff;
+}
+.c-visa { background: #1a1f71; color: #fff; }
+.c-mc   { display: inline-flex; gap: 0; padding: 4px 5px; }
+.c-mc .r { width: 12px; height: 12px; border-radius: 50%; background: #eb001b; }
+.c-mc .y { width: 12px; height: 12px; border-radius: 50%; background: #f79e1b; margin-left: -5px; }
+.c-amex { background: #006fcf; color: #fff; }
+
+/* card number with type icon */
+.card-num-wrap { position: relative; }
+.card-num-wrap input { padding-right: 44px; }
+.card-type-icon {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 11px; font-weight: 800; color: var(--muted);
+  pointer-events: none;
+}
+
+/* ── PROMO ── */
+.promo-row { display: flex; gap: 8px; margin-top: 4px; }
+.promo-row input { flex: 1; height: 38px; border: 1.5px solid var(--border); border-radius: 9px; padding: 0 12px; font-size: 13px; font-family: inherit; }
+.promo-row input:focus { outline: none; border-color: #111; }
+.promo-btn {
+  height: 38px; padding: 0 16px;
+  border: 1.5px solid #111; border-radius: 9px;
+  background: #fff; font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s;
+}
+.promo-btn:hover { background: #f4f4f6; }
+.promo-msg { font-size: 12px; color: var(--green); margin-top: 6px; display: none; }
+
+/* ── ACTION BTN ── */
+.co-action {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #ff5a1f, #e8002d);
+  color: #fff;
+  border: none;
+  border-radius: 11px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 6px;
+  font-family: inherit;
+}
+.co-action:hover { opacity: 0.88; }
+.co-action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── ALERT ── */
+.co-alert {
+  border-radius: 10px; padding: 11px 14px; font-size: 13px;
+  margin-bottom: 14px; display: none;
+}
+.co-alert.err { background: #fff0f0; border: 1px solid #ffd0d0; color: var(--red); display: block; }
+.co-alert.ok  { background: #f0faf4; border: 1px solid #b6e8c8; color: var(--green); display: block; }
+
+/* ── RIGHT: ORDER SUMMARY ── */
+.co-summary {
+  position: sticky;
+  top: 82px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.co-summary-head {
+  padding: 16px 20px;
+  font-size: 15px;
+  font-weight: 800;
+  border-bottom: 1px solid var(--border);
+  background: #fafafa;
+}
+.co-summary-body { padding: 16px 20px; }
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 13px;
+  gap: 8px;
+}
+.order-item:last-child { border-bottom: none; }
+.order-item-name { flex: 1; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.order-item-qty  { color: var(--muted); font-size: 12px; flex-shrink: 0; }
+.order-item-price { font-weight: 700; flex-shrink: 0; }
+.co-summary-totals { padding: 14px 20px; border-top: 1px solid var(--border); }
+.tot-row { display: flex; justify-content: space-between; font-size: 13.5px; color: #374151; margin-bottom: 8px; }
+.tot-row.free-ship { color: var(--green); }
+.tot-row.grand { font-size: 17px; font-weight: 800; color: #111; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 4px; }
+
+.place-order-btn {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 0 20px 16px;
+  padding: 14px;
+  background: linear-gradient(135deg, #ff5a1f, #e8002d);
+  color: #fff;
+  border: none;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.2s;
+  font-family: inherit;
+}
+.place-order-btn:hover { opacity: 0.88; }
+
+.trust-badges {
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.trust-item svg { width: 14px; height: 14px; fill: var(--green); flex-shrink: 0; }
+
+/* ── FOOTER ── */
+.co-footer {
+  background: #fff;
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 40px;
+}
+.co-footer a { color: var(--muted); text-decoration: none; margin: 0 8px; }
+.co-footer a:hover { color: #111; }
+
+/* ── SUCCESS SCREEN ── */
+.success-screen {
+  display: none;
+  max-width: 520px;
+  margin: 60px auto;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.success-icon { font-size: 56px; margin-bottom: 16px; }
+.success-screen h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.success-screen p  { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+.success-screen a  {
+  display: inline-block;
+  background: #111; color: #fff;
+  text-decoration: none; padding: 11px 28px;
+  border-radius: 10px; font-weight: 600; font-size: 14px;
+}
+
+@media (max-width: 860px) {
+  .co-layout { grid-template-columns: 1fr; }
+  .co-summary { position: static; }
+}
+@media (max-width: 560px) {
+  .field-row { grid-template-columns: 1fr; }
+  .co-steps  { gap: 0; padding: 12px; }
+  .co-step   { padding: 0 10px; font-size: 11px; }
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+<!-- TOP BAR -->
+<header class="co-topbar">
+  <a href="{% url 'home' %}" class="co-logo">Shop<span>IT</span></a>
+  <span class="co-secure">
+    <svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm-2 16-4-4 1.4-1.4L10 14.2l6.6-6.6L18 9l-8 8z"/></svg>
+    256-bit SSL secured
+  </span>
+</header>
+
+<!-- STEPS -->
+<div class="co-steps">
+  <div class="co-step done" id="step-ship-ind">
+    <div class="co-step-num">✓</div> Shipping
+  </div>
+  <div class="co-step active" id="step-pay-ind">
+    <div class="co-step-num">2</div> Payment
+  </div>
+  <div class="co-step" id="step-review-ind">
+    <div class="co-step-num">3</div> Review
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="co-layout" id="checkout-layout">
+
+  <!-- LEFT COLUMN -->
+  <div id="left-col">
+
+    <div id="co-alert" class="co-alert"></div>
+
+    <!-- SHIPPING PANEL -->
+    <div class="co-panel" id="ship-panel">
+      <div class="co-panel-head">
+        <h2><span>1</span> Shipping address</h2>
+      </div>
+      <div class="co-panel-body">
+        <div class="field-row">
+          <div class="field">
+            <label>First name</label>
+            <input type="text" id="f-fname" placeholder="John" autocomplete="given-name" />
+            <span class="err-msg" id="e-fname"></span>
+          </div>
+          <div class="field">
+            <label>Last name</label>
+            <input type="text" id="f-lname" placeholder="Smith" autocomplete="family-name" />
+            <span class="err-msg" id="e-lname"></span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" id="f-email" placeholder="john@example.com" autocomplete="email" />
+          <span class="err-msg" id="e-email"></span>
+        </div>
+        <div class="field">
+          <label>Phone number</label>
+          <input type="tel" id="f-phone" placeholder="+1 (555) 000-0000" autocomplete="tel" />
+          <span class="err-msg" id="e-phone"></span>
+        </div>
+        <div class="field">
+          <label>Street address</label>
+          <input type="text" id="f-addr" placeholder="1100 Congress Ave" autocomplete="street-address" />
+          <span class="err-msg" id="e-addr"></span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>City</label>
+            <input type="text" id="f-city" placeholder="Austin" autocomplete="address-level2" />
+            <span class="err-msg" id="e-city"></span>
+          </div>
+          <div class="field">
+            <label>ZIP / Postal code</label>
+            <input type="text" id="f-zip" placeholder="78701" autocomplete="postal-code" />
+            <span class="err-msg" id="e-zip"></span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>State / Province</label>
+            <input type="text" id="f-state" placeholder="TX" autocomplete="address-level1" />
+            <span class="err-msg" id="e-state"></span>
+          </div>
+          <div class="field">
+            <label>Country</label>
+            <select id="f-country" autocomplete="country">
+              <option value="">Select country</option>
+              <option value="PK" selected>Pakistan</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="AE">UAE</option>
+              <option value="IN">India</option>
+              <option value="CA">Canada</option>
+              <option value="AU">Australia</option>
+              <option value="other">Other</option>
+            </select>
+            <span class="err-msg" id="e-country"></span>
+          </div>
+        </div>
+        <button class="co-action" id="ship-next-btn">Continue to Payment →</button>
+      </div>
+    </div>
+
+    <!-- PAYMENT PANEL (locked until shipping done) -->
+    <div class="co-panel" id="pay-panel" style="opacity:.45;pointer-events:none;">
+      <div class="co-panel-head">
+        <h2><span>2</span> Payment method</h2>
+      </div>
+      <div class="co-panel-body">
+
+        <div class="radio-cards" id="pay-options">
+          <label class="radio-card">
+            <input type="radio" name="pay" value="cod" checked />
+            <div>
+              <div class="radio-card-label">💵 Cash on Delivery</div>
+              <div class="radio-card-sub">Pay when your order arrives</div>
+            </div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="pay" value="card" />
+            <div>
+              <div class="radio-card-label">💳 Credit / Debit Card</div>
+              <div class="radio-card-sub">Visa, Mastercard, Amex accepted</div>
+            </div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="pay" value="easypaisa" />
+            <div>
+              <div class="radio-card-label">📱 EasyPaisa / JazzCash</div>
+              <div class="radio-card-sub">Mobile wallet payment</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Card form -->
+        <div class="card-details hidden" id="card-details">
+          <div class="card-icons">
+            <span class="c-badge c-visa">VISA</span>
+            <span class="c-badge c-mc"><span class="r"></span><span class="y"></span></span>
+            <span class="c-badge c-amex">AMEX</span>
+          </div>
+          <div class="field">
+            <label>Name on card</label>
+            <input type="text" id="f-cname" placeholder="John Smith" autocomplete="cc-name" />
+            <span class="err-msg" id="e-cname"></span>
+          </div>
+          <div class="field">
+            <label>Card number</label>
+            <div class="card-num-wrap">
+              <input type="text" id="f-cnum" placeholder="4532 1234 5678 9010" maxlength="19" inputmode="numeric" autocomplete="cc-number" />
+              <span class="card-type-icon" id="card-type-icon"></span>
+            </div>
+            <span class="err-msg" id="e-cnum"></span>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Expiry</label>
+              <input type="text" id="f-exp" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" />
+              <span class="err-msg" id="e-exp"></span>
+            </div>
+            <div class="field">
+              <label>CVV</label>
+              <input type="text" id="f-cvv" placeholder="123" maxlength="4" inputmode="numeric" autocomplete="cc-csc" />
+              <span class="err-msg" id="e-cvv"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EasyPaisa form -->
+        <div class="card-details hidden" id="ep-details">
+          <div class="field">
+            <label>Mobile wallet number</label>
+            <input type="tel" id="f-epnum" placeholder="0300-1234567" />
+            <span class="err-msg" id="e-epnum"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;">Promo / Gift code</div>
+          <div class="promo-row">
+            <input type="text" id="promo-input" placeholder="Enter code" />
+            <button class="promo-btn" id="promo-btn">Apply</button>
+          </div>
+          <div class="promo-msg" id="promo-msg">✓ Promo code applied!</div>
+        </div>
+
+        <button class="co-action" id="pay-next-btn" style="margin-top:20px;">Review Order →</button>
+      </div>
+    </div>
+
+    <!-- REVIEW PANEL -->
+    <div class="co-panel" id="review-panel" style="opacity:.45;pointer-events:none;">
+      <div class="co-panel-head">
+        <h2><span>3</span> Review &amp; Place Order</h2>
+      </div>
+      <div class="co-panel-body">
+        <div id="review-ship" style="margin-bottom:14px;padding:12px 14px;background:#fafafa;border:1px solid var(--border);border-radius:10px;font-size:13px;line-height:1.7;"></div>
+        <div id="review-pay"  style="margin-bottom:14px;padding:12px 14px;background:#fafafa;border:1px solid var(--border);border-radius:10px;font-size:13px;"></div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px;">By placing your order you agree to Shop IT's <a href="#" style="color:#007185;">Terms of Service</a> and <a href="#" style="color:#007185;">Privacy Policy</a>.</p>
+        <button class="co-action" id="place-btn">🎉 Place Order</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: ORDER SUMMARY -->
+  <div class="co-summary">
+    <div class="co-summary-head">Order Summary</div>
+    <div class="co-summary-body" id="order-items">
+      <div style="color:var(--muted);font-size:13px;text-align:center;padding:12px 0;">Loading cart…</div>
+    </div>
+    <div class="co-summary-totals">
+      <div class="tot-row"><span>Subtotal</span><span id="ot-sub">$0.00</span></div>
+      <div class="tot-row free-ship"><span>Shipping</span><span>FREE</span></div>
+      <div class="tot-row"><span>Tax (est.)</span><span id="ot-tax">$0.00</span></div>
+      <div class="tot-row grand"><span>Total</span><span id="ot-total">$0.00</span></div>
+    </div>
+    <button class="place-order-btn" id="place-btn-sidebar">Place Order</button>
+    <div class="trust-badges">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm-2 16-4-4 1.4-1.4L10 14.2l6.6-6.6L18 9l-8 8z"/></svg>
+        256-bit SSL encryption
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+        Safe & secure payment
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        Free returns within 30 days
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="success-screen">
+  <div class="success-icon">🎉</div>
+  <h2>Order Placed!</h2>
+  <p>Thank you for shopping with Shop IT.<br>You'll receive a confirmation email shortly.</p>
+  <a href="{% url 'home' %}">Continue Shopping</a>
+</div>
+
+<footer class="co-footer">
+  <a href="#">Privacy Policy</a>
+  <a href="#">Terms of Service</a>
+  <a href="#">Help Center</a>
+  <div style="margin-top:8px;">© 2026 Shop IT. All rights reserved.</div>
+</footer>
+
+<script>
+var CART_KEY = "shopIT_cart";
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+  catch(e) { return []; }
+}
+
+/* ── RENDER ORDER SUMMARY ── */
+function renderSummary() {
+  var cart  = getCart();
+  var listEl = document.getElementById("order-items");
+  var TAX_RATE = 0.08;
+
+  if (cart.length === 0) {
+    listEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:12px 0;">Your cart is empty</div>';
+    document.getElementById("ot-sub").textContent = "$0.00";
+    document.getElementById("ot-tax").textContent = "$0.00";
+    document.getElementById("ot-total").textContent = "$0.00";
+    return;
+  }
+
+  var sub = 0;
+  listEl.innerHTML = cart.map(function(item) {
+    var line = parseFloat(item.price) * item.qty;
+    sub += line;
+
+    return '<div class="order-item">'
+      + '<span class="order-item-name">' + esc(item.name) + '</span>'
+      + '<span class="order-item-qty">x' + item.qty + '</span>'
+      + '<span class="order-item-price">$' + line.toFixed(2) + '</span>'
+      + '</div>';
+  }).join("");
+
+  var tax = sub * TAX_RATE;
+  var total = sub + tax;
+
+  document.getElementById("ot-sub").textContent = "$" + sub.toFixed(2);
+  document.getElementById("ot-tax").textContent = "$" + tax.toFixed(2);
+  document.getElementById("ot-total").textContent = "$" + total.toFixed(2);
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+/* ── ALERT ── */
+function showAlert(type, msg) {
+  var el = document.getElementById("co-alert");
+  el.className = "co-alert " + type;
+  el.textContent = msg;
+  el.style.display = "block";
+  el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function clearAlert() {
+  var el = document.getElementById("co-alert");
+  el.className = "co-alert";
+  el.textContent = "";
+  el.style.display = "none";
+}
+
+/* ── STEP SYSTEM (FIXED CORE) ── */
+function setStep(step) {
+  document.querySelectorAll(".co-step").forEach(s => {
+    s.classList.remove("active", "done");
+  });
+
+  if (step === 1) {
+    document.getElementById("step-ship-ind").classList.add("active");
+  }
+
+  if (step === 2) {
+    document.getElementById("step-ship-ind").classList.add("done");
+    document.getElementById("step-pay-ind").classList.add("active");
+  }
+
+  if (step === 3) {
+    document.getElementById("step-ship-ind").classList.add("done");
+    document.getElementById("step-pay-ind").classList.add("done");
+    document.getElementById("step-review-ind").classList.add("active");
+  }
+}
+
+/* ── PANEL UNLOCK ── */
+function unlockPanel(id) {
+  var p = document.getElementById(id);
+  if (!p) return;
+  p.style.opacity = "1";
+  p.style.pointerEvents = "auto";
+}
+
+/* ── VALIDATION ── */
+function val(id, errId, check, msg) {
+  var el = document.getElementById(id);
+  var err = document.getElementById(errId);
+
+  if (!el) return true;
+
+  var ok = check(el.value.trim());
+
+  el.classList.toggle("err", !ok);
+
+  if (err) err.textContent = ok ? "" : msg;
+
+  return ok;
+}
+
+function luhn(n) {
+  var d = n.replace(/\D/g,"");
+  if (d.length < 13) return false;
+
+  var s = 0, alt = false;
+
+  for (var i = d.length - 1; i >= 0; i--) {
+    var x = parseInt(d[i], 10);
+    if (alt) { x *= 2; if (x > 9) x -= 9; }
+    s += x;
+    alt = !alt;
+  }
+
+  return s % 10 === 0;
+}
+
+/* ── SHIPPING ── */
+function validateShipping() {
+  var ok = true;
+
+  ok = val("f-fname","e-fname", v=>v.length>0,"First name required") && ok;
+  ok = val("f-lname","e-lname", v=>v.length>0,"Last name required") && ok;
+  ok = val("f-email","e-email", v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),"Valid email required") && ok;
+  ok = val("f-phone","e-phone", v=>v.replace(/\D/g,"").length>=7,"Valid phone required") && ok;
+  ok = val("f-addr","e-addr", v=>v.length>3,"Address required") && ok;
+  ok = val("f-city","e-city", v=>v.length>0,"City required") && ok;
+  ok = val("f-zip","e-zip", v=>v.length>=3,"ZIP required") && ok;
+  ok = val("f-state","e-state", v=>v.length>0,"State required") && ok;
+  ok = val("f-country","e-country", v=>v.length>0,"Country required") && ok;
+
+  return ok;
+}
+
+/* ── PAYMENT ── */
+function validatePayment() {
+  var method = document.querySelector('input[name="pay"]:checked');
+  if (!method) return false;
+
+  if (method.value === "card") {
+    var ok = true;
+
+    ok = val("f-cname","e-cname", v=>v.length>1,"Card name required") && ok;
+    ok = val("f-cnum","e-cnum", v=>luhn(v),"Invalid card number") && ok;
+
+    ok = val("f-exp","e-exp", function(v){
+      var m = v.replace(/\s/g,"").split("/");
+      if (m.length !== 2) return false;
+
+      var mo = parseInt(m[0],10);
+      var yr = parseInt("20"+m[1],10);
+
+      var now = new Date();
+      var cy = now.getFullYear();
+      var cm = now.getMonth()+1;
+
+      return mo>=1 && mo<=12 && (yr>cy || (yr===cy && mo>=cm));
+    },"Invalid expiry") && ok;
+
+    ok = val("f-cvv","e-cvv", v=>v.length>=3,"Invalid CVV") && ok;
+
+    return ok;
+  }
+
+  if (method.value === "easypaisa") {
+    return val("f-epnum","e-epnum", v=>v.replace(/\D/g,"").length>=10,"Invalid number");
+  }
+
+  return true;
+}
+
+/* ── STEP STATE ── */
+var shipDone = false;
+var payDone = false;
+
+/* ── SHIPPING BUTTON ── */
+document.getElementById("ship-next-btn").addEventListener("click", function() {
+  clearAlert();
+
+  if (!validateShipping()) {
+    showAlert("err","Fix shipping fields first");
+    return;
+  }
+
+  shipDone = true;
+
+  unlockPanel("pay-panel");
+  setStep(2);
+
+  document.getElementById("pay-panel").scrollIntoView({behavior:"smooth"});
+});
+
+/* ── PAYMENT BUTTON ── */
+document.getElementById("pay-next-btn").addEventListener("click", function() {
+  clearAlert();
+
+  if (!validatePayment()) {
+    showAlert("err","Fix payment details");
+    return;
+  }
+
+  payDone = true;
+
+  buildReview();
+  unlockPanel("review-panel");
+  setStep(3);
+
+  document.getElementById("review-panel").scrollIntoView({behavior:"smooth"});
+});
+
+/* ── REVIEW ── */
+function buildReview() {
+  var fname = document.getElementById("f-fname").value.trim();
+  var lname = document.getElementById("f-lname").value.trim();
+
+  var addr = document.getElementById("f-addr").value.trim();
+  var city = document.getElementById("f-city").value.trim();
+  var zip = document.getElementById("f-zip").value.trim();
+  var country = document.getElementById("f-country").value;
+
+  document.getElementById("review-ship").innerHTML =
+    "<strong>Ship:</strong><br>" + esc(fname+" "+lname) + "<br>" +
+    esc(addr+" "+city+" "+zip) + "<br>" + esc(country);
+
+  var method = document.querySelector('input[name="pay"]:checked');
+
+  var payText = "COD";
+  if (method.value === "card") payText = "Card";
+  if (method.value === "easypaisa") payText = "EasyPaisa";
+
+  document.getElementById("review-pay").innerHTML =
+    "<strong>Payment:</strong> " + payText;
+}
+
+/* ── PLACE ORDER ── */
+function placeOrder() {
+  if (!shipDone || !payDone) {
+    showAlert("err","Complete all steps first");
+    return;
+  }
+
+  localStorage.removeItem(CART_KEY);
+  document.getElementById("checkout-layout").style.display = "none";
+  document.getElementById("success-screen").style.display = "block";
+}
+
+/* ── EVENTS ── */
+document.getElementById("place-btn").onclick = placeOrder;
+document.getElementById("place-btn-sidebar").onclick = placeOrder;
+
+/* ── INIT ── */
+renderSummary();
+setStep(1);
+</script>
+
+{% endblock %}
+
+{% block checkout_button %}{% endblock %}

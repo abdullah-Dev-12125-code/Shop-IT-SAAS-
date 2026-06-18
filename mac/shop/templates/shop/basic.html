@@ -4,574 +4,495 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-  <title>{% block title %}Welcome-Shop IT{% endblock %}</title>
+  <title>{% block title %}Shop IT{% endblock %}</title>
 
   <style>
-    /* ================= RESET ================= */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
     *, *::before, *::after { box-sizing: border-box; }
-
-    html, body {
-    height: 100%;
-}
-
-body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: #f8f8f9;
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
-
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.main-content {
-    flex: 1;
-}
+    html { font-size: 16px; }
 
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: #f8f8f9;
       margin: 0;
-      -webkit-font-smoothing: antialiased;
+      font-family: "Inter", system-ui, sans-serif;
+      background: #f4f4f6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #111;
     }
 
-    /* ================= NAVBAR ================= */
-    .modern-navbar {
-      background: #E2E6EA;
-      padding: 0 24px;
-      height: 64px;
-      border-bottom: 1px solid #CED4DA;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
+    .main-content { flex: 1; }
 
-    .modern-navbar .container-fluid {
-      padding: 0;
-      height: 100%;
+    /* ── NAVBAR ── */
+    .navbar-custom {
+      background: #ffffff;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 0 1.5rem;
+      height: 62px;
       display: flex;
       align-items: center;
-    }
-
-    /* BRAND */
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-      padding: 0;
-      margin: 0 20px 0 0;
-      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
 
     .navbar-brand img {
-      height: 250px;
+      height: 11rem;
       width: auto;
-      object-fit: contain;
     }
 
-    /* TOGGLER */
-    .navbar-toggler {
-      border: 1px solid #adb5bd;
-      border-radius: 6px;
-      padding: 4px 8px;
-    }
-
-    .navbar-toggler:focus { outline: none; box-shadow: none; }
-
-    /* NAV LINKS */
-    .navbar-nav .nav-link {
-      color: #1F2937 !important;
-      font-size: 13.5px;
+    .nav-link {
+      font-size: 0.875rem;
       font-weight: 500;
-      padding: 6px 12px !important;
-      border-radius: 6px;
-      transition: background 0.18s ease, color 0.18s ease;
-      white-space: nowrap;
+      color: #374151 !important;
+      padding: 0.4rem 0.75rem !important;
+      border-radius: 8px;
+      transition: background 0.15s;
     }
 
-    .navbar-nav .nav-link:hover {
-      background: rgba(0,0,0,0.07);
-      color: #000 !important;
+    .nav-link:hover { background: #f4f4f6; }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      background: #f4f4f6;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      max-width: 240px;
+      width: 100%;
+      margin-left: 1rem;
     }
 
-    .nav-item.active .nav-link {
-      font-weight: 700;
-      color: #000 !important;
+    .search-box {
+      border: none;
+      outline: none;
+      background: transparent;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.85rem;
+      width: 100%;
+      font-family: inherit;
     }
 
-    /* DIVIDER */
-    .nav-divider {
-      width: 1px;
-      height: 20px;
-      background: #adb5bd;
-      margin: 0 6px;
-      flex-shrink: 0;
+    .search-btn {
+      border: none;
+      background: #111;
+      color: white;
+      padding: 0.45rem 0.9rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: inherit;
+      transition: opacity 0.15s;
     }
 
-    /* CART */
-    .cart-link {
+    .search-btn:hover { opacity: 0.85; }
+
+    /* ── CART ── */
+    .cart-nav-item {
       position: relative;
+      list-style: none;
     }
 
     .cart-badge {
       position: absolute;
-      top: 0px;
-      right: 4px;
+      top: -5px;
+      right: -8px;
       background: #e8002d;
-      color: #fff;
-      font-size: 9px;
+      color: white;
+      font-size: 0.6rem;
       font-weight: 700;
-      min-width: 16px;
-      height: 16px;
-      border-radius: 99px;
+      min-width: 17px;
+      height: 17px;
       padding: 0 4px;
+      border-radius: 999px;
       display: flex;
       align-items: center;
       justify-content: center;
       line-height: 1;
     }
 
-    /* ── CART POPOVER ── */
-    .cart-pop-wrap {
+    .cart-link-wrap {
       position: relative;
+      display: inline-flex;
+      align-items: center;
     }
 
-    .cart-pop-panel {
-      display: none;
+    /* ── POPOVER ── */
+    .cart-popover {
       position: absolute;
-      top: calc(100% + 14px);
+      top: calc(100% + 10px);
       right: 0;
-      width: 300px;
+      width: 310px;
       background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      box-shadow: 0 20px 55px rgba(0,0,0,0.16);
+      border: 1px solid #e8e8e8;
+      border-radius: 16px;
+      box-shadow: 0 16px 48px rgba(0,0,0,.13);
       z-index: 9999;
       overflow: hidden;
-      animation: cpopIn 0.18s ease;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+      pointer-events: none;
     }
 
-    @keyframes cpopIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .cart-nav-item:hover .cart-popover,
+    .cart-popover:hover {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0s;
+      pointer-events: auto;
     }
 
-    .cart-pop-wrap:hover .cart-pop-panel { display: block; }
-
-    .cpp-header {
-      padding: 13px 16px 11px;
+    .cpop-header {
+      padding: 13px 16px;
+      font-weight: 700;
+      font-size: 13.5px;
       border-bottom: 1px solid #f0f0f0;
+      background: #fafafa;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
 
-    .cpp-header strong {
-      font-size: 13px;
-      font-weight: 700;
-      color: #0d0d0d;
-    }
-
-    .cpp-badge {
-      font-size: 10px;
-      font-weight: 700;
-      background: linear-gradient(135deg,#ff5a1f,#e8002d);
-      color: #fff;
+    .cpop-count {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b7280;
+      background: #ebebeb;
       padding: 2px 9px;
-      border-radius: 99px;
+      border-radius: 999px;
     }
 
-    .cpp-list {
-      max-height: 190px;
+    .cpop-items {
+      padding: 6px 14px;
+      max-height: 260px;
       overflow-y: auto;
-      padding: 8px 16px;
     }
 
-    .cpp-row {
+    .cpop-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 12.5px;
-      color: #1a1a1a;
-      padding: 6px 0;
+      padding: 8px 0;
       border-bottom: 1px solid #f5f5f5;
+      gap: 8px;
     }
 
-    .cpp-row:last-child { border-bottom: none; }
+    .cpop-item:last-child { border-bottom: none; }
 
-    .cpp-row .cpp-qty {
-      font-size: 11px;
-      color: #9ca3af;
-      margin-left: 8px;
+    .cpop-item-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #1f2937;
+      font-weight: 500;
     }
 
-    .cpp-empty {
-      padding: 20px 16px;
-      text-align: center;
-      font-size: 13px;
-      color: #9ca3af;
+    .cpop-item-meta {
+      white-space: nowrap;
+      color: #6b7280;
+      font-size: 12px;
     }
 
-    .cpp-footer {
-      padding: 11px 16px;
-      border-top: 1px solid #f0f0f0;
-      background: #fafafa;
-    }
-
-    .cpp-footer a {
-      display: block;
-      text-align: center;
-      background: linear-gradient(135deg,#ff5a1f,#e8002d);
-      color: #fff !important;
-      border-radius: 9px;
+    .cpop-total {
+      padding: 8px 16px 6px;
+      display: flex;
+      justify-content: space-between;
       font-size: 13px;
       font-weight: 700;
-      padding: 9px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .cpop-empty {
+      padding: 22px 16px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .cpop-footer {
+      padding: 10px 14px 14px;
+    }
+
+    .cpop-footer a {
+      display: block;
+      text-align: center;
+      background: #111;
+      color: #fff;
       text-decoration: none;
-      transition: opacity 0.2s;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      transition: opacity 0.15s;
+      letter-spacing: 0.02em;
     }
 
-    .cpp-footer a:hover { opacity: 0.88; }
+    .cpop-footer a:hover { opacity: 0.85; }
 
+    /* ── FOOTER ── */
+    .site-footer {
+      background: #fff;
+      border-top: 1px solid #e8e8e8;
+      margin-top: auto;
+    }
 
-
-/* ================= FOOTER ================= */
-
-.site-footer {
-    background: #E2E6EA;
-    border-top: 1px solid #CED4DA;
-    margin-top: auto;
-    color: #1F2937;
-}
-
-.footer-container {
-    max-width: 1300px;
-    margin: auto;
-    padding: 50px 30px;
-    display: flex;
-    justify-content: space-between;
-    gap: 50px;
-    flex-wrap: wrap;
-}
-
-.footer-section {
-    flex: 1;
-    min-width: 220px;
-}
-
-.footer-section h5 {
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 18px;
-    color: #111827;
-}
-
-.footer-section p {
-    color: #4B5563;
-    font-size: 14px;
-    line-height: 1.8;
-}
-
-.footer-section a {
-    display: block;
-    color: #4B5563;
-    text-decoration: none;
-    font-size: 14px;
-    margin-bottom: 10px;
-    transition: all 0.2s ease;
-}
-
-.footer-section a:hover {
-    color: #000;
-    transform: translateX(4px);
-}
-
-.footer-bottom {
-    border-top: 1px solid #CED4DA;
-    text-align: center;
-    padding: 18px;
-    font-size: 13px;
-    color: #6B7280;
-}
-
-/* Optional social icons */
-.footer-social {
-    display: flex;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.footer-social a {
-    width: 38px;
-    height: 38px;
-    background: white;
-    border: 1px solid #CED4DA;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #374151;
-    transition: all 0.2s ease;
-}
-
-.footer-social a:hover {
-    background: #1F2937;
-    color: white;
-    transform: translateY(-3px);
-}
-
-/* Mobile */
-@media (max-width: 768px) {
     .footer-container {
-        flex-direction: column;
-        gap: 30px;
-        padding: 35px 20px;
-    }
-
-    .footer-section {
-        min-width: 100%;
-    }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .footer-container {
-        flex-direction: column;
-        gap: 30px;
-        padding: 35px 20px;
-    }
-
-    .footer-section {
-        min-width: 100%;
-    }
-}
-
-
-    /* SEARCH */
-    .search-wrap {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem 1.5rem;
       display: flex;
-      align-items: center;
-      background: #f1f3f5;
-      border: 1px solid #ced4da;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-left: 14px;
+      flex-wrap: wrap;
+      gap: 3rem;
+      justify-content: space-between;
     }
 
-    .search-box {
-      border: none !important;
-      outline: none !important;
-      box-shadow: none !important;
-      background: transparent;
-      font-size: 13px;
-      padding: 8px 12px;
-      width: 200px;
+    .footer-section { flex: 1; min-width: 180px; }
+
+    .footer-section h5 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #111;
     }
 
-    .search-btn {
-      background: #3d444b;
-      border: none;
-      padding: 8px 14px;
-      color: white;
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.18s;
+    .footer-section p {
+      font-size: 0.875rem;
+      color: #6b7280;
     }
 
-    .search-btn:hover { background: #495057; }
+    .footer-section a {
+      display: block;
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 0.3rem;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
 
-    /* MOBILE */
+    .footer-section a:hover { color: #111; }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 0.75rem;
+      font-size: 0.8rem;
+      border-top: 1px solid #f0f0f0;
+      color: #9ca3af;
+    }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 991px) {
-      .modern-navbar { height: auto; padding: 10px 16px; }
-      .search-wrap    { width: 100%; margin: 10px 0 4px; }
-      .search-box     { width: 100%; }
-      .nav-divider    { display: none; }
-      .cart-pop-panel { right: -20px; width: 270px; }
+      .search-wrap { margin: 0.8rem 0; max-width: 100%; }
+      .cart-popover { display: none !important; }
     }
 
-    {% block css %}{% endblock %}
+    @media (max-width: 768px) {
+      .footer-container { flex-direction: column; gap: 1.5rem; }
+    }
   </style>
+
+  {% block css %}{% endblock %}
 </head>
 
 <body>
 
-  <!-- ═══ NAVBAR ═══ -->
-  <nav class="navbar navbar-expand-lg modern-navbar">
-    <div class="container-fluid">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
 
-      <!-- BRAND -->
-      <a class="navbar-brand" href="#">
-        <img src="{% static 'shop/assets/logo.png' %}" alt="Shop IT Logo">
-      </a>
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'shop/assets/logo.png' %}" alt="Shop IT">
+    </a>
 
-      <!-- TOGGLER -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#nav" style="border:none;background:none;font-size:1.3rem;">
+      ☰
+    </button>
 
-      <!-- LINKS -->
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ml-auto align-items-lg-center">
 
-        <ul class="navbar-nav align-items-center">
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'shops' %}">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'categories' %}">Categories</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'TrackUs' %}">Tracker</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
 
-          <li class="nav-item active">
-            <a class="nav-link" href="/shop/index">Home</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/shop/shops">Shop</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/shop/categories">Categories</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/shop/tracker">Tracker</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/shop/contact">Contact</a>
-          </li>
-
-
-          <li class="nav-item d-none d-lg-flex align-items-center">
-            <div class="nav-divider"></div>
-          </li>
-
-          <!-- CART with hover popover -->
-          <li class="nav-item cart-link cart-pop-wrap">
-            <a class="nav-link" href="#" id="cart-icon-link">
+        <!-- CART -->
+        <li class="nav-item cart-nav-item ml-lg-3">
+          <a class="nav-link" href="{% url 'cart' %}">
+            <span class="cart-link-wrap">
               🛒 Cart
-              <span id="cart" class="cart-badge">0</span>
-            </a>
+              <span class="cart-badge cart-count">0</span>
+            </span>
+          </a>
 
-            <!-- Popover panel -->
-            <div class="cart-pop-panel" id="cart-pop-panel">
-              <div class="cpp-header">
-                <strong>Your Cart</strong>
-                <span class="cpp-badge" id="cpp-total-badge">0 items</span>
-              </div>
-              <div class="cpp-list" id="cpp-list">
-                <div class="cpp-empty">Your cart is empty.</div>
-              </div>
-              <div class="cpp-footer">
-                <a href="/cart">View Cart &amp; Checkout →</a>
-              </div>
+          <div class="cart-popover" role="dialog" aria-label="Cart preview">
+            <div class="cpop-header">
+              Your Cart
+              <span class="cpop-count" id="cpop-count-badge">0 items</span>
             </div>
-          </li>
+            <div class="cpop-items" id="cpop-items-list">
+              <div class="cpop-empty">Your cart is empty.</div>
+            </div>
+            <div class="cpop-total" id="cpop-total" style="display:none;">
+              <span>Total</span>
+              <span id="cpop-total-price">$0.00</span>
+            </div>
+            {% block checkout_button %}
+            <div class="cpop-footer">
+              <a href="{% url 'cart' %}">View Cart &amp; Checkout →</a>
+            </div>
+            {% endblock %}
+          </div>
+        </li>
 
-        </ul>
+      </ul>
 
-        <!-- SEARCH -->
-        <div class="search-wrap">
-          <input class="search-box" type="search" placeholder="Search products...">
-          <button class="search-btn">Search</button>
-        </div>
-
-
-     
+      <!-- SEARCH -->
+      <div class="search-wrap ml-lg-3">
+        <input class="search-box" type="text" placeholder="Search products…">
+        <button class="search-btn">Search</button>
       </div>
     </div>
   </nav>
 
-  
- 
-  
-
-
-  <!-- ═══ PAGE CONTENT ═══ -->
-<main class="main-content">
+  <!-- CONTENT -->
+  <main class="main-content">
     {% block body %}{% endblock %}
-</main>
-<footer class="site-footer">
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
     <div class="footer-container">
-
-        <div class="footer-section">
-            <h5>Shop IT</h5>
-            <p>Your trusted online shopping destination.</p>
-        </div>
-
-        <div class="footer-section">
-            <h5>Quick Links</h5>
-            <a href="/shop/index">Home</a>
-            <a href="/shop/shops">Shop</a>
-            <a href="/shop/categories">Categories</a>
-            <a href="/shop/contact">Contact</a>
-            <a href="/shop/about">About US</a>
-        </div>
-
-        <div class="footer-section">
-            <h5>Support</h5>
-            <a href="/shop/tracker">Track Order</a>
-            <a href="/shop/contact">Help Center</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms & Conditions</a>
-        </div>
-
+      <div class="footer-section">
+        <h5>Shop IT</h5>
+        <p>Your trusted shopping platform.</p>
+      </div>
+      <div class="footer-section">
+        <h5>Navigate</h5>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'shops' %}">Shop</a>
+        <a href="{% url 'categories' %}">Categories</a>
+        <a href="{% url 'contact' %}">Contact</a>
+      </div>
+      <div class="footer-section">
+        <h5>Support</h5>
+        <a href="{% url 'TrackUs' %}">Track Order</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
     </div>
+    <div class="footer-bottom">© 2026 Shop IT. All rights reserved.</div>
+  </footer>
 
-    <div class="footer-bottom">
-        © 2026 Shop IT. All Rights Reserved.
-    </div>
-</footer>
-
-  <!-- ═══ SCRIPTS ═══ -->
+  <!-- SCRIPTS -->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
-  {% block js %}{% endblock %}
-
   <script>
-    /* ── CART STORAGE ── */
+    /*
+      CART STORAGE HELPERS
+      ────────────────────
+      Cart is stored in localStorage as JSON array of objects:
+        [{ id, name, price, qty }, ...]
+
+      CART_KEY must match exactly what index.html uses when saving items.
+    */
+    const CART_KEY = "shopIT_cart";
+
     function getCart() {
-      return JSON.parse(localStorage.getItem('cart') || '{}');
+      try {
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch(e) {
+        return [];
+      }
     }
 
     function saveCart(cart) {
-      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
     }
 
-    function updateCart() {
-      const cart  = getCart();
-      let   total = 0;
-      for (let key in cart) total += cart[key];
-      document.getElementById('cart').innerText = total;
-      refreshCartPopover();
-    }
+    /*
+      updateCartUI()
+      ──────────────
+      Reads localStorage and re-renders:
+        1. The red badge count on the navbar cart icon
+        2. The hover popover item list
+        3. The popover item count chip
+        4. The popover total price row
+    */
+    function updateCartUI() {
+      const cart = getCart();
+      const totalQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
 
-    /* ── CART POPOVER ── */
-    function refreshCartPopover() {
-      const cart    = getCart();
-      const keys    = Object.keys(cart);
-      const total   = keys.reduce((s, k) => s + cart[k], 0);
-      const badge   = document.getElementById('cpp-total-badge');
-      const list    = document.getElementById('cpp-list');
-      if (!badge || !list) return;
+      /* Badge on cart icon */
+      document.querySelectorAll(".cart-count").forEach(el => {
+        el.textContent = totalQty;
+      });
 
-      badge.textContent = total + (total === 1 ? ' item' : ' items');
+      /* Popover count chip */
+      const countBadge = document.getElementById("cpop-count-badge");
+      if (countBadge) countBadge.textContent = totalQty + " item" + (totalQty !== 1 ? "s" : "");
 
-      if (keys.length === 0) {
-        list.innerHTML = '<div class="cpp-empty">Your cart is empty.</div>';
+      /* Popover item list */
+      const list = document.getElementById("cpop-items-list");
+      const totalRow = document.getElementById("cpop-total");
+      const totalPrice = document.getElementById("cpop-total-price");
+
+      if (!list) return;
+
+      if (cart.length === 0) {
+        list.innerHTML = '<div class="cpop-empty">Your cart is empty.</div>';
+        if (totalRow) totalRow.style.display = "none";
         return;
       }
 
-      list.innerHTML = keys.map(k => {
-        const qty = cart[k];
-        /* Product name lookup: reads data attribute set by index.html buttons */
-        const btn  = document.getElementById(k);
-        const name = btn ? (btn.dataset.name || 'Product #' + k.replace('pr','')) : 'Product #' + k.replace('pr','');
-        return `<div class="cpp-row">
-          <span>${name}</span>
-          <span class="cpp-qty">× ${qty}</span>
-        </div>`;
-      }).join('');
+      list.innerHTML = cart.map(item => {
+        const qty = item.qty || 1;
+        const price = parseFloat(item.price) || 0;
+        return `
+          <div class="cpop-item">
+            <span class="cpop-item-name">${escHtml(item.name)}</span>
+            <span class="cpop-item-meta">x${qty} · $${(price * qty).toFixed(2)}</span>
+          </div>
+        `;
+      }).join("");
+
+      if (totalRow && totalPrice) {
+        const grand = cart.reduce((s, i) => s + (parseFloat(i.price)||0) * (i.qty||1), 0);
+        totalPrice.textContent = "$" + grand.toFixed(2);
+        totalRow.style.display = "flex";
+      }
     }
 
-    document.addEventListener('DOMContentLoaded', updateCart);
+    function escHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[m]));
+    }
+
+    /* Run on page load */
+    document.addEventListener("DOMContentLoaded", updateCartUI);
+
+    /*
+      Listen for cart changes from other tabs / index page
+      (index.html dispatches a "cartUpdated" event after saving)
+    */
+    window.addEventListener("cartUpdated", updateCartUI);
+    window.addEventListener("storage", function(e) {
+      if (e.key === CART_KEY) updateCartUI();
+    });
   </script>
+
+  {% block js %}{% endblock %}
 
 </body>
 </html>
