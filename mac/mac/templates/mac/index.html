@@ -1,11 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <script>window.location= '/shop';</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdullah king</title>
+    <title>Welcome to the mac</title>
+    <style>
+
+body {
+    margin: 0;
+    background-color: #0f172a;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+
+/* Main heading */
+
+.heading {
+    text-align: center;
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 30px;
+}
+
+.heading span {
+    color: #38bdf8;
+}
+
+
+/* Main area */
+
+.display {
+    background-color: #1e293b;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 124px;
+}
+
+
+/* Both cards */
+
+.card-blog, .card-shop {
+
+    background-color: #111827;
+    width: 300px;
+    height: 350px;
+
+    border-radius: 25px;
+
+    padding: 25px;
+    box-sizing: border-box;
+
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+
+    transition: 0.3s;
+}
+
+
+.card-blog:hover, 
+.card-shop:hover {
+
+    transform: translateY(-12px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+
+}
+
+
+/* Card heading */
+
+.card-heading {
+
+    color: #f8fafc;
+
+    display: flex;
+    justify-content: center;
+
+    font-weight: bold;
+
+}
+
+
+.card-heading h1 {
+
+    font-size: 35px;
+}
+
+
+
+/* Paragraph */
+
+.card-text {
+
+    color: #cbd5e1;
+
+    margin-top: 70px;
+
+    padding: 0 10px;
+
+    text-align: center;
+
+    font-size: 17px;
+
+    line-height: 1.6;
+
+}
+
+
+/* Button */
+
+.card-btn {
+
+    display: flex;
+    justify-content: center;
+
+    margin-top: 40px;
+
+}
+
+
+.card-btn a {
+
+    background-color: #38bdf8;
+
+    color: #0f172a;
+
+    width: 180px;
+
+    padding: 12px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    display: flex;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+
+}
+
+
+.card-btn a:hover {
+
+    background-color: #f8fafc;
+
+    transform: scale(1.05);
+
+}
+
+
+</style>
 </head>
+
 <body>
-    I am abdullah hussain
+    <div class="hero-heading">
+        <h1 class="heading">Welcome to <span>The Project</span></h1>
+    </div>
+
+    <div class="wrapper">
+        <div class="display">    
+            <div class="card-blog">
+                <div class="card-heading">
+                    <h1>BLOG</h1>
+                </div>
+
+                <div class="card-text">
+                    <p>You can access the blog by clicking the button below</p>
+                </div>
+                
+                <div class="card-btn">
+                    <a href="{% url 'blog:blog' %}">Click Me</a>
+                </div>
+            </div>
+
+            <div class="card-shop">
+                <div class="card-heading">
+                    <h1>Shop</h1>
+                </div>
+            
+                <div class="card-text">
+                    <p>You can access the shop by clicking the button below</p>
+                </div>
+
+                <div class="card-btn">
+                    <a href="{% url 'shop:shop' %}">Click Me</a>
+                </div>
+
+            </div>
+            </div>
+        </div>
+    </div>
+
 </body>
+
 </html>
+

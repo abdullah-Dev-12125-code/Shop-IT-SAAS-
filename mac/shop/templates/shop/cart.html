@@ -69,23 +69,13 @@ body { font-family: "Inter", system-ui, sans-serif; background: #f4f4f6; }
 }
 .cart-item:hover { box-shadow: 0 8px 30px rgba(0,0,0,.1); }
 
+/* ✅ FIX: unified thumb style — proper <img> with fallback */
 .item-thumb {
   width: 60px;
   height: 60px;
   border-radius: 10px;
   object-fit: cover;
   background: #f0f0f0;
-  flex-shrink: 0;
-}
-.item-thumb-placeholder {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
-  background: #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
   flex-shrink: 0;
 }
 
@@ -262,11 +252,6 @@ body { font-family: "Inter", system-ui, sans-serif; background: #f4f4f6; }
 </div>
 
 <script>
-/*
-  CART FORMAT  (key: "shopIT_cart")
-  Array of: { id, name, price, qty }
-  Same key & format as index.html and basic.html
-*/
 var CART_KEY = "shopIT_cart";
 
 function getCart() {
@@ -286,15 +271,21 @@ function esc(s) {
 }
 
 function renderCart() {
-  var cart = getCart();
+  var cart = getCart() || [];
+
   var emptyEl = document.getElementById("empty-state");
   var gridEl  = document.getElementById("cart-grid");
   var listEl  = document.getElementById("cart-items");
 
+  if (!emptyEl || !gridEl || !listEl) {
+    console.error("Missing cart DOM elements");
+    return;
+  }
+
   if (cart.length === 0) {
-    emptyEl.style.display = "";
+    emptyEl.style.display = "block";
     gridEl.style.display  = "none";
-    /* update navbar */
+    listEl.innerHTML = "";
     if (typeof updateCartUI === "function") updateCartUI();
     return;
   }
@@ -302,37 +293,62 @@ function renderCart() {
   emptyEl.style.display = "none";
   gridEl.style.display  = "grid";
 
-  var totalQty   = 0;
+  var totalQty = 0;
   var totalPrice = 0;
 
   listEl.innerHTML = cart.map(function(item) {
-    var lineTotal = (parseFloat(item.price) * item.qty).toFixed(2);
-    totalQty   += item.qty;
-    totalPrice += parseFloat(item.price) * item.qty;
-    return '<div class="cart-item" data-id="' + esc(item.id) + '">'
-      + '<div class="item-thumb-placeholder">📦</div>'
-      + '<div class="item-info">'
-      +   '<div class="item-name">' + esc(item.name) + '</div>'
-      +   '<div class="item-unit">$' + parseFloat(item.price).toFixed(2) + ' each</div>'
-      + '</div>'
-      + '<div class="qty-control">'
-      +   '<button class="qty-btn" data-action="dec" data-id="' + esc(item.id) + '">−</button>'
-      +   '<input class="qty-num" type="number" min="1" value="' + item.qty + '" data-id="' + esc(item.id) + '" />'
-      +   '<button class="qty-btn" data-action="inc" data-id="' + esc(item.id) + '">+</button>'
-      + '</div>'
-      + '<div class="item-total">$' + lineTotal + '</div>'
-      + '<button class="remove-btn" data-action="remove" data-id="' + esc(item.id) + '" title="Remove">✕</button>'
-      + '</div>';
+    var price = parseFloat(item.price) || 0;
+    var qty   = parseInt(item.qty) || 0;
+    var lineTotal = (price * qty).toFixed(2);
+
+    totalQty   += qty;
+    totalPrice += price * qty;
+
+    // ✅ FIX: item.image is now a proper URL stored from index.html
+    // Falls back to a placeholder emoji div only if truly missing
+    var thumbHtml = item.image
+      ? `<img
+           class="item-thumb"
+           src="${esc(item.image)}"
+           alt="${esc(item.name)}"
+           onerror="this.onerror=null;this.src='https://placehold.co/60x60?text=?';"
+         >`
+      : `<div class="item-thumb" style="display:flex;align-items:center;justify-content:center;font-size:22px;background:#f0f0f0;">📦</div>`;
+
+    return `
+      <div class="cart-item" data-id="${esc(item.id)}">
+        ${thumbHtml}
+
+        <div class="item-info">
+          <div class="item-name">${esc(item.name)}</div>
+          <div class="item-unit">$${price.toFixed(2)} each</div>
+        </div>
+
+        <div class="qty-control">
+          <button class="qty-btn" data-action="dec" data-id="${esc(item.id)}">−</button>
+          <input class="qty-num" type="number" min="1" value="${qty}" data-id="${esc(item.id)}">
+          <button class="qty-btn" data-action="inc" data-id="${esc(item.id)}">+</button>
+        </div>
+
+        <div class="item-total">$${lineTotal}</div>
+
+        <button class="remove-btn" data-action="remove" data-id="${esc(item.id)}">✕</button>
+      </div>
+    `;
   }).join("");
 
-  document.getElementById("s-count").textContent = totalQty;
-  document.getElementById("s-sub").textContent   = "$" + totalPrice.toFixed(2);
-  document.getElementById("s-total").textContent = "$" + totalPrice.toFixed(2);
+  var countEl = document.getElementById("s-count");
+  var subEl   = document.getElementById("s-sub");
+  var totalEl = document.getElementById("s-total");
+
+  if (countEl) countEl.textContent = totalQty;
+  if (subEl)   subEl.textContent   = "$" + totalPrice.toFixed(2);
+  if (totalEl) totalEl.textContent = "$" + totalPrice.toFixed(2);
 
   if (typeof updateCartUI === "function") updateCartUI();
 }
 
-/* Event delegation for +/−/remove/qty input */
+/* Event delegation for +/−/remove */
 document.addEventListener("click", function(e) {
   var btn = e.target.closest("[data-action]");
   if (!btn) return;

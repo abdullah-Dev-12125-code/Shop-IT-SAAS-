@@ -28,7 +28,7 @@
 
     /* ── NAVBAR ── */
     .navbar-custom {
-      background: #ffffff;
+      background:#ffffff;
       border-bottom: 1px solid #e8e8e8;
       padding: 0 1.5rem;
       height: 62px;
@@ -243,7 +243,7 @@
     .site-footer {
       background: #fff;
       border-top: 1px solid #e8e8e8;
-      margin-top: auto;
+      margin-top: 10px;
     }
 
     .footer-container {
@@ -308,7 +308,7 @@
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-custom">
 
-    <a class="navbar-brand" href="{% url 'home' %}">
+    <a class="navbar-brand" href="{% url 'shop:home' %}">
       <img src="{% static 'shop/assets/logo.png' %}" alt="Shop IT">
     </a>
 
@@ -319,15 +319,16 @@
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav ml-auto align-items-lg-center">
 
-        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'shops' %}">Shop</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'categories' %}">Categories</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'TrackUs' %}">Tracker</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'shop:home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'shop:shops' %}">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'shop:categories' %}">Categories</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'shop:TrackUs' %}">Tracker</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'blog:blog' %}">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'shop:contact' %}">Contact</a></li>
 
         <!-- CART -->
         <li class="nav-item cart-nav-item ml-lg-3">
-          <a class="nav-link" href="{% url 'cart' %}">
+          <a class="nav-link" href="{% url 'shop:cart' %}">
             <span class="cart-link-wrap">
               🛒 Cart
               <span class="cart-badge cart-count">0</span>
@@ -348,7 +349,7 @@
             </div>
             {% block checkout_button %}
             <div class="cpop-footer">
-              <a href="{% url 'cart' %}">View Cart &amp; Checkout →</a>
+              <a href="{% url 'shop:cart' %}">View Cart &amp; Checkout →</a>
             </div>
             {% endblock %}
           </div>
@@ -378,14 +379,14 @@
       </div>
       <div class="footer-section">
         <h5>Navigate</h5>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'shops' %}">Shop</a>
-        <a href="{% url 'categories' %}">Categories</a>
-        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'shop:home' %}">Home</a>
+        <a href="{% url 'shop:shops' %}">Shop</a>
+        <a href="{% url 'shop:categories' %}">Categories</a>
+        <a href="{% url 'shop:contact' %}">Contact</a>
       </div>
       <div class="footer-section">
         <h5>Support</h5>
-        <a href="{% url 'TrackUs' %}">Track Order</a>
+        <a href="{% url 'shop:TrackUs' %}">Track Order</a>
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Service</a>
       </div>
@@ -394,7 +395,7 @@
   </footer>
 
   <!-- SCRIPTS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
   <script>

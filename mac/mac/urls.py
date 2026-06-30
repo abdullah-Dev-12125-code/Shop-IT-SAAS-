@@ -5,11 +5,13 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path("", views.indexed),
+    path('', views.index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('blog/', include("blog.urls")),
-    path('shop/', include("shop.urls")),
+    path('shop/', include("shop.urls"))
+
+
 ]
 
 # ✅ DEBUG TOOLBAR (IMPORTANT FIX)

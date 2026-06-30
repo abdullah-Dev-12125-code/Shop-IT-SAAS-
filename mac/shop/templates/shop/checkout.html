@@ -1,909 +1,1488 @@
-{% extends 'shop/basic.html' %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block title %}Checkout — Shop IT{% endblock %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Shop IT</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-{% block css %}
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand: #e8002d;
+      --green: #16a34a;
+      --green-bg: #f0faf4;
+      --green-border: #b6e8c8;
+      --red: #e8002d;
+      --red-bg: #fff0f0;
+      --red-border: #ffd0d0;
+      --border: #e8e8e8;
+      --border2: #d0d0d0;
+      --bg: #ffffff;
+      --bg2: #fafafa;
+      --bg3: #f4f4f6;
+      --text: #111111;
+      --muted: #6b7280;
+      --radius: 14px;
+      --radius-md: 9px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, .06);
+    }
 
-:root {
-  --grad: linear-gradient(135deg, #ff5a1f, #e8002d);
-  --border: #e8e8e8;
-  --muted: #6b7280;
-  --radius: 14px;
-  --shadow: 0 4px 20px rgba(0,0,0,.06);
-  --green: #16a34a;
-  --red: #e8002d;
-}
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg3);
+      min-height: 100vh
+    }
 
-body { font-family: "Inter", system-ui, sans-serif; background: #f4f4f6; color: #111; }
+    /* TOP BAR */
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .04)
+    }
 
-/* ── TOP BAR ── */
-.co-topbar {
-  background: #fff;
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.co-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #111; text-decoration: none; }
-.co-logo span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.co-secure { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
-.co-secure svg { width: 14px; height: 14px; fill: var(--green); }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+      color: #111;
+      text-decoration: none
+    }
 
-/* ── STEP INDICATOR ── */
-.co-steps {
-  background: #fff;
-  border-bottom: 1px solid var(--border);
-  padding: 14px 24px;
-  display: flex;
-  justify-content: center;
-  gap: 0;
-}
-.co-step {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #bbb;
-  padding: 0 20px;
-  position: relative;
-}
-.co-step::after {
-  content: "›";
-  position: absolute;
-  right: -4px;
-  color: #ddd;
-  font-size: 18px;
-}
-.co-step:last-child::after { display: none; }
-.co-step.done { color: var(--green); }
-.co-step.active { color: #111; }
-.co-step-num {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  background: #eee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700;
-}
-.co-step.done .co-step-num { background: var(--green); color: #fff; }
-.co-step.active .co-step-num { background: #111; color: #fff; }
+    .logo span {
+      background: linear-gradient(135deg, #ff5a1f, #e8002d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
 
-/* ── LAYOUT ── */
-.co-layout {
-  max-width: 1060px;
-  margin: 32px auto;
-  padding: 0 20px 60px;
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 24px;
-  align-items: start;
-}
+    .secure {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted)
+    }
 
-/* ── PANELS ── */
-.co-panel {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  margin-bottom: 16px;
-}
+    .secure i {
+      color: var(--green);
+      font-size: 14px
+    }
 
-.co-panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  background: #fafafa;
-}
-.co-panel-head h2 {
-  font-size: 15px;
-  font-weight: 700;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.co-panel-head h2 span {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  background: #111;
-  color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px;
-}
-.co-panel-head .edit-link {
-  font-size: 12px;
-  color: #007185;
-  text-decoration: none;
-  font-weight: 500;
-}
-.co-panel-head .edit-link:hover { text-decoration: underline; }
+    /* PROGRESS */
+    .progress-wrap {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px 0
+    }
 
-.co-panel-body { padding: 20px; }
+    .progress-bar {
+      height: 3px;
+      background: var(--bg3);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0
+    }
 
-/* COMPLETED PANEL */
-.co-panel.done-panel .co-panel-head { background: #f0faf0; }
-.co-panel.done-panel .co-panel-head h2 span { background: var(--green); }
-.co-panel.done-panel .done-summary {
-  padding: 12px 20px;
-  font-size: 13px;
-  color: #374151;
-}
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff5a1f, #e8002d);
+      transition: width .5s cubic-bezier(.4, 0, .2, 1);
+      width: 33.33%
+    }
 
-/* ── FIELDS ── */
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.field { margin-bottom: 16px; }
-.field:last-child { margin-bottom: 0; }
-.field label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.field input,
-.field select {
-  width: 100%;
-  height: 42px;
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
-  padding: 0 12px;
-  font-size: 14px;
-  font-family: inherit;
-  color: #111;
-  background: #fff;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  appearance: none;
-}
-.field input:focus,
-.field select:focus {
-  outline: none;
-  border-color: #111;
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
-}
-.field input.err,
-.field select.err {
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(232,0,45,0.1);
-}
-.field .err-msg {
-  display: block;
-  font-size: 11px;
-  color: var(--red);
-  margin-top: 4px;
-  min-height: 14px;
-}
+    /* STEPS */
+    .steps {
+      background: #fff;
+      padding: 0 24px;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-bottom: 1px solid var(--border)
+    }
 
-/* ── RADIO CARDS (payment / delivery) ── */
-.radio-cards { display: flex; flex-direction: column; gap: 10px; }
-.radio-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  border: 1.5px solid var(--border);
-  border-radius: 11px;
-  padding: 14px 16px;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-.radio-card:has(input:checked) { border-color: #111; background: #fafafa; }
-.radio-card input[type="radio"] { margin-top: 2px; accent-color: #111; flex-shrink: 0; }
-.radio-card-label { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-.radio-card-sub   { font-size: 12px; color: var(--muted); }
+    .step-btn {
+      flex: 0 0 auto;
+      padding: 14px 20px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #bbb;
+      position: relative;
+      transition: color .2s;
+      border-bottom: 2px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
 
-/* ── CARD FORM ── */
-.card-details { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
-.card-details.hidden { display: none; }
+    .step-btn::after {
+      content: "›";
+      margin-left: 8px;
+      font-size: 18px;
+      color: #ddd
+    }
 
-.card-icons { display: flex; gap: 6px; margin-bottom: 14px; }
-.c-badge {
-  height: 24px; padding: 0 7px;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  font-size: 9px; font-weight: 800;
-  display: inline-flex; align-items: center; justify-content: center;
-  background: #fff;
-}
-.c-visa { background: #1a1f71; color: #fff; }
-.c-mc   { display: inline-flex; gap: 0; padding: 4px 5px; }
-.c-mc .r { width: 12px; height: 12px; border-radius: 50%; background: #eb001b; }
-.c-mc .y { width: 12px; height: 12px; border-radius: 50%; background: #f79e1b; margin-left: -5px; }
-.c-amex { background: #006fcf; color: #fff; }
+    .step-btn:last-child::after {
+      display: none
+    }
 
-/* card number with type icon */
-.card-num-wrap { position: relative; }
-.card-num-wrap input { padding-right: 44px; }
-.card-type-icon {
-  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  font-size: 11px; font-weight: 800; color: var(--muted);
-  pointer-events: none;
-}
+    .step-btn.active {
+      color: #111;
+      border-bottom-color: #111
+    }
 
-/* ── PROMO ── */
-.promo-row { display: flex; gap: 8px; margin-top: 4px; }
-.promo-row input { flex: 1; height: 38px; border: 1.5px solid var(--border); border-radius: 9px; padding: 0 12px; font-size: 13px; font-family: inherit; }
-.promo-row input:focus { outline: none; border-color: #111; }
-.promo-btn {
-  height: 38px; padding: 0 16px;
-  border: 1.5px solid #111; border-radius: 9px;
-  background: #fff; font-size: 13px; font-weight: 600; cursor: pointer;
-  transition: background 0.15s;
-}
-.promo-btn:hover { background: #f4f4f6; }
-.promo-msg { font-size: 12px; color: var(--green); margin-top: 6px; display: none; }
+    .step-btn.done {
+      color: var(--green)
+    }
 
-/* ── ACTION BTN ── */
-.co-action {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #ff5a1f, #e8002d);
-  color: #fff;
-  border: none;
-  border-radius: 11px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  margin-top: 6px;
-  font-family: inherit;
-}
-.co-action:hover { opacity: 0.88; }
-.co-action:disabled { opacity: 0.5; cursor: not-allowed; }
+    .sn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      transition: background .2s, color .2s
+    }
 
-/* ── ALERT ── */
-.co-alert {
-  border-radius: 10px; padding: 11px 14px; font-size: 13px;
-  margin-bottom: 14px; display: none;
-}
-.co-alert.err { background: #fff0f0; border: 1px solid #ffd0d0; color: var(--red); display: block; }
-.co-alert.ok  { background: #f0faf4; border: 1px solid #b6e8c8; color: var(--green); display: block; }
+    .step-btn.active .sn {
+      background: #111;
+      color: #fff
+    }
 
-/* ── RIGHT: ORDER SUMMARY ── */
-.co-summary {
-  position: sticky;
-  top: 82px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-.co-summary-head {
-  padding: 16px 20px;
-  font-size: 15px;
-  font-weight: 800;
-  border-bottom: 1px solid var(--border);
-  background: #fafafa;
-}
-.co-summary-body { padding: 16px 20px; }
-.order-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #f5f5f5;
-  font-size: 13px;
-  gap: 8px;
-}
-.order-item:last-child { border-bottom: none; }
-.order-item-name { flex: 1; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.order-item-qty  { color: var(--muted); font-size: 12px; flex-shrink: 0; }
-.order-item-price { font-weight: 700; flex-shrink: 0; }
-.co-summary-totals { padding: 14px 20px; border-top: 1px solid var(--border); }
-.tot-row { display: flex; justify-content: space-between; font-size: 13.5px; color: #374151; margin-bottom: 8px; }
-.tot-row.free-ship { color: var(--green); }
-.tot-row.grand { font-size: 17px; font-weight: 800; color: #111; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 4px; }
+    .step-btn.done .sn {
+      background: var(--green);
+      color: #fff
+    }
 
-.place-order-btn {
-  display: block;
-  width: calc(100% - 40px);
-  margin: 0 20px 16px;
-  padding: 14px;
-  background: linear-gradient(135deg, #ff5a1f, #e8002d);
-  color: #fff;
-  border: none;
-  border-radius: 11px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-  transition: opacity 0.2s;
-  font-family: inherit;
-}
-.place-order-btn:hover { opacity: 0.88; }
+    /* LAYOUT */
+    .layout {
+      max-width: 1060px;
+      margin: 28px auto;
+      padding: 0 20px 60px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start
+    }
 
-.trust-badges {
-  padding: 12px 20px 16px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.trust-item svg { width: 14px; height: 14px; fill: var(--green); flex-shrink: 0; }
+    /* PANELS */
+    .panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 16px;
+      transition: opacity .3s
+    }
 
-/* ── FOOTER ── */
-.co-footer {
-  background: #fff;
-  border-top: 1px solid var(--border);
-  padding: 20px;
-  text-align: center;
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 40px;
-}
-.co-footer a { color: var(--muted); text-decoration: none; margin: 0 8px; }
-.co-footer a:hover { color: #111; }
+    .panel.locked {
+      opacity: .45;
+      pointer-events: none
+    }
 
-/* ── SUCCESS SCREEN ── */
-.success-screen {
-  display: none;
-  max-width: 520px;
-  margin: 60px auto;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 40px 32px;
-  text-align: center;
-  box-shadow: var(--shadow);
-}
-.success-icon { font-size: 56px; margin-bottom: 16px; }
-.success-screen h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-.success-screen p  { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
-.success-screen a  {
-  display: inline-block;
-  background: #111; color: #fff;
-  text-decoration: none; padding: 11px 28px;
-  border-radius: 10px; font-weight: 600; font-size: 14px;
-}
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2)
+    }
 
-@media (max-width: 860px) {
-  .co-layout { grid-template-columns: 1fr; }
-  .co-summary { position: static; }
-}
-@media (max-width: 560px) {
-  .field-row { grid-template-columns: 1fr; }
-  .co-steps  { gap: 0; padding: 12px; }
-  .co-step   { padding: 0 10px; font-size: 11px; }
-}
-</style>
-{% endblock %}
+    .panel-head h3 {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0
+    }
 
-{% block body %}
+    .pn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #111;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: background .2s
+    }
 
-<!-- TOP BAR -->
-<header class="co-topbar">
-  <a href="{% url 'home' %}" class="co-logo">Shop<span>IT</span></a>
-  <span class="co-secure">
-    <svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm-2 16-4-4 1.4-1.4L10 14.2l6.6-6.6L18 9l-8 8z"/></svg>
-    256-bit SSL secured
-  </span>
-</header>
+    .panel.done-state .panel-head {
+      background: #f0faf4
+    }
 
-<!-- STEPS -->
-<div class="co-steps">
-  <div class="co-step done" id="step-ship-ind">
-    <div class="co-step-num">✓</div> Shipping
-  </div>
-  <div class="co-step active" id="step-pay-ind">
-    <div class="co-step-num">2</div> Payment
-  </div>
-  <div class="co-step" id="step-review-ind">
-    <div class="co-step-num">3</div> Review
-  </div>
-</div>
+    .panel.done-state .pn {
+      background: var(--green)
+    }
 
-<!-- MAIN -->
-<div class="co-layout" id="checkout-layout">
+    .edit-btn {
+      font-size: 12px;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s;
+      display: none;
+      align-items: center;
+      gap: 5px
+    }
 
-  <!-- LEFT COLUMN -->
-  <div id="left-col">
+    .edit-btn:hover {
+      background: var(--bg3)
+    }
 
-    <div id="co-alert" class="co-alert"></div>
+    .panel-body {
+      padding: 20px
+    }
 
-    <!-- SHIPPING PANEL -->
-    <div class="co-panel" id="ship-panel">
-      <div class="co-panel-head">
-        <h2><span>1</span> Shipping address</h2>
-      </div>
-      <div class="co-panel-body">
-        <div class="field-row">
-          <div class="field">
-            <label>First name</label>
-            <input type="text" id="f-fname" placeholder="John" autocomplete="given-name" />
-            <span class="err-msg" id="e-fname"></span>
-          </div>
-          <div class="field">
-            <label>Last name</label>
-            <input type="text" id="f-lname" placeholder="Smith" autocomplete="family-name" />
-            <span class="err-msg" id="e-lname"></span>
-          </div>
-        </div>
-        <div class="field">
-          <label>Email address</label>
-          <input type="email" id="f-email" placeholder="john@example.com" autocomplete="email" />
-          <span class="err-msg" id="e-email"></span>
-        </div>
-        <div class="field">
-          <label>Phone number</label>
-          <input type="tel" id="f-phone" placeholder="+1 (555) 000-0000" autocomplete="tel" />
-          <span class="err-msg" id="e-phone"></span>
-        </div>
-        <div class="field">
-          <label>Street address</label>
-          <input type="text" id="f-addr" placeholder="1100 Congress Ave" autocomplete="street-address" />
-          <span class="err-msg" id="e-addr"></span>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label>City</label>
-            <input type="text" id="f-city" placeholder="Austin" autocomplete="address-level2" />
-            <span class="err-msg" id="e-city"></span>
-          </div>
-          <div class="field">
-            <label>ZIP / Postal code</label>
-            <input type="text" id="f-zip" placeholder="78701" autocomplete="postal-code" />
-            <span class="err-msg" id="e-zip"></span>
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label>State / Province</label>
-            <input type="text" id="f-state" placeholder="TX" autocomplete="address-level1" />
-            <span class="err-msg" id="e-state"></span>
-          </div>
-          <div class="field">
-            <label>Country</label>
-            <select id="f-country" autocomplete="country">
-              <option value="">Select country</option>
-              <option value="PK" selected>Pakistan</option>
-              <option value="US">United States</option>
-              <option value="GB">United Kingdom</option>
-              <option value="AE">UAE</option>
-              <option value="IN">India</option>
-              <option value="CA">Canada</option>
-              <option value="AU">Australia</option>
-              <option value="other">Other</option>
-            </select>
-            <span class="err-msg" id="e-country"></span>
-          </div>
-        </div>
-        <button class="co-action" id="ship-next-btn">Continue to Payment →</button>
-      </div>
+    .done-summary {
+      padding: 10px 20px;
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.7
+    }
+
+    /* FIELDS */
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    .field {
+      margin-bottom: 16px
+    }
+
+    .field:last-child {
+      margin-bottom: 0
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      height: 42px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #111;
+      background: #fff;
+      transition: border-color .15s, box-shadow .15s;
+      appearance: none;
+      -webkit-appearance: none
+    }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: #111;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, .06)
+    }
+
+    .field input.err,
+    .field select.err {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(232, 0, 45, .1)
+    }
+
+    .field input.ok {
+      border-color: var(--green)
+    }
+
+    .err-msg {
+      display: block;
+      font-size: 11px;
+      color: var(--red);
+      margin-top: 4px;
+      min-height: 14px
+    }
+
+    /* RADIO CARDS */
+    .radio-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px
+    }
+
+    .radio-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 11px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      position: relative
+    }
+
+    .radio-card.selected {
+      border-color: #111;
+      background: var(--bg2)
+    }
+
+    .radio-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0
+    }
+
+    .rc-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: border-color .15s, background .15s
+    }
+
+    .radio-card.selected .rc-dot {
+      border-color: #111;
+      background: #111
+    }
+
+    .rc-dot::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0;
+      transition: opacity .15s
+    }
+
+    .radio-card.selected .rc-dot::after {
+      opacity: 1
+    }
+
+    .rc-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px
+    }
+
+    .rc-sub {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    /* EXPANDABLE */
+    .extra-fields {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .35s ease, opacity .3s;
+      opacity: 0
+    }
+
+    .extra-fields.open {
+      max-height: 600px;
+      opacity: 1
+    }
+
+    .divider {
+      border-top: 1px solid var(--border);
+      margin: 14px 0
+    }
+
+    /* PROMO */
+    .promo-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px
+    }
+
+    .promo-row input {
+      flex: 1;
+      height: 38px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: inherit;
+      color: #111;
+      background: #fff;
+      transition: border-color .15s
+    }
+
+    .promo-row input:focus {
+      outline: none;
+      border-color: #111
+    }
+
+    .promo-apply {
+      height: 38px;
+      padding: 0 16px;
+      border: 1.5px solid var(--border2);
+      border-radius: 9px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      color: #111;
+      transition: background .15s
+    }
+
+    .promo-apply:hover {
+      background: var(--bg3)
+    }
+
+    .promo-ok {
+      font-size: 12px;
+      color: var(--green);
+      margin-top: 6px;
+      display: none
+    }
+
+    .promo-ok.show {
+      display: block
+    }
+
+    /* ACTION BTN */
+    .action-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #ff5a1f, #e8002d);
+      color: #fff;
+      border: none;
+      border-radius: 11px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      margin-top: 16px;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px
+    }
+
+    .action-btn:hover {
+      opacity: .88
+    }
+
+    .action-btn:active {
+      transform: scale(.98)
+    }
+
+    /* ALERT */
+    .co-alert {
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+      align-items: center;
+      gap: 8px
+    }
+
+    .co-alert.show {
+      display: flex
+    }
+
+    .co-alert.err {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      color: var(--red)
+    }
+
+    .co-alert.ok {
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      color: var(--green)
+    }
+
+    /* CARD NUM */
+    .cnum-wrap {
+      position: relative
+    }
+
+    .cnum-wrap input {
+      padding-right: 60px
+    }
+
+    .card-badge {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--muted);
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      pointer-events: none;
+      min-width: 28px;
+      text-align: center
+    }
+
+    /* PHONE */
+    .phone-wrap {
+      position: relative
+    }
+
+    .phone-wrap input {
+      padding-left: 40px
+    }
+
+    .phone-prefix {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      pointer-events: none
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden
+    }
+
+    .summary-head {
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: 800;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .summary-body {
+      padding: 14px 20px
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 13px;
+      gap: 8px
+    }
+
+    .order-item:last-child {
+      border-bottom: none
+    }
+
+    .oi-name {
+      flex: 1;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .oi-qty {
+      color: var(--muted);
+      font-size: 12px;
+      flex-shrink: 0
+    }
+
+    .oi-price {
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .totals {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border)
+    }
+
+    .tot-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      color: #374151;
+      margin-bottom: 8px
+    }
+
+    .tot-row.free {
+      color: var(--green)
+    }
+
+    .tot-row.grand {
+      font-size: 17px;
+      font-weight: 800;
+      color: #111;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-top: 4px;
+      margin-bottom: 0
+    }
+
+    .place-btn {
+      display: block;
+      width: calc(100% - 40px);
+      margin: 0 20px 16px;
+      padding: 13px;
+      background: linear-gradient(135deg, #ff5a1f, #e8002d);
+      color: #fff;
+      border: none;
+      border-radius: 11px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity .2s
+    }
+
+    .place-btn:hover {
+      opacity: .88
+    }
+
+    .trust {
+      padding: 10px 20px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .trust-item i {
+      color: var(--green);
+      font-size: 14px
+    }
+
+    /* SUCCESS */
+    .success-screen {
+      display: none;
+      max-width: 520px;
+      margin: 60px auto;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: var(--shadow)
+    }
+
+    .success-screen.show {
+      display: block
+    }
+
+    .success-icon {
+      font-size: 56px;
+      margin-bottom: 16px
+    }
+
+    .success-screen h2 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px
+    }
+
+    .success-screen p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 16px
+    }
+
+    .order-num {
+      display: inline-block;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-family: monospace;
+      letter-spacing: .05em
+    }
+
+    .cont-link {
+      display: inline-block;
+      background: #111;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: opacity .2s
+    }
+
+    .cont-link:hover {
+      opacity: .85
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 40px
+    }
+
+    .footer a {
+      color: var(--muted);
+      text-decoration: none;
+      margin: 0 8px
+    }
+
+    .footer a:hover {
+      color: #111
+    }
+
+    @media(max-width:860px) {
+      .layout {
+        grid-template-columns: 1fr
+      }
+
+      .sidebar {
+        position: static
+      }
+    }
+
+    @media(max-width:560px) {
+      .field-row {
+        grid-template-columns: 1fr
+      }
+
+      .steps {
+        gap: 0;
+        padding: 0 12px
+      }
+
+      .step-btn {
+        padding: 12px 10px;
+        font-size: 11px
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <a href="/" class="logo">Shop<span>IT</span></a>
+    <span class="secure">
+      <i class="ti ti-shield-check"></i>
+      256-bit SSL secured
+    </span>
+  </header>
+
+  <!-- PROGRESS + STEPS -->
+  <div class="progress-wrap">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress"></div>
     </div>
+  </div>
+  <div class="steps">
+    <button class="step-btn active" id="s1" onclick="goStep(1)"><span class="sn">1</span> Shipping</button>
+    <button class="step-btn" id="s2" onclick="goStep(2)"><span class="sn">2</span> Payment</button>
+    <button class="step-btn" id="s3" onclick="goStep(3)"><span class="sn">3</span> Review</button>
+  </div>
 
-    <!-- PAYMENT PANEL (locked until shipping done) -->
-    <div class="co-panel" id="pay-panel" style="opacity:.45;pointer-events:none;">
-      <div class="co-panel-head">
-        <h2><span>2</span> Payment method</h2>
-      </div>
-      <div class="co-panel-body">
+  <!-- MAIN LAYOUT -->
+  <div class="layout" id="checkout-layout">
 
-        <div class="radio-cards" id="pay-options">
-          <label class="radio-card">
-            <input type="radio" name="pay" value="cod" checked />
-            <div>
-              <div class="radio-card-label">💵 Cash on Delivery</div>
-              <div class="radio-card-sub">Pay when your order arrives</div>
-            </div>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="pay" value="card" />
-            <div>
-              <div class="radio-card-label">💳 Credit / Debit Card</div>
-              <div class="radio-card-sub">Visa, Mastercard, Amex accepted</div>
-            </div>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="pay" value="easypaisa" />
-            <div>
-              <div class="radio-card-label">📱 EasyPaisa / JazzCash</div>
-              <div class="radio-card-sub">Mobile wallet payment</div>
-            </div>
-          </label>
+    <div id="left-col">
+      <div class="co-alert" id="co-alert"><i class="ti ti-alert-circle"></i><span id="alert-msg"></span></div>
+
+      <!-- ── SHIPPING PANEL ── -->
+      <div class="panel" id="ship-panel">
+        <div class="panel-head">
+          <h3>
+            <div class="pn">1</div> Shipping address
+          </h3>
+          <button class="edit-btn" id="ship-edit" onclick="editStep(0)"><i class="ti ti-edit"></i> Edit</button>
         </div>
-
-        <!-- Card form -->
-        <div class="card-details hidden" id="card-details">
-          <div class="card-icons">
-            <span class="c-badge c-visa">VISA</span>
-            <span class="c-badge c-mc"><span class="r"></span><span class="y"></span></span>
-            <span class="c-badge c-amex">AMEX</span>
-          </div>
-          <div class="field">
-            <label>Name on card</label>
-            <input type="text" id="f-cname" placeholder="John Smith" autocomplete="cc-name" />
-            <span class="err-msg" id="e-cname"></span>
-          </div>
-          <div class="field">
-            <label>Card number</label>
-            <div class="card-num-wrap">
-              <input type="text" id="f-cnum" placeholder="4532 1234 5678 9010" maxlength="19" inputmode="numeric" autocomplete="cc-number" />
-              <span class="card-type-icon" id="card-type-icon"></span>
+        <div class="done-summary" id="ship-done-summary" style="display:none"></div>
+        <div class="panel-body" id="ship-body">
+          <div class="field-row">
+            <div class="field">
+              <label>First name</label>
+              <input type="text" id="ff" placeholder="John" autocomplete="given-name"
+                oninput="liveVal(this,v=>v.length>0,'ff','ef','First name required')">
+              <span class="err-msg" id="ef"></span>
             </div>
-            <span class="err-msg" id="e-cnum"></span>
+            <div class="field">
+              <label>Last name</label>
+              <input type="text" id="fl" placeholder="Smith" autocomplete="family-name"
+                oninput="liveVal(this,v=>v.length>0,'fl','el','Last name required')">
+              <span class="err-msg" id="el"></span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Email address</label>
+            <input type="email" id="fem" placeholder="john@example.com" autocomplete="email"
+              oninput="liveVal(this,v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),'fem','eem','Valid email required')">
+            <span class="err-msg" id="eem"></span>
+          </div>
+          <div class="field">
+            <label>Phone number</label>
+            <div class="phone-wrap">
+              <span class="phone-prefix">🇵🇰</span>
+              <input type="tel" id="fph" placeholder="0300 1234567" autocomplete="tel"
+                oninput="liveVal(this,v=>v.replace(/\D/g,'').length>=10,'fph','eph','Valid phone required (10+ digits)')">
+            </div>
+            <span class="err-msg" id="eph"></span>
+          </div>
+          <div class="field">
+            <label>Street address</label>
+            <input type="text" id="fad" placeholder="12-B DHA Phase 5, Street 7" autocomplete="street-address"
+              oninput="liveVal(this,v=>v.length>3,'fad','ead','Address required')">
+            <span class="err-msg" id="ead"></span>
           </div>
           <div class="field-row">
             <div class="field">
-              <label>Expiry</label>
-              <input type="text" id="f-exp" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" />
-              <span class="err-msg" id="e-exp"></span>
+              <label>City</label>
+              <input type="text" id="fct" placeholder="Karachi" autocomplete="address-level2"
+                oninput="liveVal(this,v=>v.length>0,'fct','ect','City required')">
+              <span class="err-msg" id="ect"></span>
             </div>
             <div class="field">
-              <label>CVV</label>
-              <input type="text" id="f-cvv" placeholder="123" maxlength="4" inputmode="numeric" autocomplete="cc-csc" />
-              <span class="err-msg" id="e-cvv"></span>
+              <label>ZIP / Postal code</label>
+              <input type="text" id="fzp" placeholder="74200" autocomplete="postal-code" maxlength="10"
+                oninput="liveVal(this,v=>v.length>=3,'fzp','ezp','Postal code required')">
+              <span class="err-msg" id="ezp"></span>
             </div>
           </div>
-        </div>
-
-        <!-- EasyPaisa form -->
-        <div class="card-details hidden" id="ep-details">
-          <div class="field">
-            <label>Mobile wallet number</label>
-            <input type="tel" id="f-epnum" placeholder="0300-1234567" />
-            <span class="err-msg" id="e-epnum"></span>
+          <div class="field-row">
+            <div class="field">
+              <label>Province / State</label>
+              <input type="text" id="fst" placeholder="Sindh" autocomplete="address-level1"
+                oninput="liveVal(this,v=>v.length>0,'fst','est','Province required')">
+              <span class="err-msg" id="est"></span>
+            </div>
+            <div class="field">
+              <label>Country</label>
+              <select id="fcn" autocomplete="country">
+                <option value="">Select country…</option>
+                <option value="PK" selected>🇵🇰 Pakistan</option>
+                <option value="AE">🇦🇪 UAE</option>
+                <option value="SA">🇸🇦 Saudi Arabia</option>
+                <option value="US">🇺🇸 United States</option>
+                <option value="GB">🇬🇧 United Kingdom</option>
+                <option value="IN">🇮🇳 India</option>
+                <option value="CA">🇨🇦 Canada</option>
+                <option value="AU">🇦🇺 Australia</option>
+                <option value="other">Other</option>
+              </select>
+              <span class="err-msg" id="ecn"></span>
+            </div>
           </div>
+          <button class="action-btn" onclick="submitShipping()">
+            <i class="ti ti-arrow-right"></i> Continue to payment
+          </button>
         </div>
+      </div>
 
-        <div style="margin-top:16px;">
-          <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;">Promo / Gift code</div>
+      <!-- ── PAYMENT PANEL ── -->
+      <div class="panel locked" id="pay-panel">
+        <div class="panel-head">
+          <h3>
+            <div class="pn">2</div> Payment method
+          </h3>
+          <button class="edit-btn" id="pay-edit" onclick="editStep(1)"><i class="ti ti-edit"></i> Edit</button>
+        </div>
+        <div class="done-summary" id="pay-done-summary" style="display:none"></div>
+        <div class="panel-body" id="pay-body">
+          <div class="radio-cards">
+            <label class="radio-card selected" onclick="selectPay('cod',this)">
+              <input type="radio" name="pay" value="cod" checked>
+              <div class="rc-dot"></div>
+              <div>
+                <div class="rc-label"><i class="ti ti-cash"></i> Cash on delivery</div>
+                <div class="rc-sub">Pay when your order arrives — no card needed</div>
+              </div>
+            </label>
+            <label class="radio-card" onclick="selectPay('card',this)">
+              <input type="radio" name="pay" value="card">
+              <div class="rc-dot"></div>
+              <div>
+                <div class="rc-label"><i class="ti ti-credit-card"></i> Credit / debit card</div>
+                <div class="rc-sub">Visa, Mastercard, Amex — 3-D Secure checkout</div>
+              </div>
+            </label>
+            <label class="radio-card" onclick="selectPay('ep',this)">
+              <input type="radio" name="pay" value="ep">
+              <div class="rc-dot"></div>
+              <div>
+                <div class="rc-label"><i class="ti ti-device-mobile"></i> EasyPaisa / JazzCash</div>
+                <div class="rc-sub">Instant mobile wallet payment</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Card fields -->
+          <div class="extra-fields" id="card-fields">
+            <div class="divider"></div>
+            <div class="field">
+              <label>Name on card</label>
+              <input type="text" id="fcn2" placeholder="John Smith" autocomplete="cc-name">
+              <span class="err-msg" id="ecn2"></span>
+            </div>
+            <div class="field">
+              <label>Card number</label>
+              <div class="cnum-wrap">
+                <input type="text" id="fcc" placeholder="4532 1234 5678 9010" maxlength="19" inputmode="numeric"
+                  autocomplete="cc-number" oninput="formatCard(this)">
+                <span class="card-badge" id="ctbadge"></span>
+              </div>
+              <span class="err-msg" id="ecc"></span>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Expiry</label>
+                <input type="text" id="fex" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp"
+                  oninput="formatExp(this)">
+                <span class="err-msg" id="eex"></span>
+              </div>
+              <div class="field">
+                <label>CVV</label>
+                <input type="password" id="fcv" placeholder="•••" maxlength="4" inputmode="numeric"
+                  autocomplete="cc-csc">
+                <span class="err-msg" id="ecv"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- EasyPaisa fields -->
+          <div class="extra-fields" id="ep-fields">
+            <div class="divider"></div>
+            <div class="field">
+              <label>Mobile wallet number</label>
+              <input type="tel" id="fep" placeholder="0300-1234567">
+              <span class="err-msg" id="eep"></span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <div
+            style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">
+            Promo / gift code</div>
           <div class="promo-row">
-            <input type="text" id="promo-input" placeholder="Enter code" />
-            <button class="promo-btn" id="promo-btn">Apply</button>
+            <input type="text" id="promo-in" placeholder="Try SHOPIT10">
+            <button class="promo-apply" onclick="applyPromo()">Apply</button>
           </div>
-          <div class="promo-msg" id="promo-msg">✓ Promo code applied!</div>
+          <div class="promo-ok" id="promo-ok"><i class="ti ti-check"></i> Code applied — 10% off!</div>
+
+          <button class="action-btn" onclick="submitPayment()">
+            <i class="ti ti-arrow-right"></i> Review order
+          </button>
         </div>
+      </div>
 
-        <button class="co-action" id="pay-next-btn" style="margin-top:20px;">Review Order →</button>
+      <!-- ── REVIEW PANEL ── -->
+      <div class="panel locked" id="review-panel">
+        <div class="panel-head">
+          <h3>
+            <div class="pn">3</div> Review &amp; place order
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div id="rev-ship-box"
+            style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.7;margin-bottom:12px">
+          </div>
+          <div id="rev-pay-box"
+            style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;margin-bottom:16px">
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:16px">By placing your order you agree to Shop IT's
+            <a href="#" style="color:#007185">Terms of Service</a> and <a href="#" style="color:#007185">Privacy
+              Policy</a>.</p>
+          <button class="action-btn" onclick="placeOrder()">
+            <i class="ti ti-shopping-bag"></i> Place order
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- REVIEW PANEL -->
-    <div class="co-panel" id="review-panel" style="opacity:.45;pointer-events:none;">
-      <div class="co-panel-head">
-        <h2><span>3</span> Review &amp; Place Order</h2>
+    <!-- ── SIDEBAR ── -->
+    <div class="sidebar">
+      <div class="summary-head"><i class="ti ti-shopping-cart"></i> Order summary</div>
+      <div class="summary-body" id="order-items">
+        <div style="color:var(--muted);font-size:13px;text-align:center;padding:12px 0">Loading cart…</div>
       </div>
-      <div class="co-panel-body">
-        <div id="review-ship" style="margin-bottom:14px;padding:12px 14px;background:#fafafa;border:1px solid var(--border);border-radius:10px;font-size:13px;line-height:1.7;"></div>
-        <div id="review-pay"  style="margin-bottom:14px;padding:12px 14px;background:#fafafa;border:1px solid var(--border);border-radius:10px;font-size:13px;"></div>
-        <p style="font-size:12px;color:var(--muted);margin-bottom:16px;">By placing your order you agree to Shop IT's <a href="#" style="color:#007185;">Terms of Service</a> and <a href="#" style="color:#007185;">Privacy Policy</a>.</p>
-        <button class="co-action" id="place-btn">🎉 Place Order</button>
+      <div class="totals">
+        <div class="tot-row"><span>Subtotal</span><span id="ot-sub">$0.00</span></div>
+        <div class="tot-row free"><span><i class="ti ti-truck"></i> Shipping</span><span>Free</span></div>
+        <div class="tot-row"><span>Tax (8%)</span><span id="ot-tax">$0.00</span></div>
+        <div class="tot-row grand"><span>Total</span><span id="ot-total">$0.00</span></div>
+      </div>
+      <button class="place-btn" onclick="placeOrder()">Place order</button>
+      <div class="trust">
+        <div class="trust-item"><i class="ti ti-shield-check"></i> 256-bit SSL encryption</div>
+        <div class="trust-item"><i class="ti ti-lock"></i> Safe &amp; secure payment</div>
+        <div class="trust-item"><i class="ti ti-refresh"></i> Free returns within 30 days</div>
       </div>
     </div>
 
   </div>
 
-  <!-- RIGHT: ORDER SUMMARY -->
-  <div class="co-summary">
-    <div class="co-summary-head">Order Summary</div>
-    <div class="co-summary-body" id="order-items">
-      <div style="color:var(--muted);font-size:13px;text-align:center;padding:12px 0;">Loading cart…</div>
-    </div>
-    <div class="co-summary-totals">
-      <div class="tot-row"><span>Subtotal</span><span id="ot-sub">$0.00</span></div>
-      <div class="tot-row free-ship"><span>Shipping</span><span>FREE</span></div>
-      <div class="tot-row"><span>Tax (est.)</span><span id="ot-tax">$0.00</span></div>
-      <div class="tot-row grand"><span>Total</span><span id="ot-total">$0.00</span></div>
-    </div>
-    <button class="place-order-btn" id="place-btn-sidebar">Place Order</button>
-    <div class="trust-badges">
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm-2 16-4-4 1.4-1.4L10 14.2l6.6-6.6L18 9l-8 8z"/></svg>
-        256-bit SSL encryption
-      </div>
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-        Safe & secure payment
-      </div>
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-        Free returns within 30 days
-      </div>
-    </div>
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">🎉</div>
+    <h2>Order placed!</h2>
+    <p>Thank you for shopping with Shop IT.<br>You'll receive a confirmation email shortly.</p>
+    <div class="order-num" id="order-num-display">000000</div><br>
+    <a href="{% url 'shop' %}" class="cont-link">Continue shopping</a>
   </div>
 
-</div>
+  <footer class="footer">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="#">Help Center</a>
+    <div style="margin-top:8px">© 2026 Shop IT. All rights reserved.</div>
+  </footer>
 
-<!-- SUCCESS SCREEN -->
-<div class="success-screen" id="success-screen">
-  <div class="success-icon">🎉</div>
-  <h2>Order Placed!</h2>
-  <p>Thank you for shopping with Shop IT.<br>You'll receive a confirmation email shortly.</p>
-  <a href="{% url 'home' %}">Continue Shopping</a>
-</div>
+  <script>
+    var CART_KEY = 'shopIT_cart';
+    var shipDone = false, payDone = false;
+    var promoApplied = false;
+    var payMethod = 'cod';
 
-<footer class="co-footer">
-  <a href="#">Privacy Policy</a>
-  <a href="#">Terms of Service</a>
-  <a href="#">Help Center</a>
-  <div style="margin-top:8px;">© 2026 Shop IT. All rights reserved.</div>
-</footer>
+    /* ── CART ── */
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+      catch (e) {
+        return [
+          { name: 'Sony WH-1000XM5 Headphones', price: 299.99, qty: 1 },
+          { name: 'Samsung 65" QLED TV', price: 1199.00, qty: 1 },
+          { name: 'Apple AirPods Pro', price: 249.00, qty: 2 }
+        ];
+      }
+    }
 
-<script>
-var CART_KEY = "shopIT_cart";
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
 
-function getCart() {
-  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
-  catch(e) { return []; }
-}
+    function renderSummary() {
+      var cart = getCart(), el = document.getElementById('order-items'), TAX = 0.08;
+      if (!cart.length) {
+        el.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:12px 0">Your cart is empty</div>';
+        ['ot-sub', 'ot-tax', 'ot-total'].forEach(function (id) { document.getElementById(id).textContent = '$0.00'; });
+        return;
+      }
+      var sub = 0;
+      el.innerHTML = cart.map(function (item) {
+        var line = parseFloat(item.price) * item.qty;
+        sub += line;
+        return '<div class="order-item">'
+          + '<span class="oi-name">' + esc(item.name) + '</span>'
+          + '<span class="oi-qty">x' + item.qty + '</span>'
+          + '<span class="oi-price">$' + line.toFixed(2) + '</span>'
+          + '</div>';
+      }).join('');
+      if (promoApplied) sub = sub * 0.9;
+      var tax = sub * TAX, total = sub + tax;
+      document.getElementById('ot-sub').textContent = '$' + sub.toFixed(2);
+      document.getElementById('ot-tax').textContent = '$' + tax.toFixed(2);
+      document.getElementById('ot-total').textContent = '$' + total.toFixed(2);
+    }
 
-/* ── RENDER ORDER SUMMARY ── */
-function renderSummary() {
-  var cart  = getCart();
-  var listEl = document.getElementById("order-items");
-  var TAX_RATE = 0.08;
+    /* ── ALERT ── */
+    function showAlert(type, msg) {
+      var el = document.getElementById('co-alert');
+      el.className = 'co-alert show ' + type;
+      document.getElementById('alert-msg').textContent = msg;
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    function clearAlert() {
+      document.getElementById('co-alert').className = 'co-alert';
+    }
 
-  if (cart.length === 0) {
-    listEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:12px 0;">Your cart is empty</div>';
-    document.getElementById("ot-sub").textContent = "$0.00";
-    document.getElementById("ot-tax").textContent = "$0.00";
-    document.getElementById("ot-total").textContent = "$0.00";
-    return;
+    /* ── STEPS ── */
+    function setProgress(n) {
+      document.getElementById('progress').style.width = (n * 33.33) + '%';
+    }
+    function updateStepBtns(active) {
+      for (var i = 1; i <= 3; i++) {
+        var b = document.getElementById('s' + i);
+        b.classList.remove('active', 'done');
+        if (i < active) b.classList.add('done');
+        else if (i === active) b.classList.add('active');
+      }
+    }
+    function goStep(n) {
+      if (n === 2 && !shipDone) return;
+      if (n === 3 && (!shipDone || !payDone)) return;
+      updateStepBtns(n);
+      setProgress(n);
+    }
+
+    /* ── LIVE VALIDATION ── */
+    function liveVal(el, fn, id, errId, msg) {
+      var ok = fn(el.value.trim());
+      el.classList.toggle('err', !ok);
+      el.classList.toggle('ok', ok);
+      document.getElementById(errId).textContent = ok ? '' : msg;
+      return ok;
+    }
+    function validateField(id, errId, fn, msg) {
+      var el = document.getElementById(id);
+      if (!el) return true;
+      var ok = fn(el.value.trim());
+      el.classList.toggle('err', !ok);
+      el.classList.toggle('ok', ok);
+      document.getElementById(errId).textContent = ok ? '' : msg;
+      return ok;
+    }
+
+    /* ── LUHN ── */
+    function luhn(n) {
+      var d = n.replace(/\D/g, '');
+      if (d.length < 13) return false;
+      var s = 0, alt = false;
+      for (var i = d.length - 1; i >= 0; i--) {
+        var x = parseInt(d[i], 10);
+        if (alt) { x *= 2; if (x > 9) x -= 9; }
+        s += x; alt = !alt;
+      }
+      return s % 10 === 0;
+    }
+
+    /* ── CARD FORMATTING ── */
+    function formatCard(el) {
+      var v = el.value.replace(/\D/g, '').slice(0, 16);
+      el.value = v.replace(/(.{4})/g, '$1 ').trim();
+      var badge = document.getElementById('ctbadge');
+      if (v.startsWith('4')) badge.textContent = 'VISA';
+      else if (/^5[1-5]/.test(v) || /^2[2-7]/.test(v)) badge.textContent = 'MC';
+      else if (/^3[47]/.test(v)) badge.textContent = 'AMEX';
+      else badge.textContent = '';
+    }
+
+    function formatExp(el) {
+      var v = el.value.replace(/\D/g, '').slice(0, 4);
+      if (v.length >= 3) el.value = v.slice(0, 2) + ' / ' + v.slice(2);
+      else el.value = v;
+    }
+
+    /* ── PAYMENT METHOD ── */
+    function selectPay(val, card) {
+      payMethod = val;
+      document.querySelectorAll('.radio-card').forEach(function (c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
+      document.getElementById('card-fields').classList.toggle('open', val === 'card');
+      document.getElementById('ep-fields').classList.toggle('open', val === 'ep');
+    }
+
+    /* ── PROMO ── */
+    function applyPromo() {
+      var code = document.getElementById('promo-in').value.trim().toUpperCase();
+      var okEl = document.getElementById('promo-ok');
+      if (code === 'SHOPIT10' || code === 'SAVE10' || code === 'TEST') {
+        promoApplied = true;
+        okEl.classList.add('show');
+        renderSummary();
+      } else {
+        okEl.classList.remove('show');
+        showAlert('err', 'Invalid promo code. Try SHOPIT10');
+      }
+    }
+
+    
+
+    /* ── UNLOCK PANEL ── */
+    function unlockPanel(id) {
+      var p = document.getElementById(id);
+      if (p) { p.classList.remove('locked'); }
+    }
+
+    /* ── SHIPPING SUBMIT ── */
+    function submitShipping() {
+      clearAlert();
+      var ok = true;
+      ok = validateField('ff', 'ef', function (v) { return v.length > 0; }, 'First name required') && ok;
+      ok = validateField('fl', 'el', function (v) { return v.length > 0; }, 'Last name required') && ok;
+      ok = validateField('fem', 'eem', function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }, 'Valid email required') && ok;
+      ok = validateField('fph', 'eph', function (v) { return v.replace(/\D/g, '').length >= 10; }, 'Valid phone required (10+ digits)') && ok;
+      ok = validateField('fad', 'ead', function (v) { return v.length > 3; }, 'Street address required') && ok;
+      ok = validateField('fct', 'ect', function (v) { return v.length > 0; }, 'City required') && ok;
+      ok = validateField('fzp', 'ezp', function (v) { return v.length >= 3; }, 'Postal code required') && ok;
+      ok = validateField('fst', 'est', function (v) { return v.length > 0; }, 'Province / state required') && ok;
+      ok = validateField('fcn', 'ecn', function (v) { return v.length > 0; }, 'Country required') && ok;
+      if (!ok) { showAlert('err', 'Please fill in all required fields above.'); return; }
+
+      shipDone = true;
+      var panel = document.getElementById('ship-panel');
+      panel.classList.add('done-state');
+
+      var fn = document.getElementById('ff').value.trim();
+      var ln = document.getElementById('fl').value.trim();
+      var ad = document.getElementById('fad').value.trim();
+      var ct = document.getElementById('fct').value.trim();
+      var zp = document.getElementById('fzp').value.trim();
+      var em = document.getElementById('fem').value.trim();
+      document.getElementById('ship-done-summary').style.display = 'block';
+      document.getElementById('ship-done-summary').innerHTML =
+        esc(fn + ' ' + ln) + ' · ' + esc(em) + '<br>' + esc(ad + ', ' + ct + ' ' + zp);
+      document.getElementById('ship-body').style.display = 'none';
+      document.getElementById('ship-edit').style.display = 'flex';
+
+      unlockPanel('pay-panel');
+      updateStepBtns(2); setProgress(2);
+      document.getElementById('pay-panel').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ── PAYMENT SUBMIT ── */
+    function submitPayment() {
+      clearAlert();
+      var ok = true;
+      if (payMethod === 'card') {
+        ok = validateField('fcn2', 'ecn2', function (v) { return v.length > 1; }, 'Name on card required') && ok;
+        ok = validateField('fcc', 'ecc', function (v) { return luhn(v); }, 'Invalid card number') && ok;
+        ok = validateField('fex', 'eex', function (v) {
+          var m = v.replace(/\s/g, '').split('/');
+          if (m.length !== 2) return false;
+          var mo = parseInt(m[0], 10), yr = parseInt('20' + m[1].trim(), 10);
+          var now = new Date(), cy = now.getFullYear(), cm = now.getMonth() + 1;
+          return mo >= 1 && mo <= 12 && (yr > cy || (yr === cy && mo >= cm));
+        }, 'Expiry date invalid') && ok;
+        ok = validateField('fcv', 'ecv', function (v) { return v.length >= 3; }, 'CVV required') && ok;
+      }
+      if (payMethod === 'ep') {
+        ok = validateField('fep', 'eep', function (v) { return v.replace(/\D/g, '').length >= 10; }, 'Valid mobile number required') && ok;
+      }
+      if (!ok) { showAlert('err', 'Please fix the payment details above.'); return; }
+
+      payDone = true;
+      var panel = document.getElementById('pay-panel');
+      panel.classList.add('done-state');
+
+      var payLabels = { cod: 'Cash on delivery', card: 'Credit / debit card', ep: 'EasyPaisa / JazzCash' };
+      document.getElementById('pay-done-summary').style.display = 'block';
+      document.getElementById('pay-done-summary').innerHTML = payLabels[payMethod];
+      document.getElementById('pay-body').style.display = 'none';
+      document.getElementById('pay-edit').style.display = 'flex';
+
+      buildReview();
+      unlockPanel('review-panel');
+      updateStepBtns(3); setProgress(3);
+      document.getElementById('review-panel').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ── REVIEW ── */
+    function buildReview() {
+      var fn = document.getElementById('ff').value.trim();
+      var ln = document.getElementById('fl').value.trim();
+      var em = document.getElementById('fem').value.trim();
+      var ph = document.getElementById('fph').value.trim();
+      var ad = document.getElementById('fad').value.trim();
+      var ct = document.getElementById('fct').value.trim();
+      var zp = document.getElementById('fzp').value.trim();
+      var cn = document.getElementById('fcn').value;
+      document.getElementById('rev-ship-box').innerHTML =
+        '<strong>Shipping to</strong><br>' + esc(fn + ' ' + ln) + '<br>' +
+        esc(ad + ', ' + ct + ' ' + zp) + ', ' + esc(cn) + '<br>' +
+        '<span style="color:var(--muted)">' + esc(em) + ' · ' + esc(ph) + '</span>';
+      var payLabels = { cod: 'Cash on delivery', card: 'Credit / debit card', ep: 'EasyPaisa / JazzCash' };
+      document.getElementById('rev-pay-box').innerHTML = '<strong>Payment</strong><br>' + payLabels[payMethod];
+    }
+
+    /* ── EDIT STEPS ── */
+    function editStep(n) {
+      clearAlert();
+      if (n === 0) {
+        shipDone = false; payDone = false;
+        document.getElementById('ship-done-summary').style.display = 'none';
+        document.getElementById('ship-body').style.display = 'block';
+        document.getElementById('ship-edit').style.display = 'none';
+        document.getElementById('ship-panel').classList.remove('done-state');
+        document.getElementById('pay-panel').classList.add('locked');
+        document.getElementById('pay-panel').classList.remove('done-state');
+        document.getElementById('pay-done-summary').style.display = 'none';
+        document.getElementById('pay-body').style.display = 'block';
+        document.getElementById('pay-edit').style.display = 'none';
+        document.getElementById('review-panel').classList.add('locked');
+        updateStepBtns(1); setProgress(1);
+        document.getElementById('ship-panel').scrollIntoView({ behavior: 'smooth' });
+      }
+      if (n === 1) {
+        payDone = false;
+        document.getElementById('pay-done-summary').style.display = 'none';
+        document.getElementById('pay-body').style.display = 'block';
+        document.getElementById('pay-edit').style.display = 'none';
+        document.getElementById('pay-panel').classList.remove('done-state');
+        document.getElementById('review-panel').classList.add('locked');
+        updateStepBtns(2); setProgress(2);
+        document.getElementById('pay-panel').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    /* ── PLACE ORDER ── */
+/* ── CSRF HELPER (Django FIX) ── */
+function getCSRFToken() {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, 10) === 'csrftoken=') {
+        cookieValue = decodeURIComponent(cookie.substring(10));
+        break;
+      }
+    }
   }
-
-  var sub = 0;
-  listEl.innerHTML = cart.map(function(item) {
-    var line = parseFloat(item.price) * item.qty;
-    sub += line;
-
-    return '<div class="order-item">'
-      + '<span class="order-item-name">' + esc(item.name) + '</span>'
-      + '<span class="order-item-qty">x' + item.qty + '</span>'
-      + '<span class="order-item-price">$' + line.toFixed(2) + '</span>'
-      + '</div>';
-  }).join("");
-
-  var tax = sub * TAX_RATE;
-  var total = sub + tax;
-
-  document.getElementById("ot-sub").textContent = "$" + sub.toFixed(2);
-  document.getElementById("ot-tax").textContent = "$" + tax.toFixed(2);
-  document.getElementById("ot-total").textContent = "$" + total.toFixed(2);
+  return cookieValue;
 }
 
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, function(c){
-    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
-  });
-}
-
-/* ── ALERT ── */
-function showAlert(type, msg) {
-  var el = document.getElementById("co-alert");
-  el.className = "co-alert " + type;
-  el.textContent = msg;
-  el.style.display = "block";
-  el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-}
-
-function clearAlert() {
-  var el = document.getElementById("co-alert");
-  el.className = "co-alert";
-  el.textContent = "";
-  el.style.display = "none";
-}
-
-/* ── STEP SYSTEM (FIXED CORE) ── */
-function setStep(step) {
-  document.querySelectorAll(".co-step").forEach(s => {
-    s.classList.remove("active", "done");
-  });
-
-  if (step === 1) {
-    document.getElementById("step-ship-ind").classList.add("active");
-  }
-
-  if (step === 2) {
-    document.getElementById("step-ship-ind").classList.add("done");
-    document.getElementById("step-pay-ind").classList.add("active");
-  }
-
-  if (step === 3) {
-    document.getElementById("step-ship-ind").classList.add("done");
-    document.getElementById("step-pay-ind").classList.add("done");
-    document.getElementById("step-review-ind").classList.add("active");
-  }
-}
-
-/* ── PANEL UNLOCK ── */
-function unlockPanel(id) {
-  var p = document.getElementById(id);
-  if (!p) return;
-  p.style.opacity = "1";
-  p.style.pointerEvents = "auto";
-}
-
-/* ── VALIDATION ── */
-function val(id, errId, check, msg) {
-  var el = document.getElementById(id);
-  var err = document.getElementById(errId);
-
-  if (!el) return true;
-
-  var ok = check(el.value.trim());
-
-  el.classList.toggle("err", !ok);
-
-  if (err) err.textContent = ok ? "" : msg;
-
-  return ok;
-}
-
-function luhn(n) {
-  var d = n.replace(/\D/g,"");
-  if (d.length < 13) return false;
-
-  var s = 0, alt = false;
-
-  for (var i = d.length - 1; i >= 0; i--) {
-    var x = parseInt(d[i], 10);
-    if (alt) { x *= 2; if (x > 9) x -= 9; }
-    s += x;
-    alt = !alt;
-  }
-
-  return s % 10 === 0;
-}
-
-/* ── SHIPPING ── */
-function validateShipping() {
-  var ok = true;
-
-  ok = val("f-fname","e-fname", v=>v.length>0,"First name required") && ok;
-  ok = val("f-lname","e-lname", v=>v.length>0,"Last name required") && ok;
-  ok = val("f-email","e-email", v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),"Valid email required") && ok;
-  ok = val("f-phone","e-phone", v=>v.replace(/\D/g,"").length>=7,"Valid phone required") && ok;
-  ok = val("f-addr","e-addr", v=>v.length>3,"Address required") && ok;
-  ok = val("f-city","e-city", v=>v.length>0,"City required") && ok;
-  ok = val("f-zip","e-zip", v=>v.length>=3,"ZIP required") && ok;
-  ok = val("f-state","e-state", v=>v.length>0,"State required") && ok;
-  ok = val("f-country","e-country", v=>v.length>0,"Country required") && ok;
-
-  return ok;
-}
-
-/* ── PAYMENT ── */
-function validatePayment() {
-  var method = document.querySelector('input[name="pay"]:checked');
-  if (!method) return false;
-
-  if (method.value === "card") {
-    var ok = true;
-
-    ok = val("f-cname","e-cname", v=>v.length>1,"Card name required") && ok;
-    ok = val("f-cnum","e-cnum", v=>luhn(v),"Invalid card number") && ok;
-
-    ok = val("f-exp","e-exp", function(v){
-      var m = v.replace(/\s/g,"").split("/");
-      if (m.length !== 2) return false;
-
-      var mo = parseInt(m[0],10);
-      var yr = parseInt("20"+m[1],10);
-
-      var now = new Date();
-      var cy = now.getFullYear();
-      var cm = now.getMonth()+1;
-
-      return mo>=1 && mo<=12 && (yr>cy || (yr===cy && mo>=cm));
-    },"Invalid expiry") && ok;
-
-    ok = val("f-cvv","e-cvv", v=>v.length>=3,"Invalid CVV") && ok;
-
-    return ok;
-  }
-
-  if (method.value === "easypaisa") {
-    return val("f-epnum","e-epnum", v=>v.replace(/\D/g,"").length>=10,"Invalid number");
-  }
-
-  return true;
-}
-
-/* ── STEP STATE ── */
-var shipDone = false;
-var payDone = false;
-
-/* ── SHIPPING BUTTON ── */
-document.getElementById("ship-next-btn").addEventListener("click", function() {
-  clearAlert();
-
-  if (!validateShipping()) {
-    showAlert("err","Fix shipping fields first");
-    return;
-  }
-
-  shipDone = true;
-
-  unlockPanel("pay-panel");
-  setStep(2);
-
-  document.getElementById("pay-panel").scrollIntoView({behavior:"smooth"});
-});
-
-/* ── PAYMENT BUTTON ── */
-document.getElementById("pay-next-btn").addEventListener("click", function() {
-  clearAlert();
-
-  if (!validatePayment()) {
-    showAlert("err","Fix payment details");
-    return;
-  }
-
-  payDone = true;
-
-  buildReview();
-  unlockPanel("review-panel");
-  setStep(3);
-
-  document.getElementById("review-panel").scrollIntoView({behavior:"smooth"});
-});
-
-/* ── REVIEW ── */
-function buildReview() {
-  var fname = document.getElementById("f-fname").value.trim();
-  var lname = document.getElementById("f-lname").value.trim();
-
-  var addr = document.getElementById("f-addr").value.trim();
-  var city = document.getElementById("f-city").value.trim();
-  var zip = document.getElementById("f-zip").value.trim();
-  var country = document.getElementById("f-country").value;
-
-  document.getElementById("review-ship").innerHTML =
-    "<strong>Ship:</strong><br>" + esc(fname+" "+lname) + "<br>" +
-    esc(addr+" "+city+" "+zip) + "<br>" + esc(country);
-
-  var method = document.querySelector('input[name="pay"]:checked');
-
-  var payText = "COD";
-  if (method.value === "card") payText = "Card";
-  if (method.value === "easypaisa") payText = "EasyPaisa";
-
-  document.getElementById("review-pay").innerHTML =
-    "<strong>Payment:</strong> " + payText;
-}
-
-/* ── PLACE ORDER ── */
+/* ── PLACE ORDER (FIXED FINAL VERSION) ── */
 function placeOrder() {
   if (!shipDone || !payDone) {
-    showAlert("err","Complete all steps first");
+    showAlert('err', 'Please complete all steps first.');
     return;
   }
 
-  localStorage.removeItem(CART_KEY);
-  document.getElementById("checkout-layout").style.display = "none";
-  document.getElementById("success-screen").style.display = "block";
+  const cart = JSON.parse(localStorage.getItem("shopIT_cart")) || [];
+
+  const totalText = document.getElementById('ot-total').textContent || "0";
+  const total_price = parseFloat(totalText.replace('$', '').trim()) || 0;
+
+  const data = {
+    first_name: document.getElementById('ff').value.trim(),
+    last_name: document.getElementById('fl').value.trim(),
+    email: document.getElementById('fem').value.trim(),
+    phone: document.getElementById('fph').value.trim(),
+    address: document.getElementById('fad').value.trim(),
+    city: document.getElementById('fct').value.trim(),
+    zip_code: document.getElementById('fzp').value.trim(),
+    country: document.getElementById('fcn').value,
+    payment_method: payMethod,
+    total_price: total_price,
+    cart: cart
+  };
+
+
+
+  fetch("/shop/api/create-order/", {
+    method: "POST",
+    credentials: "same-origin",   // ✅ IMPORTANT for Django sessions
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCSRFToken() // ✅ FIX CSRF ISSUE
+    },
+    body: JSON.stringify(data)
+  })
+  .then(async (res) => {
+    const text = await res.text();
+
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      console.log("❌ Server returned:", text);
+      throw new Error("Response is not JSON (check Django error)");
+    }
+  })
+  .then(res => {
+    if (res.success) {
+      localStorage.removeItem("shopIT_cart");
+
+      document.getElementById('checkout-layout').style.display = 'none';
+      document.getElementById('success-screen').classList.add('show');
+
+      document.getElementById('order-num-display').textContent =
+        "Tracking ID:" + res.order_id;
+    } else {
+      showAlert('err', res.error || 'Order failed!');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    showAlert('err', 'Server error (check console / Django logs)');
+  });
+
+
+
 }
 
-/* ── EVENTS ── */
-document.getElementById("place-btn").onclick = placeOrder;
-document.getElementById("place-btn-sidebar").onclick = placeOrder;
+    /* ── INIT ── */
+    renderSummary();
+    updateStepBtns(1);
+    setProgress(1);
+  </script>
+</body>
 
-/* ── INIT ── */
-renderSummary();
-setStep(1);
-</script>
-
-{% endblock %}
-
-{% block checkout_button %}{% endblock %}
+</html>
