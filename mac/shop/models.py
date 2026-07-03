@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 #Create your model here
 
 
@@ -16,7 +17,7 @@ class Product(models.Model):
     image_url = models.URLField(blank=True, default="")
     image = models.ImageField(upload_to="shop/images", default="")
     stock_status = models.CharField(max_length=20, default="In Stock")
-    available_now = models.IntegerField(max_length=20, blank=False, null=False)
+    available_now = models.IntegerField(blank=False, null=False)
 
 
     @property
@@ -34,7 +35,7 @@ class Contact(models.Model):
     msg_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, default="")
-    phone_number = models.IntegerField(max_length=50, default="")
+    phone_number = models.IntegerField(default="")
     desc = models.CharField(max_length = 400, default="")
 
 

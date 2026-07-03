@@ -1,0 +1,146 @@
+{% extends 'blog/basic.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block css %}
+<style>
+    .login-shell {
+        min-height: calc(100vh - 62px);
+        display: grid;
+        place-items: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, #f4f4f6 0%, #e9eef5 100%);
+    }
+
+    .login-card {
+        width: min(100%, 440px);
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+        padding: 2rem;
+    }
+
+    .login-card h1 {
+        margin: 0 0 0.5rem;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #111827;
+    }
+
+    .login-card p {
+        margin: 0 0 1.5rem;
+        color: #6b7280;
+    }
+
+    .login-form .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .login-form label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .login-form input {
+        width: 100%;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        padding: 0.8rem 0.95rem;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .login-form input:focus {
+        border-color: #111827;
+        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+    }
+
+    .login-errors {
+        margin-bottom: 1rem;
+        color: #b91c1c;
+        font-size: 0.95rem;
+    }
+
+    .login-submit {
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        padding: 0.9rem 1rem;
+        background: #111827;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .login-submit:hover {
+        background: #000000;
+        transform: translateY(-1px);
+    }
+
+    .sign-up {
+        margin-top: 1rem;
+        color: #374151;
+    }
+
+    .sign-up a {
+        color: #111827;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .sign-up a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="login-shell">
+    <div class="login-card">
+        <h1>Create account</h1>
+        <p>Sign up to start posting blogs.</p>
+
+        {% if error %}
+        <div class="login-errors">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post" class="login-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                <input id="id_email" type="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input id="id_username" type="text" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                <input id="id_password" type="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password2">Confirm Password</label>
+                <input id="id_password2" type="password" name="password2" required>
+            </div>
+
+            <button type="submit" class="login-submit">Create Account</button>
+        </form>
+
+        <div class="sign-up">
+            <span>Already have an account? </span><a href="{% url 'login' %}">Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

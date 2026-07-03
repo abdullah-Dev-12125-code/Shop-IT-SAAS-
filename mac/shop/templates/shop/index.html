@@ -84,7 +84,7 @@
                 <p class="card-status">Available: {{ item.available_now }}</p>
                 <p class="card-price">${{ item.price }}</p>
                 <div class="btn-row">
-                  <a href="/shop/product/{{ item.id }}" class="btn-view" title="View product">👁</a>
+                  <a href="{% url 'shop:product' item.id %}" class="btn-view" title="View product">👁</a>
 
                   {# FIX: single data-image using image_url first, then /media/ fallback #}
                   <button class="btn-cart"
@@ -95,7 +95,7 @@
                     Add to Cart
                   </button>
 
-                  <a href="checkout" class="btn-buy">Buy Now</a>
+                  <a href="{% url 'shop:checkout' %}" class="btn-buy">Buy Now</a>
                 </div>
               </div>
             </div>

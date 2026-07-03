@@ -7,3 +7,5 @@ __pycache__/
 
 # Ignore the Django local database
 db.sqlite3
+
+.vscode

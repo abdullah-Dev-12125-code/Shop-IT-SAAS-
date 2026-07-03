@@ -82,6 +82,8 @@ WSGI_APPLICATION = 'mac.wsgi.application'
 
 # DATABASE
 
+AUTH_USER_MODEL = "blog.CustomUser"
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -131,7 +133,7 @@ STATIC_URL = '/static/'
 # LOGIN SETTINGS
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/shop/'
+LOGIN_REDIRECT_URL = '/accounts/login/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 

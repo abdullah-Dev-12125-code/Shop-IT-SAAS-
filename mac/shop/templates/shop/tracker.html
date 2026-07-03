@@ -283,87 +283,87 @@
 {% block js %}
 
 <script>
-$('#trackerform').submit(function (event) {
-    event.preventDefault();
+    $('#trackerform').submit(function (event) {
+        event.preventDefault();
 
-    $('.tracker-container').addClass('active');
+        $('.tracker-container').addClass('active');
 
-    let status = document.getElementById("order-status");
-    status.classList.remove("show");
+        let status = document.getElementById("order-status");
+        status.classList.remove("show");
 
-    let formdata = {
-        orderid: $('#orderid').val(),
-        email: $('#email').val(),
-        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
-    };
+        let formdata = {
+            orderid: $('#orderid').val(),
+            email: $('#email').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        };
 
-    $.ajax({
-        type: 'POST',
-        url: '/shop/tracker/',
-        data: formdata
-    })
-    .done(function (data) {
+        $.ajax({
+            type: 'POST',
+            url: '/shop/tracker/',
+            data: formdata
+        })
+            .done(function (data) {
 
-        let html = "";
+                let html = "";
 
-        if (!data.success) {
-            html = `
+                if (!data.success) {
+                    html = `
                 <h3>Order Status</h3>
                 <div class="status-box">
                     <h5>${data.message}</h5>
                 </div>
             `;
 
-            status.innerHTML = html;
-            status.classList.add("show");
-            return;
-        }
+                    status.innerHTML = html;
+                    status.classList.add("show");
+                    return;
+                }
 
-        html += "<h3>Order Status</h3>";
+                html += "<h3>Order Status</h3>";
 
-        // =====================
-        // UPDATES
-        // =====================
-        let updates = data.update || [];
+                // =====================
+                // UPDATES
+                // =====================
+                let updates = data.update || [];
 
-        updates.forEach(u => {
-            html += `
+                updates.forEach(u => {
+                    html += `
                 <div class="status-box">
                     <h5>${u.text}</h5>
                     <p>${u.time}</p>
                 </div>
             `;
-        });
+                });
 
-        // =====================
-        // ITEMS
-        // =====================
-        if (data.items && data.items.length > 0) {
+                // =====================
+                // ITEMS
+                // =====================
+                if (data.items && data.items.length > 0) {
 
-            html += `
+                    html += `
                 <div class="status-box">
                     <h5>Items in Order</h5>
             `;
 
-            data.items.forEach(item => {
-                html += `
+                    data.items.forEach(item => {
+                        html += `
                     <p>
                         ${item.name} × ${item.qty}
                     </p>
                 `;
+                    });
+
+                    html += `</div>`;
+                }
+
+                status.innerHTML = html;
+                status.classList.add("show");
+
+            })
+            .fail(function (error) {
+                console.log(error);
             });
-
-            html += `</div>`;
-        }
-
-        status.innerHTML = html;
-        status.classList.add("show");
-
-    })
-    .fail(function (error) {
-        console.log(error);
     });
-});
 </script>
 
 {% endblock %}

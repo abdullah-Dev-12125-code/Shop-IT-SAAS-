@@ -1104,7 +1104,7 @@
     <h2>Order placed!</h2>
     <p>Thank you for shopping with Shop IT.<br>You'll receive a confirmation email shortly.</p>
     <div class="order-num" id="order-num-display">000000</div><br>
-    <a href="{% url 'shop' %}" class="cont-link">Continue shopping</a>
+    <a href="{% url 'shop:home' %}" class="cont-link">Continue shopping</a>
   </div>
 
   <footer class="footer">
@@ -1116,13 +1116,33 @@
 
   <script>
     var CART_KEY = 'shopIT_cart';
+    var LEGACY_CART_KEY = 'cart';
     var shipDone = false, payDone = false;
     var promoApplied = false;
     var payMethod = 'cod';
 
     /* ── CART ── */
+    function normalizeCart(cart) {
+      if (!Array.isArray(cart)) return [];
+      return cart
+        .filter(function (item) { return item && typeof item === 'object'; })
+        .map(function (item) {
+          return {
+            id: item.id,
+            name: item.name,
+            price: Number(item.price) || 0,
+            qty: Number(item.qty) > 0 ? Number(item.qty) : 1,
+            image: item.image || ''
+          };
+        });
+    }
+
     function getCart() {
-      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+      try {
+        var current = normalizeCart(JSON.parse(localStorage.getItem(CART_KEY)) || []);
+        if (current.length) return current;
+        return normalizeCart(JSON.parse(localStorage.getItem(LEGACY_CART_KEY)) || []);
+      }
       catch (e) {
         return [
           { name: 'Sony WH-1000XM5 Headphones', price: 299.99, qty: 1 },
@@ -1416,7 +1436,7 @@ function placeOrder() {
     return;
   }
 
-  const cart = JSON.parse(localStorage.getItem("shopIT_cart")) || [];
+  const cart = getCart();
 
   const totalText = document.getElementById('ot-total').textContent || "0";
   const total_price = parseFloat(totalText.replace('$', '').trim()) || 0;
@@ -1437,7 +1457,12 @@ function placeOrder() {
 
 
 
-  fetch("/shop/api/create-order/", {
+  if (!cart.length) {
+    showAlert('err', 'Your cart is empty.');
+    return;
+  }
+
+  fetch("{% url 'shop:create-order' %}", {
     method: "POST",
     credentials: "same-origin",   // ✅ IMPORTANT for Django sessions
     headers: {
@@ -1459,6 +1484,7 @@ function placeOrder() {
   .then(res => {
     if (res.success) {
       localStorage.removeItem("shopIT_cart");
+      localStorage.removeItem("cart");
 
       document.getElementById('checkout-layout').style.display = 'none';
       document.getElementById('success-screen').classList.add('show');

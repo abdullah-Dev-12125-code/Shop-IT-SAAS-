@@ -256,7 +256,6 @@
 .btn-buy svg {
   display: block;
   flex-shrink: 0;
-  vertical-align: middle;
 }
 
 /* FORCE TEXT CENTERING (important fix) */
@@ -331,7 +330,7 @@
 <div class="container">
 
   <!-- BACK -->
-  <a href="{% url 'shop' %}" class="back-link">
+  <a href="{% url 'shop:shop' %}" class="back-link">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
       stroke-linejoin="round">
       <polyline points="15 18 9 12 15 6" />
@@ -369,7 +368,8 @@
 
       <div class="btn-row">
         <button id="pr{{ product.id }}" class="btn-cart cart" data-product-id="{{ product.id }}"
-          data-product-name="{{ product.product_name }}" data-product-price="{{ product.price }}">
+          data-product-name="{{ product.product_name }}" data-product-price="{{ product.price }}"
+          data-product-image="{% if product.image_url %}{{ product.image_url }}{% elif product.has_image_file %}{{ product.image.url }}{% endif %}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
             stroke-linejoin="round">
             <circle cx="9" cy="21" r="1" />
@@ -378,7 +378,7 @@
           </svg>
           Add to Cart
         </button>
-        <a href="#" class="btn-buy">
+        <a href="{% url 'shop:checkout' %}" class="btn-buy">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
             stroke-linejoin="round">
             <polyline points="13 17 18 12 13 7" />
@@ -423,177 +423,39 @@
 
 {% block js %}
 <script>
-let cart = JSON.parse(localStorage.getItem("cart")) || {};
+/* ================= ADD TO CART ================= */
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".btn-cart");
+  if (!btn) return;
 
-/* ================= SAVE ================= */
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
+  const id = btn.dataset.productId;
+  const name = btn.dataset.productName;
+  const price = parseFloat(String(btn.dataset.productPrice).replace(/[^0-9.-]/g, ""));
+  const image = btn.dataset.productImage || "";
 
-/* ================= UPDATE CART ================= */
-function updateCart() {
-
-  let totalItems = 0;
-  let totalPrice = 0;
-  let productsHTML = "";
-
-  for (let id in cart) {
-
-    let p = cart[id];
-
-    if (!p || typeof p !== "object") continue;
-
-    let qty = Number(p.qty) || 0;
-    let price = Number(p.price) || 0;
-
-    if (isNaN(price) || isNaN(qty)) continue;
-
-    totalItems += qty;
-    totalPrice += qty * price;
-
-    productsHTML += `
-      <div class="cpop-item" style="display:flex;justify-content:space-between;padding:6px 0;">
-        <span>${p.name}</span>
-        <span>x${qty} - $${qty * price}</span>
-      </div>
-    `;
+  if (!id || !name || isNaN(price)) {
+    console.error("Cart error: missing/invalid data", { id, name, price });
+    return;
   }
 
-  /* ================= NAV BADGE ================= */
-  const badge = document.querySelector(".cart-count");
-  if (badge) badge.innerText = totalItems;
+  const cart = getCart();
+  const existing = cart.find(item => String(item.id) === String(id));
 
-  /* ================= POPUP COUNT ================= */
-  const popCount = document.getElementById("cpop-count-badge");
-  if (popCount) popCount.innerText = totalItems + " items";
-
-  /* ================= POPUP LIST ================= */
-  const popList = document.getElementById("cpop-items-list");
-  if (popList) {
-    popList.innerHTML =
-      totalItems === 0 ? "Your cart is empty 🛒" : productsHTML;
+  if (!existing) {
+    cart.push({ id, name, price, qty: 1, image });
+  } else {
+    existing.qty += 1;
   }
 
-  /* ================= CART PAGE SUPPORT ================= */
-  const cartList = document.getElementById("cart-list");
-  const emptyCart = document.getElementById("empty-cart");
+  saveCart(cart);
 
-  if (cartList) {
-
-    if (totalItems === 0) {
-      if (emptyCart) emptyCart.style.display = "block";
-      cartList.innerHTML = "";
-      return;
-    }
-
-    if (emptyCart) emptyCart.style.display = "none";
-
-    cartList.innerHTML = Object.keys(cart).map(id => {
-
-      let p = cart[id];
-
-      return `
-        <div class="cart-item">
-
-          <div class="cart-left">
-            <div>
-              <div class="cart-name">${p.name}</div>
-              <div class="cart-price">$${p.price}</div>
-            </div>
-          </div>
-
-          <div class="qty-box">
-            <button onclick="decItem('${id}')">-</button>
-            <span>${p.qty}</span>
-            <button onclick="incItem('${id}')">+</button>
-          </div>
-
-          <button onclick="removeItem('${id}')">
-            Remove
-          </button>
-
-        </div>
-      `;
-    }).join("");
-
-    const t1 = document.getElementById("total-items");
-    const t2 = document.getElementById("total-price");
-
-    if (t1) t1.innerText = totalItems;
-    if (t2) t2.innerText = "$" + totalPrice;
-  }
-}
-
-/* ================= ADD TO CART (FIXED) ================= */
-document.querySelectorAll(".btn-cart").forEach(btn => {
-
-  btn.addEventListener("click", function () {
-
-    let id = this.dataset.productId;
-    let name = this.dataset.productName;
-    let price = Number(this.dataset.productPrice);
-
-    if (!id || !name || isNaN(price)) {
-      console.error("Cart error: missing data", {
-        id, name, price
-      });
-      return;
-    }
-
-    if (!cart[id]) {
-      cart[id] = {
-        name: name,
-        price: price,
-        qty: 1
-      };
-    } else {
-      cart[id].qty += 1;
-    }
-
-    saveCart();
-    updateCart();
-
-    let old = this.innerHTML;
-    this.innerHTML = "✔ Added";
-    this.style.background = "#16a34a";
-
-    setTimeout(() => {
-      this.innerHTML = old;
-      this.style.background = "";
-    }, 800);
-  });
-
+  const old = btn.innerHTML;
+  btn.innerHTML = "✔ Added";
+  btn.style.background = "#16a34a";
+  setTimeout(() => {
+    btn.innerHTML = old;
+    btn.style.background = "";
+  }, 800);
 });
-
-/* ================= QTY FUNCTIONS ================= */
-function incItem(id) {
-  if (!cart[id]) return;
-  cart[id].qty += 1;
-  saveCart();
-  updateCart();
-}
-
-function decItem(id) {
-  if (!cart[id]) return;
-
-  cart[id].qty -= 1;
-
-  if (cart[id].qty <= 0) {
-    delete cart[id];
-  }
-
-  saveCart();
-  updateCart();
-}
-
-function removeItem(id) {
-  if (!cart[id]) return;
-  delete cart[id];
-  saveCart();
-  updateCart();
-}
-
-/* ================= INIT ================= */
-updateCart();
 </script>
 {% endblock %}

@@ -1,8 +1,57 @@
-from django.shortcuts import render
 from collections import defaultdict
-from .models import Product, Contact, Order, OrderUpdate
-from django.http import JsonResponse, HttpResponse
+from decimal import Decimal, InvalidOperation
 import json
+
+from django.http import JsonResponse
+from django.shortcuts import render
+
+from .models import Contact, Order, OrderUpdate, Product
+
+
+def _normalize_cart_items(cart):
+    normalized = []
+    total_price = Decimal("0.00")
+
+    if not isinstance(cart, list):
+        return normalized, total_price
+
+    for raw_item in cart:
+        if not isinstance(raw_item, dict):
+            continue
+
+        product_id = raw_item.get("id")
+        try:
+            quantity = int(raw_item.get("qty", 1))
+        except (TypeError, ValueError):
+            quantity = 1
+
+        if quantity <= 0:
+            quantity = 1
+
+        product = Product.objects.filter(id=product_id).first() if product_id is not None else None
+
+        if product:
+            item_name = product.product_name
+            item_price = Decimal(str(product.price))
+            item_image = product.image_url or (product.image.url if product.has_image_file else "")
+        else:
+            item_name = str(raw_item.get("name", "Item"))
+            try:
+                item_price = Decimal(str(raw_item.get("price", 0)))
+            except (InvalidOperation, TypeError, ValueError):
+                item_price = Decimal("0.00")
+            item_image = raw_item.get("image", "") or ""
+
+        normalized.append({
+            "id": product_id,
+            "name": item_name,
+            "price": float(item_price),
+            "qty": quantity,
+            "image": item_image,
+        })
+        total_price += item_price * quantity
+
+    return normalized, total_price
 
 def index(request):
     products = Product.objects.all()
@@ -10,7 +59,6 @@ def index(request):
     
     for p in products:
         grouped[p.category].append(p)
-    print("image.url:", p.image.url)
 
     allprods = []
     for cat,items in grouped.items():
@@ -119,8 +167,16 @@ def tracker(request):
 
 def create_order(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        cart = data.get("cart", []) 
+        try:
+            data = json.loads(request.body or b"{}")
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "error": "Invalid request payload"}, status=400)
+
+        cart = data.get("cart", [])
+        normalized_cart, server_total = _normalize_cart_items(cart)
+
+        if not normalized_cart:
+            return JsonResponse({"success": False, "error": "Your cart is empty"}, status=400)
 
         order = Order.objects.create(
             first_name = data["first_name"],
@@ -132,8 +188,8 @@ def create_order(request):
             zip_code = data["zip_code"],
             country = data["country"],
             payment_method = data["payment_method"],
-            total_price = data["total_price"],
-            item_json = json.dumps(cart),
+            total_price = server_total,
+            item_json = json.dumps(normalized_cart),
         
         )
 
@@ -147,10 +203,11 @@ def create_order(request):
 
         return JsonResponse({
             "success": True,
-            "order_id": order.id
+            "order_id": order.id,
+            "total_price": str(server_total)
         })
 
-    return JsonResponse({"success":False})    
+    return JsonResponse({"success":False, "error": "Invalid request method"}, status=405)    
 
 
 def about(request):
