@@ -1,144 +1,89 @@
-{% extends 'blog/basic.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
 
-{% block title %}Login{% endblock %}
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f9ff; /* dark blue background */
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-{% block css %}
-<style>
-    .login-shell {
-        min-height: calc(100vh - 62px);
-        display: grid;
-        place-items: center;
-        padding: 2rem 1rem;
-        background: linear-gradient(135deg, #f4f4f6 0%, #e9eef5 100%);
-    }
+        .container {
+            background: teal;
+            padding: 30px;
+            border-radius: 12px;
+            width: 320px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
 
-    .login-card {
-        width: min(100%, 440px);
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 20px;
-        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
-        padding: 2rem;
-    }
+        .heading {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    .login-card h1 {
-        margin: 0 0 0.5rem;
-        font-size: 2rem;
-        font-weight: 800;
-        color: #111827;
-    }
+        form p {
+            margin-bottom: 12px;
+        }
 
-    .login-card p {
-        margin: 0 0 1.5rem;
-        color: #6b7280;
-    }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 6px;
+            outline: none;
+        }
 
-    .login-form .form-group {
-        margin-bottom: 1rem;
-    }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
 
-    .login-form label {
-        display: block;
-        margin-bottom: 0.4rem;
-        font-weight: 600;
-        color: #374151;
-    }
+        button:hover {
+            background: #2563eb;
+        }
 
-    .login-form input {
-        width: 100%;
-        border: 1px solid #d1d5db;
-        border-radius: 12px;
-        padding: 0.8rem 0.95rem;
-        font-size: 1rem;
-        outline: none;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    }
+        .content {
+            display: flex;
+            justify-content: center;
+        }
 
-    .login-form input:focus {
-        border-color: #111827;
-        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
-    }
+    </style>
+</head>
 
-    .login-errors {
-        margin-bottom: 1rem;
-        color: #b91c1c;
-        font-size: 0.95rem;
-    }
+<body>
 
-    .login-submit {
-        width: 100%;
-        border: 0;
-        border-radius: 12px;
-        padding: 0.9rem 1rem;
-        background: #111827;
-        color: #ffffff;
-        font-weight: 700;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: transform 0.15s ease, background 0.15s ease;
-    }
+    <div class="container">
 
-    .login-submit:hover {
-        background: #000000;
-        transform: translateY(-1px);
-    }
-
-    .sign-up,
-    a {
-        margin-top: 10px;
-        color: black;
-        text-decoration: none;
-    }
-
-    .sign-up a:hover {
-        text-decoration: none;
-        color:bisque;
-    }
-</style>
-{% endblock %}
-
-{% block body %}
-<div class="login-shell">
-    <div class="login-card">
-        <h1>Sign in</h1>
-        <p>Use your account credentials to continue.</p>
-
-        {% if messages %}
-        {% for message in messages %}
-        <div class="login-errors" style="color: #166534;">
-            {{ message }}
+        <div class="heading">
+            <h2>Login</h2>
         </div>
-        {% endfor %}
-        {% endif %}
 
-        {% if form.errors %}
-        <div class="login-errors">
-            Please enter a correct email and password.
+        <div class="content">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+            </form>
         </div>
-        {% endif %}
 
-        <form method="post" class="login-form">
-            {% csrf_token %}
-
-            {% if next %}
-            <input type="hidden" name="next" value="{{ next }}">
-            {% endif %}
-
-            <div class="form-group">
-                <label for="id_username">Email</label>
-                {{ form.username }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_password">Password</label>
-                {{ form.password }}
-            </div>
-
-            <button type="submit" class="login-submit">Login</button>
-        </form>
-        <div class="sign-up">
-            <span>New here? </span><a href="{% url 'signup' %}">Sign up</a>
-        </div>
     </div>
-</div>
-{% endblock %}
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 from django.contrib import admin # pyright: ignore[reportMissingModuleSource]
-from django.urls import path # type: ignore
+from django.urls import path, include # type: ignore
 from . import views
 
 app_name = "blog"

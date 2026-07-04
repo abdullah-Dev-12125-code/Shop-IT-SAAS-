@@ -79,10 +79,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mac.wsgi.application'
 
 
+AUTH_USER_MODEL = "blog.CustomUser"
+
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+ 
 
 # DATABASE
-
-AUTH_USER_MODEL = "blog.CustomUser"
 
 DATABASES = {
     'default': {
@@ -127,14 +132,6 @@ USE_TZ = True
 # STATIC FILES
 
 STATIC_URL = '/static/'
-
-
-
-# LOGIN SETTINGS
-
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/accounts/login/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 
 
