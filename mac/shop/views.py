@@ -8,6 +8,7 @@ from django.shortcuts import render
 from .models import Contact, Order, OrderUpdate, Product
 
 
+
 def _normalize_cart_items(cart):
     normalized = []
     total_price = Decimal("0.00")
@@ -53,23 +54,23 @@ def _normalize_cart_items(cart):
 
     return normalized, total_price
 
-def index(request):
-    products = Product.objects.all()
+
+def _group_products_by_category(products):
     grouped = defaultdict(list)
-    
-    for p in products:
-        grouped[p.category].append(p)
+
+    for product in products:
+        grouped[product.category].append(product)
 
     allprods = []
-    for cat,items in grouped.items():
-        slides = [
-            items[i:i + 4] for i in range(0, len(items), 4)
-            ]
-        
+    for cat, items in grouped.items():
+        slides = [items[i:i + 4] for i in range(0, len(items), 4)]
         allprods.append((cat, slides))
 
+    return allprods
+
+def index(request):
     params = {
-        'allprods': allprods
+        'allprods': _group_products_by_category(Product.objects.all())
     }
 
     return render(request, 'shop/index.html', params)
@@ -84,10 +85,6 @@ def categories(request):
 
 
 
-from django.shortcuts import render
-from django.http import JsonResponse
-from .models import Order, OrderUpdate, Product
-import json
 
 def tracker(request):
     if request.method == "POST":
@@ -233,12 +230,40 @@ def product(request,id):
 
 
 def checkout(request):
-    return render(request,"shop/checkout.html")
+    return render(request, 'shop/checkout.html')
 
 
 def cart(request):
     return render(request, 'shop/cart.html')
 
+def searchMatch(query, item):
+    if not query:
+        return True
 
+    query_words = query.lower().strip().split()
+
+    searchable_text = " ".join([
+        item.product_name,
+        item.category,
+        item.sub_category,
+        item.desc,
+    ]).lower()
+
+    return all(word in searchable_text for word in query_words)
+
+
+def search(request):
+    query = (request.GET.get('search') or '').strip()
+    products = Product.objects.all()
+
+    if query:
+        products = [product for product in products if searchMatch(query, product)]
+
+    params = {
+        'allprods': _group_products_by_category(products),
+        'query': query,
+    }
+
+    return render(request, 'shop/index.html', params)
 
 

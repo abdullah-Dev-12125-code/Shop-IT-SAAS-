@@ -57,6 +57,7 @@
     <p>Curated collections, delivered fast.</p>
   </div>
 
+  {% if allprods %}
   {% for cat_name, slides in allprods %}
   <div class="section-label"><h3>{{ cat_name }}</h3></div>
 
@@ -113,6 +114,12 @@
     </a>
   </div>
   {% endfor %}
+  {% else %}
+  <div class="text-center py-5">
+    <h3 class="mb-3">No products found{% if query %} for "{{ query }}"{% endif %}.</h3>
+    <p class="text-muted mb-0">Try a different search term or browse all products.</p>
+  </div>
+  {% endif %}
 </div>
 
 <div id="cart-toast">Added to cart ✓</div>

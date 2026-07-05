@@ -11,8 +11,15 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-    *, *::before, *::after { box-sizing: border-box; }
-    html { font-size: 16px; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+    }
 
     body {
       margin: 0;
@@ -24,11 +31,13 @@
       color: #111;
     }
 
-    .main-content { flex: 1; }
+    .main-content {
+      flex: 1;
+    }
 
     /* ── NAVBAR ── */
     .navbar-custom {
-      background:#ffffff;
+      background: #ffffff;
       border-bottom: 1px solid #e8e8e8;
       padding: 0 1.5rem;
       height: 62px;
@@ -53,7 +62,9 @@
       transition: background 0.15s;
     }
 
-    .nav-link:hover { background: #f4f4f6; }
+    .nav-link:hover {
+      background: #f4f4f6;
+    }
 
     /* ── SEARCH ── */
     .search-wrap {
@@ -90,7 +101,9 @@
       transition: opacity 0.15s;
     }
 
-    .search-btn:hover { opacity: 0.85; }
+    .search-btn:hover {
+      opacity: 0.85;
+    }
 
     /* ── CART ── */
     .cart-nav-item {
@@ -131,7 +144,7 @@
       background: #fff;
       border: 1px solid #e8e8e8;
       border-radius: 16px;
-      box-shadow: 0 16px 48px rgba(0,0,0,.13);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, .13);
       z-index: 9999;
       overflow: hidden;
       visibility: hidden;
@@ -186,7 +199,9 @@
       gap: 8px;
     }
 
-    .cpop-item:last-child { border-bottom: none; }
+    .cpop-item:last-child {
+      border-bottom: none;
+    }
 
     .cpop-item-name {
       flex: 1;
@@ -237,7 +252,9 @@
       letter-spacing: 0.02em;
     }
 
-    .cpop-footer a:hover { opacity: 0.85; }
+    .cpop-footer a:hover {
+      opacity: 0.85;
+    }
 
     /* ── FOOTER ── */
     .site-footer {
@@ -256,7 +273,10 @@
       justify-content: space-between;
     }
 
-    .footer-section { flex: 1; min-width: 180px; }
+    .footer-section {
+      flex: 1;
+      min-width: 180px;
+    }
 
     .footer-section h5 {
       font-size: 0.9rem;
@@ -279,7 +299,9 @@
       transition: color 0.15s;
     }
 
-    .footer-section a:hover { color: #111; }
+    .footer-section a:hover {
+      color: #111;
+    }
 
     .footer-bottom {
       text-align: center;
@@ -291,12 +313,21 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 991px) {
-      .search-wrap { margin: 0.8rem 0; max-width: 100%; }
-      .cart-popover { display: none !important; }
+      .search-wrap {
+        margin: 0.8rem 0;
+        max-width: 100%;
+      }
+
+      .cart-popover {
+        display: none !important;
+      }
     }
 
     @media (max-width: 768px) {
-      .footer-container { flex-direction: column; gap: 1.5rem; }
+      .footer-container {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
     }
   </style>
 
@@ -312,7 +343,8 @@
       <img src="{% static 'shop/assets/logo.png' %}" alt="Shop IT">
     </a>
 
-    <button class="navbar-toggler" data-toggle="collapse" data-target="#nav" style="border:none;background:none;font-size:1.3rem;">
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#nav"
+      style="border:none;background:none;font-size:1.3rem;">
       ☰
     </button>
 
@@ -357,11 +389,13 @@
 
       </ul>
 
-      <!-- SEARCH -->
-      <div class="search-wrap ml-lg-3">
-        <input class="search-box" type="text" placeholder="Search products…">
-        <button class="search-btn">Search</button>
-      </div>
+      <form method="get" action="{% url 'shop:search' %}">
+        <!-- SEARCH -->
+        <div class="search-wrap ml-lg-3">
+          <input class="search-box" type="text" name="search" value="{{ query|default:'' }}" placeholder="Search products…">
+          <button class="search-btn" type="submit">Search</button>
+        </div>
+      </form>
     </div>
   </nav>
 
@@ -395,7 +429,8 @@
   </footer>
 
   <!-- SCRIPTS -->
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
   <script>
@@ -428,7 +463,7 @@
         const current = normalizeCart(JSON.parse(localStorage.getItem(CART_KEY)) || []);
         if (current.length) return current;
         return normalizeCart(JSON.parse(localStorage.getItem(LEGACY_CART_KEY)) || []);
-      } catch(e) {
+      } catch (e) {
         return [];
       }
     }
@@ -486,7 +521,7 @@
       }).join("");
 
       if (totalRow && totalPrice) {
-        const grand = cart.reduce((s, i) => s + (parseFloat(i.price)||0) * (i.qty||1), 0);
+        const grand = cart.reduce((s, i) => s + (parseFloat(i.price) || 0) * (i.qty || 1), 0);
         totalPrice.textContent = "$" + grand.toFixed(2);
         totalRow.style.display = "flex";
       }
@@ -494,7 +529,7 @@
 
     function escHtml(str) {
       return String(str).replace(/[&<>"']/g, m => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       }[m]));
     }
 
@@ -506,7 +541,7 @@
       (index.html dispatches a "cartUpdated" event after saving)
     */
     window.addEventListener("cartUpdated", updateCartUI);
-    window.addEventListener("storage", function(e) {
+    window.addEventListener("storage", function (e) {
       if (e.key === CART_KEY) updateCartUI();
     });
   </script>
@@ -514,4 +549,5 @@
   {% block js %}{% endblock %}
 
 </body>
+
 </html>
