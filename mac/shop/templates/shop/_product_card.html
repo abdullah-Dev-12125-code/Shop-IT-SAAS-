@@ -1,0 +1,62 @@
+{% load static %}
+{% comment %}
+  Reusable product card. Include with:
+    {% include "shop/_product_card.html" with item=item %}
+  Optional extra context:
+    ribbon       -> "hot" | "top" | "festival"  (adds the corner ribbon)
+    ribbon_label -> text shown on the ribbon, e.g. "Hot", "Bestseller", "Eid Special"
+{% endcomment %}
+<div class="card">
+  <div class="card-img-wrap">
+    {% if ribbon %}<span class="ribbon {{ ribbon }}">{{ ribbon_label }}</span>{% endif %}
+    <button class="wishlist-btn" data-id="{{ item.id }}" title="Save for later">♡</button>
+    {% if item.image_url %}
+      <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+    {% elif item.image %}
+      <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+    {% else %}
+      <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+    {% endif %}
+  </div>
+
+  <div class="card-body">
+    <h5 class="card-title">{{ item.product_name }}</h5>
+    <p class="card-desc">{{ item.desc }}</p>
+
+    {% if item.rating %}
+    <div class="rating-row">
+      <span class="stars">
+        {% for i in "12345" %}{% if forloop.counter <= item.rating %}★{% else %}☆{% endif %}{% endfor %}
+      </span>
+      <span class="count">{{ item.rating }} {% if item.review_count %}· {{ item.review_count }} reviews{% endif %}</span>
+    </div>
+    {% endif %}
+
+    <div class="price-row">
+      <span class="card-price">${{ item.price }}</span>
+      {% if item.original_price and item.original_price > item.price %}
+        <span class="card-price-old">${{ item.original_price }}</span>
+        <span class="discount-pill">Save {{ item.original_price|add:"-0"|floatformat:0 }}</span>
+      {% endif %}
+    </div>
+
+    <div class="meta-row">
+      <span class="stock {% if item.available_now and item.available_now <= 5 %}low{% endif %}">
+        {{ item.stock_status|default:"In Stock" }}{% if item.available_now %} · {{ item.available_now }} left{% endif %}
+      </span>
+      {% if item.is_fast_delivery %}<span class="fast-tag">⚡ Fast</span>{% endif %}
+    </div>
+
+    <div class="btn-row">
+      <a href="{% url 'shop:product' item.id %}" class="btn-view" title="View product">👁</a>
+      <button class="btn-cart"
+        data-id="{{ item.id }}"
+        data-name="{{ item.product_name|escapejs }}"
+        data-price="{{ item.price }}"
+        data-image="{% if item.image_url %}{{ item.image_url }}{% elif item.image %}/media/{{ item.image }}{% endif %}">
+        Add to Cart
+      </button>
+      <a href="{% url 'shop:checkout' %}" class="btn-buy">Buy</a>
+    </div>
+  </div>
+</div>

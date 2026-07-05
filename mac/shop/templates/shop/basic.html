@@ -8,8 +8,26 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
   <title>{% block title %}Shop IT{% endblock %}</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    :root {
+      --ink: #12151c;
+      --ink-soft: #1c212c;
+      --paper: #fbfaf8;
+      --teal: #0f6e5c;
+      --teal-deep: #0a4f42;
+      --teal-tint: #e4f2ee;
+      --gold: #c9932e;
+      --coral: #e8542f;
+      --line: #e6e3dc;
+      --line-dark: #2a2f3b;
+      --muted: #6f6d64;
+      --muted-dark: #9aa0ad;
+      --radius: 14px;
+      --shadow-soft: 0 10px 30px rgba(18, 21, 28, .08);
+    }
 
     *,
     *::before,
@@ -24,21 +42,24 @@
     body {
       margin: 0;
       font-family: "Inter", system-ui, sans-serif;
-      background: #f4f4f6;
+      background: var(--paper);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      color: #111;
+      color: var(--ink);
     }
 
     .main-content {
       flex: 1;
     }
 
+    .mono { font-family: "JetBrains Mono", monospace; }
+    .display { font-family: "Fraunces", serif; }
+
     /* ── NAVBAR ── */
     .navbar-custom {
       background: #ffffff;
-      border-bottom: 1px solid #e8e8e8;
+      border-bottom: 1px solid var(--line);
       padding: 0 1.5rem;
       height: 62px;
       display: flex;
@@ -48,35 +69,60 @@
       z-index: 1000;
     }
 
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 !important;
+    }
+
     .navbar-brand img {
-      height: 11rem;
+      height: 2.9rem;
       width: auto;
+    }
+
+    .navbar-brand .brand-text {
+      font-family: "Fraunces", serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.3px;
+    }
+
+    .navbar-brand .brand-text span {
+      color: var(--teal);
     }
 
     .nav-link {
       font-size: 0.875rem;
-      font-weight: 500;
+      font-weight: 600;
       color: #374151 !important;
-      padding: 0.4rem 0.75rem !important;
+      padding: 0.5rem 0.8rem !important;
       border-radius: 8px;
-      transition: background 0.15s;
+      transition: background 0.15s, color 0.15s;
     }
 
     .nav-link:hover {
-      background: #f4f4f6;
+      background: var(--teal-tint);
+      color: var(--teal-deep) !important;
     }
 
     /* ── SEARCH ── */
     .search-wrap {
       display: flex;
       align-items: center;
-      background: #f4f4f6;
-      border: 1px solid #e0e0e0;
+      background: var(--paper);
+      border: 1px solid var(--line);
       border-radius: 10px;
       overflow: hidden;
       max-width: 240px;
       width: 100%;
       margin-left: 1rem;
+      transition: border-color 0.15s;
+    }
+
+    .search-wrap:focus-within {
+      border-color: var(--teal);
     }
 
     .search-box {
@@ -87,22 +133,23 @@
       font-size: 0.85rem;
       width: 100%;
       font-family: inherit;
+      color: var(--ink);
     }
 
     .search-btn {
       border: none;
-      background: #111;
+      background: var(--ink);
       color: white;
       padding: 0.45rem 0.9rem;
       cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.78rem;
+      font-weight: 700;
       font-family: inherit;
-      transition: opacity 0.15s;
+      transition: background 0.15s;
     }
 
     .search-btn:hover {
-      opacity: 0.85;
+      background: var(--teal-deep);
     }
 
     /* ── CART ── */
@@ -115,9 +162,10 @@
       position: absolute;
       top: -5px;
       right: -8px;
-      background: #e8002d;
+      background: var(--coral);
       color: white;
-      font-size: 0.6rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.62rem;
       font-weight: 700;
       min-width: 17px;
       height: 17px;
@@ -142,9 +190,9 @@
       right: 0;
       width: 310px;
       background: #fff;
-      border: 1px solid #e8e8e8;
+      border: 1px solid var(--line);
       border-radius: 16px;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, .13);
+      box-shadow: 0 16px 48px rgba(18, 21, 28, .16);
       z-index: 9999;
       overflow: hidden;
       visibility: hidden;
@@ -165,20 +213,23 @@
 
     .cpop-header {
       padding: 13px 16px;
-      font-weight: 700;
-      font-size: 13.5px;
-      border-bottom: 1px solid #f0f0f0;
-      background: #fafafa;
+      font-family: "Fraunces", serif;
+      font-weight: 600;
+      font-size: 15px;
+      border-bottom: 1px solid var(--line);
+      background: var(--ink);
+      color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .cpop-count {
+      font-family: "JetBrains Mono", monospace;
       font-size: 11px;
       font-weight: 600;
-      color: #6b7280;
-      background: #ebebeb;
+      color: var(--ink);
+      background: var(--gold);
       padding: 2px 9px;
       border-radius: 999px;
     }
@@ -209,22 +260,28 @@
       overflow: hidden;
       text-overflow: ellipsis;
       color: #1f2937;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .cpop-item-meta {
       white-space: nowrap;
-      color: #6b7280;
+      color: var(--muted);
       font-size: 12px;
+      font-family: "JetBrains Mono", monospace;
     }
 
     .cpop-total {
-      padding: 8px 16px 6px;
+      padding: 10px 16px 8px;
       display: flex;
       justify-content: space-between;
       font-size: 13px;
       font-weight: 700;
-      border-top: 1px solid #f0f0f0;
+      border-top: 1px solid var(--line);
+    }
+
+    .cpop-total #cpop-total-price {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--teal-deep);
     }
 
     .cpop-empty {
@@ -241,32 +298,33 @@
     .cpop-footer a {
       display: block;
       text-align: center;
-      background: #111;
+      background: var(--ink);
       color: #fff;
       text-decoration: none;
       padding: 10px;
       border-radius: 10px;
       font-size: 12.5px;
       font-weight: 700;
-      transition: opacity 0.15s;
+      transition: background 0.15s;
       letter-spacing: 0.02em;
     }
 
     .cpop-footer a:hover {
-      opacity: 0.85;
+      background: var(--teal-deep);
     }
 
     /* ── FOOTER ── */
     .site-footer {
-      background: #fff;
-      border-top: 1px solid #e8e8e8;
+      background: var(--ink);
+      border-top: 1px solid var(--line-dark);
       margin-top: 10px;
+      color: var(--muted-dark);
     }
 
     .footer-container {
       max-width: 1200px;
       margin: auto;
-      padding: 2rem 1.5rem;
+      padding: 2.5rem 1.5rem 1.75rem;
       display: flex;
       flex-wrap: wrap;
       gap: 3rem;
@@ -279,36 +337,40 @@
     }
 
     .footer-section h5 {
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-      color: #111;
+      font-family: "Fraunces", serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.7rem;
+      color: #fff;
     }
+
+    .footer-section h5.brand span { color: var(--gold); }
 
     .footer-section p {
       font-size: 0.875rem;
-      color: #6b7280;
+      color: var(--muted-dark);
     }
 
     .footer-section a {
       display: block;
       font-size: 0.875rem;
-      color: #6b7280;
-      margin-bottom: 0.3rem;
+      color: var(--muted-dark);
+      margin-bottom: 0.45rem;
       text-decoration: none;
       transition: color 0.15s;
     }
 
     .footer-section a:hover {
-      color: #111;
+      color: var(--gold);
     }
 
     .footer-bottom {
       text-align: center;
-      padding: 0.75rem;
-      font-size: 0.8rem;
-      border-top: 1px solid #f0f0f0;
-      color: #9ca3af;
+      padding: 0.9rem;
+      font-size: 0.78rem;
+      font-family: "JetBrains Mono", monospace;
+      border-top: 1px solid var(--line-dark);
+      color: #6b7280;
     }
 
     /* ── RESPONSIVE ── */
@@ -341,6 +403,7 @@
 
     <a class="navbar-brand" href="{% url 'shop:home' %}">
       <img src="{% static 'shop/assets/logo.png' %}" alt="Shop IT">
+      <span class="brand-text">Shop <span>IT</span></span>
     </a>
 
     <button class="navbar-toggler" data-toggle="collapse" data-target="#nav"
@@ -408,7 +471,7 @@
   <footer class="site-footer">
     <div class="footer-container">
       <div class="footer-section">
-        <h5>Shop IT</h5>
+        <h5 class="brand">Shop <span>IT</span></h5>
         <p>Your trusted shopping platform.</p>
       </div>
       <div class="footer-section">

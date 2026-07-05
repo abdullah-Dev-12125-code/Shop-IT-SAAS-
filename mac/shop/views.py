@@ -1,12 +1,38 @@
-from collections import defaultdict
+from collections import Counter, defaultdict
 from decimal import Decimal, InvalidOperation
 import json
 
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils.text import slugify
 
 from .models import Contact, Order, OrderUpdate, Product
 
+
+# Purely cosmetic: an icon per category slug for the sub-nav pills. Any
+# category not listed here just falls back to a generic tag icon, so new
+# categories in the catalog never break the nav.
+CATEGORY_ICONS = {
+    "electronics": "💻",
+    "gaming": "🎮",
+    "school accessories": "🎒",
+    "school": "🎒",
+    "fashion": "👕",
+    "home & living": "🏠",
+    "home": "🏠",
+    "beauty": "💄",
+    "sports": "🏸",
+}
+
+# Interim way to flag "festival" products until Product has a dedicated
+# tag/boolean field for this. Matched (case-insensitively) against category,
+# sub_category and desc. Extend this list for other seasons/sales.
+FESTIVAL_KEYWORDS = ["eid", "bakra eid", "qurbani", "festival", "ramadan"]
+
+HOT_SELLING_LIMIT = 8
+TOP_PURCHASED_LIMIT = 8
+FESTIVAL_LIMIT = 8
+RECENT_ORDERS_FOR_TRENDING = 50
 
 
 def _normalize_cart_items(cart):
@@ -68,22 +94,147 @@ def _group_products_by_category(products):
 
     return allprods
 
-def index(request):
-    params = {
-        'allprods': _group_products_by_category(Product.objects.all())
+
+def _build_categories(products):
+    """Distinct categories -> [{'name', 'slug', 'icon'}, ...] for the sub-nav."""
+    names = []
+    for product in products:
+        if product.category and product.category not in names:
+            names.append(product.category)
+
+    categories = []
+    for name in names:
+        categories.append({
+            "name": name,
+            "slug": slugify(name),
+            "icon": CATEGORY_ICONS.get(name.lower(), "🛍"),
+        })
+    return categories
+
+
+def _iter_order_line_items(raw_item_json):
+    """
+    Yields (product_id_str, qty_int) pairs from a stored Order.item_json blob.
+    Handles both historical shapes: {id: qty} and [{"id": ..., "qty": ...}].
+    Silently skips anything malformed so one bad order can't break the shelves.
+    """
+    try:
+        items = json.loads(raw_item_json or "[]")
+    except (json.JSONDecodeError, TypeError):
+        return
+
+    if isinstance(items, dict):
+        pairs = items.items()
+    elif isinstance(items, list):
+        pairs = (
+            (entry.get("id"), entry.get("qty", 1))
+            for entry in items
+            if isinstance(entry, dict)
+        )
+    else:
+        return
+
+    for product_id, qty in pairs:
+        if product_id is None:
+            continue
+        try:
+            qty = int(qty)
+        except (TypeError, ValueError):
+            qty = 1
+        yield str(product_id), qty
+
+
+def _ranked_products_from_orders(item_json_values, limit):
+    """Counts total quantity per product across the given orders and returns
+    the top `limit` Product objects, ranked by that count (not by DB id)."""
+    counts = Counter()
+    for raw_item_json in item_json_values:
+        for product_id, qty in _iter_order_line_items(raw_item_json):
+            counts[product_id] += qty
+
+    if not counts:
+        return []
+
+    ranked_ids = [pid for pid, _ in counts.most_common(limit)]
+    products_by_id = Product.objects.in_bulk([int(pid) for pid in ranked_ids if pid.isdigit()])
+    return [products_by_id[int(pid)] for pid in ranked_ids if pid.isdigit() and int(pid) in products_by_id]
+
+
+def _top_purchased_products(limit=TOP_PURCHASED_LIMIT):
+    """All-time best sellers, ranked by total quantity sold."""
+    values = Order.objects.values_list('item_json', flat=True)
+    return _ranked_products_from_orders(values, limit)
+
+
+def _hot_selling_products(limit=HOT_SELLING_LIMIT, recent_orders=RECENT_ORDERS_FOR_TRENDING):
+    """"Trending now" -- ranked the same way as top purchased, but only over
+    the most recently placed orders (by created_at)."""
+    values = Order.objects.order_by('-created_at').values_list('item_json', flat=True)[:recent_orders]
+    return _ranked_products_from_orders(values, limit)
+
+
+def _festival_products(products, limit=FESTIVAL_LIMIT):
+    matches = []
+    for product in products:
+        haystack = " ".join(filter(None, [product.category, product.sub_category, product.desc])).lower()
+        if any(keyword in haystack for keyword in FESTIVAL_KEYWORDS):
+            matches.append(product)
+            if len(matches) >= limit:
+                break
+    return matches
+
+
+def _build_home_context(products, query=None, category_slug=None, interest=False):
+    products = list(products)
+
+    if category_slug:
+        products = [p for p in products if slugify(p.category) == category_slug]
+
+    hot_selling = _hot_selling_products()
+    top_purchased = _top_purchased_products()
+    festival_products = _festival_products(products)
+
+    # Don't repeat a product that's already sitting in a shelf above.
+    featured_ids = {p.id for p in hot_selling} | {p.id for p in top_purchased} | {p.id for p in festival_products}
+    discover_products = [p for p in products if p.id not in featured_ids]
+
+    if interest:
+        # Placeholder "For You" ranking until real personalization exists:
+        # surface whatever looks best-reviewed/rated first, falling back to
+        # newest-first if those fields aren't populated on a product.
+        discover_products = sorted(
+            discover_products,
+            key=lambda p: (getattr(p, "rating", 0) or 0, p.id),
+            reverse=True,
+        )
+
+    return {
+        'allprods': _group_products_by_category(products),  # kept for backward compatibility
+        'categories': _build_categories(Product.objects.all()),
+        'hot_selling': hot_selling,
+        'top_purchased': top_purchased,
+        'festival_products': festival_products,
+        'festival_name': "Eid-ul-Adha Specials",
+        'discover_products': discover_products,
+        'query': query,
     }
 
-    return render(request, 'shop/index.html', params)
+
+def index(request):
+    category_slug = request.GET.get('category')
+    interest = request.GET.get('interest') == '1'
+    context = _build_home_context(Product.objects.all(), category_slug=category_slug, interest=interest)
+    return render(request, 'shop/index.html', context)
 
 
 def shops(request):
-    return render(request, 'shop/index.html')
+    context = _build_home_context(Product.objects.all())
+    return render(request, 'shop/index.html', context)
 
 
 def categories(request):
-    return render(request, 'shop/index.html')
-
-
+    context = _build_home_context(Product.objects.all())
+    return render(request, 'shop/index.html', context)
 
 
 def tracker(request):
@@ -254,16 +405,12 @@ def searchMatch(query, item):
 
 def search(request):
     query = (request.GET.get('search') or '').strip()
+    category_slug = request.GET.get('category')
+    interest = request.GET.get('interest') == '1'
     products = Product.objects.all()
 
     if query:
         products = [product for product in products if searchMatch(query, product)]
 
-    params = {
-        'allprods': _group_products_by_category(products),
-        'query': query,
-    }
-
-    return render(request, 'shop/index.html', params)
-
-
+    context = _build_home_context(products, query=query, category_slug=category_slug, interest=interest)
+    return render(request, 'shop/index.html', context)

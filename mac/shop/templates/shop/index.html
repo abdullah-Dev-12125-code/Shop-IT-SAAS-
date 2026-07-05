@@ -1,125 +1,245 @@
 {% extends 'shop/basic.html' %}
 {% load static %}
 
+{% comment %}
+  ============================================================================
+  CONTEXT VARIABLES THIS TEMPLATE EXPECTS FROM THE VIEW
+  ============================================================================
+  categories        -> list of dicts: {"name": "Electronics", "slug": "electronics", "icon": "💻"}
+                        (4-6 of these; used for the sub-nav strip)
+  hot_selling        -> list of product dicts (the "Hot Right Now" shelf)
+  top_purchased      -> list of product dicts (the "Most Bought" shelf)
+  festival_products  -> list of product dicts (the seasonal/festival shelf)
+  festival_name      -> string, e.g. "Eid-ul-Adha Specials" (used as the shelf title)
+  discover_products  -> list of product dicts (the big Amazon-style grid, unordered/random)
+
+  Each product dict can carry (all optional except id/product_name/price):
+  id, product_name, desc, price, original_price, stock_status, available_now,
+  image_url, image, rating (0-5 float), review_count, is_fast_delivery (bool)
+
+  If a variable isn't provided the section simply won't render (guarded with
+  {% templatetag openblock %} if {% templatetag closeblock %}), so you can wire this up incrementally.
+{% endcomment %}
+
 {% block css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --grad: linear-gradient(135deg, #ff5a1f, #e8002d);
-    --border: #e8e8e8;
-    --muted: #6b7280;
-    --radius: 16px;
-    --shadow: 0 10px 30px rgba(0, 0, 0, .09);
+    --ink: #12151c;
+    --paper: #fbfaf8;
+    --teal: #0f6e5c;
+    --teal-deep: #0a4f42;
+    --gold: #c9932e;
+    --coral: #e8542f;
+    --line: #e6e3dc;
+    --muted: #6f6d64;
+    --card-bg: #ffffff;
+    --radius: 14px;
+    --shadow-soft: 0 8px 24px rgba(18, 21, 28, .07);
+    --shadow-hover: 0 16px 36px rgba(18, 21, 28, .14);
+    font-family: 'Inter', sans-serif;
   }
-  .shop-hero { text-align: center; padding: 52px 0 36px; }
-  .shop-hero h1 { font-size: clamp(32px, 5vw, 50px); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 8px; }
-  .shop-hero h1 span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .shop-hero p { color: var(--muted); font-size: 1rem; margin: 0; }
-  .section-label { display: flex; align-items: center; gap: 12px; margin: 44px 0 20px; }
-  .section-label::before { content: ""; width: 5px; height: 26px; background: var(--grad); border-radius: 20px; flex-shrink: 0; }
-  .section-label h3 { font-size: 1.15rem; font-weight: 700; margin: 0; }
-  .card { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: transform 0.22s ease, box-shadow 0.22s ease; background: #fff; display: flex; flex-direction: column; height: 100%; }
-  .card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-  .card-img-wrap { height: 200px; overflow: hidden; background: #f5f5f5; }
-  .card-img-top { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-  .card:hover .card-img-top { transform: scale(1.04); }
-  .card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; flex: 1; }
-  .card-title { font-weight: 700; font-size: 14.5px; margin-bottom: 4px; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-desc { color: var(--muted); font-size: 12.5px; line-height: 1.5; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .card-price { font-size: 19px; font-weight: 800; color: #111; margin-top: auto; margin-bottom: 0; }
-  .card-status { font-size: 12px; font-family: sans-serif; color: #000; margin-top: auto; margin-bottom: 0; font-weight: 600; }
-  .card-status span { color: teal; }
-  .btn-row { display: flex; gap: 7px; margin-top: 12px; align-items: stretch; }
-  .btn-view { width: 38px; height: 38px; border: 1px solid var(--border); border-radius: 9px; display: flex; justify-content: center; align-items: center; background: #fff; cursor: pointer; transition: background 0.18s, border-color 0.18s; text-decoration: none; font-size: 15px; flex-shrink: 0; }
-  .btn-view:hover { background: #111; border-color: #111; }
-  .btn-cart { flex: 1; background: #111; color: #fff; border: none; border-radius: 9px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; padding: 0 10px; height: 38px; transition: opacity 0.18s, background 0.15s, transform 0.1s !important; }
-  .btn-cart:hover { opacity: 0.88; }
-  .btn-cart.flash-added { background: #16a34a !important; transform: scale(0.97); }
-  .btn-buy { flex: 1; background: var(--grad); border-radius: 9px; color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 13px; font-weight: 600; height: 38px; transition: opacity 0.18s; }
-  .btn-buy:hover { opacity: 0.88; color: #fff; }
-  .hero-carousel { position: relative; margin-bottom: 10px; }
-  .carousel-inner { padding: 8px 0 12px; }
-  .carousel-item .row { justify-content: center; }
-  .carousel-arrow-out { width: 42px; height: 42px; border-radius: 50%; background: #111; position: absolute; top: 45%; transform: translateY(-50%); display: flex; justify-content: center; align-items: center; z-index: 10; border: none; transition: opacity 0.18s; }
-  .carousel-arrow-out:hover { opacity: 0.8; }
-  .carousel-control-prev.carousel-arrow-out { left: -56px; }
-  .carousel-control-next.carousel-arrow-out { right: -56px; }
-  .carousel-control-prev-icon, .carousel-control-next-icon { filter: invert(1); }
-  #cart-toast { position: fixed; bottom: 24px; right: 24px; background: #111; color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 600; z-index: 99999; opacity: 0; transform: translateY(10px); transition: opacity 0.22s ease, transform 0.22s ease; pointer-events: none; }
+  body { background: var(--paper); color: var(--ink); }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .display { font-family: 'Fraunces', serif; }
+
+  /* ---------- Category sub-nav (sits flush under main navbar) ---------- */
+  .subnav-wrap { padding-top: 0; margin-top: 0; background: var(--ink); border-bottom: 1px solid #232733; }
+  .subnav { display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 0 8px; }
+  .subnav::-webkit-scrollbar { display: none; }
+  .subnav a { display: flex; align-items: center; gap: 6px; white-space: nowrap; color: #cfd3dc; text-decoration: none; font-size: 13.5px; font-weight: 600; padding: 13px 16px; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
+  .subnav a:hover { color: #fff; }
+  .subnav a.is-active { color: #fff; border-bottom-color: var(--gold); }
+  .subnav a.interest { margin-left: auto; color: var(--gold); }
+  .subnav a.interest::before { content: "✦"; font-size: 11px; }
+
+  /* ---------- Hero strip ---------- */
+  .shop-hero { text-align: center; padding: 44px 0 8px; }
+  .shop-hero .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); font-weight: 700; }
+  .shop-hero h1 { font-family: 'Fraunces', serif; font-size: clamp(30px, 4.4vw, 46px); font-weight: 600; letter-spacing: -0.5px; margin: 6px 0 6px; color: var(--ink); }
+  .shop-hero p { color: var(--muted); font-size: 15px; margin: 0; }
+
+  /* ---------- Themed shelves (hot / top-purchased / festival) ---------- */
+  .shelf { margin: 40px 0; }
+  .shelf-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; padding: 0 2px; }
+  .shelf-head .title-group { display: flex; align-items: center; gap: 10px; }
+  .shelf-tag { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 4px 9px; border-radius: 6px; color: #fff; }
+  .shelf-head h3 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; margin: 0; color: var(--ink); }
+  .shelf-head .sub { color: var(--muted); font-size: 12.5px; margin-left: 2px; }
+  .shelf.hot .shelf-tag { background: var(--coral); }
+  .shelf.top .shelf-tag { background: var(--teal); }
+  .shelf.festival .shelf-tag { background: var(--gold); }
+  .shelf.festival .shelf-head { position: relative; }
+  .shelf-scroll { display: flex; gap: 16px; overflow-x: auto; padding: 4px 2px 14px; scroll-snap-type: x proximity; }
+  .shelf-scroll::-webkit-scrollbar { height: 6px; }
+  .shelf-scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 10px; }
+  .shelf-scroll .card-slot { flex: 0 0 232px; scroll-snap-align: start; }
+
+  .shelf.festival { background: linear-gradient(180deg, rgba(201,147,46,.08), rgba(201,147,46,0)); border-radius: 20px; padding: 22px 18px 6px; }
+
+  /* ---------- Product card ---------- */
+  .card { position: relative; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--card-bg); display: flex; flex-direction: column; height: 100%; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #d8d4c8; }
+  .card-img-wrap { position: relative; height: 178px; background: #f4f2ec; overflow: hidden; }
+  .card-img-top { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+  .card:hover .card-img-top { transform: scale(1.05); }
+
+  /* ribbon badge = signature element, used on shelf cards to mark why the item is here */
+  .ribbon { position: absolute; top: 10px; left: -6px; padding: 4px 12px 4px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: #fff; clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 60%); box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+  .ribbon.hot { background: var(--coral); }
+  .ribbon.top { background: var(--teal); }
+  .ribbon.festival { background: var(--gold); }
+
+  .wishlist-btn { position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.92); border: none; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; transition: transform .15s; }
+  .wishlist-btn:hover { transform: scale(1.1); }
+  .wishlist-btn.active { color: var(--coral); }
+
+  .card-body { padding: 13px 14px 15px; display: flex; flex-direction: column; flex: 1; gap: 4px; }
+  .card-title { font-weight: 700; font-size: 14px; margin: 0; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-desc { color: var(--muted); font-size: 12px; line-height: 1.45; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .rating-row { display: flex; align-items: center; gap: 5px; font-size: 12px; margin: 1px 0; }
+  .stars { color: var(--gold); letter-spacing: 1px; font-size: 11px; }
+  .rating-row .count { color: var(--muted); font-size: 11.5px; }
+
+  .price-row { display: flex; align-items: baseline; gap: 7px; margin-top: 4px; }
+  .card-price { font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 700; color: var(--ink); }
+  .card-price-old { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); text-decoration: line-through; }
+  .discount-pill { font-size: 10.5px; font-weight: 800; color: var(--teal-deep); background: #e4f2ee; padding: 2px 6px; border-radius: 5px; }
+
+  .meta-row { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .meta-row .stock.low { color: var(--coral); font-weight: 700; }
+  .fast-tag { display: flex; align-items: center; gap: 3px; color: var(--teal-deep); font-weight: 700; }
+
+  .btn-row { display: flex; gap: 7px; margin-top: 10px; }
+  .btn-view { width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 9px; display: flex; justify-content: center; align-items: center; background: #fff; cursor: pointer; text-decoration: none; font-size: 14px; flex-shrink: 0; transition: background .15s, border-color .15s; }
+  .btn-view:hover { background: var(--ink); border-color: var(--ink); filter: invert(0); }
+  .btn-cart { flex: 1; background: var(--ink); color: #fff; border: none; border-radius: 9px; cursor: pointer; font-family: inherit; font-size: 12.5px; font-weight: 700; padding: 0 8px; height: 36px; transition: opacity .18s, background .15s, transform .1s; }
+  .btn-cart:hover { opacity: .88; }
+  .btn-cart.flash-added { background: var(--teal) !important; transform: scale(.97); }
+  .btn-buy { flex: 1; background: var(--coral); border-radius: 9px; color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 12.5px; font-weight: 700; height: 36px; transition: opacity .18s; }
+  .btn-buy:hover { opacity: .88; color: #fff; }
+
+  /* ---------- Discover grid: interconnected Amazon-style wall ---------- */
+  .discover-head { display: flex; align-items: baseline; gap: 10px; margin: 52px 0 4px; padding: 0 2px; }
+  .discover-head h3 { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; margin: 0; }
+  .discover-head .sub { color: var(--muted); font-size: 13px; }
+  .discover-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; margin-top: 16px; }
+  .discover-grid .card { border: 1px solid var(--line); border-radius: var(--radius); }
+  .discover-grid .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #d8d4c8; }
+
+  #cart-toast { position: fixed; bottom: 24px; right: 24px; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 600; z-index: 99999; opacity: 0; transform: translateY(10px); transition: opacity .22s ease, transform .22s ease; pointer-events: none; }
   #cart-toast.show { opacity: 1; transform: translateY(0); }
-  @media(max-width: 768px) { .carousel-control-prev.carousel-arrow-out { left: 6px; } .carousel-control-next.carousel-arrow-out { right: 6px; } }
+
+  .empty-state { text-align: center; padding: 60px 0; }
+  @media (max-width: 576px) { .shelf-scroll .card-slot { flex: 0 0 168px; } .card-img-wrap { height: 140px; } }
 </style>
 {% endblock %}
 
 {% block body %}
+
+<div class="subnav-wrap">
+  <div class="container">
+    <nav class="subnav">
+      {% for cat in categories %}
+      <a href="#" class="{% if request.GET.category == cat.slug %}is-active{% endif %}">
+        <span>{{ cat.icon|default:"🛍" }}</span>{{ cat.name }}
+      </a>
+      {% endfor %}
+      <a href="#" class="interest">For You</a>
+    </nav>
+  </div>
+</div>
+
 <div class="container">
+
   <div class="shop-hero">
-    <h1>Welcome to <span>Shop IT</span></h1>
-    <p>Curated collections, delivered fast.</p>
+    <div class="eyebrow">Curated · Delivered fast</div>
+    <h1>Welcome to <span class="display">Shop IT</span></h1>
+    <p>Everything trending, everything in demand, in one place.</p>
   </div>
 
-  {% if allprods %}
-  {% for cat_name, slides in allprods %}
-  <div class="section-label"><h3>{{ cat_name }}</h3></div>
-
-  <div id="carousel{{ forloop.counter0 }}" class="carousel slide hero-carousel" data-ride="carousel">
-    <div class="carousel-inner">
-      {% for slide in slides %}
-      <div class="carousel-item {% if forloop.first %}active{% endif %}">
-        <div class="row justify-content-center">
-          {% for item in slide %}
-          <div class="col-12 col-sm-6 col-lg-3 d-flex mb-3">
-            <div class="card">
-              <div class="card-img-wrap">
-                {% if item.image_url %}
-                  <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.product_name }}">
-                {% elif item.image %}
-                  <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.product_name }}">
-                {% else %}
-                  <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.product_name }}">
-                {% endif %}
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{ item.product_name }}</h5>
-                <p class="card-desc">{{ item.desc }}</p>
-                <p class="card-status">Stock Status: <span>{{ item.stock_status }}</span></p>
-                <p class="card-status">Available: {{ item.available_now }}</p>
-                <p class="card-price">${{ item.price }}</p>
-                <div class="btn-row">
-                  <a href="{% url 'shop:product' item.id %}" class="btn-view" title="View product">👁</a>
-
-                  {# FIX: single data-image using image_url first, then /media/ fallback #}
-                  <button class="btn-cart"
-                    data-id="{{ item.id }}"
-                    data-name="{{ item.product_name|escapejs }}"
-                    data-price="{{ item.price }}"
-                    data-image="{% if item.image_url %}{{ item.image_url }}{% elif item.image %}/media/{{ item.image }}{% endif %}">
-                    Add to Cart
-                  </button>
-
-                  <a href="{% url 'shop:checkout' %}" class="btn-buy">Buy Now</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
+  {# ---------------- Shelf: Hot Right Now ---------------- #}
+  {% if hot_selling %}
+  <div class="shelf hot">
+    <div class="shelf-head">
+      <div class="title-group">
+        <span class="shelf-tag">🔥 Hot</span>
+        <h3>Hot Right Now</h3>
+        <span class="sub">selling fast this week</span>
+      </div>
+    </div>
+    <div class="shelf-scroll">
+      {% for item in hot_selling %}
+      <div class="card-slot">
+        {% include "shop/_product_card.html" with item=item ribbon="hot" ribbon_label="Hot" %}
       </div>
       {% endfor %}
     </div>
-    <a class="carousel-control-prev carousel-arrow-out" href="#carousel{{ forloop.counter0 }}" data-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-    </a>
-    <a class="carousel-control-next carousel-arrow-out" href="#carousel{{ forloop.counter0 }}" data-slide="next">
-      <span class="carousel-control-next-icon"></span>
-    </a>
-  </div>
-  {% endfor %}
-  {% else %}
-  <div class="text-center py-5">
-    <h3 class="mb-3">No products found{% if query %} for "{{ query }}"{% endif %}.</h3>
-    <p class="text-muted mb-0">Try a different search term or browse all products.</p>
   </div>
   {% endif %}
+
+  {# ---------------- Shelf: Most Bought / Must-Buy ---------------- #}
+  {% if top_purchased %}
+  <div class="shelf top">
+    <div class="shelf-head">
+      <div class="title-group">
+        <span class="shelf-tag">✓ Top</span>
+        <h3>Most Bought</h3>
+        <span class="sub">customer favorites, must-buy picks</span>
+      </div>
+    </div>
+    <div class="shelf-scroll">
+      {% for item in top_purchased %}
+      <div class="card-slot">
+        {% include "shop/_product_card.html" with item=item ribbon="top" ribbon_label="Bestseller" %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {# ---------------- Shelf: Festival Special ---------------- #}
+  {% if festival_products %}
+  <div class="shelf festival">
+    <div class="shelf-head">
+      <div class="title-group">
+        <span class="shelf-tag">✦ Festive</span>
+        <h3>{{ festival_name|default:"Festival Specials" }}</h3>
+        <span class="sub">limited-time seasonal picks</span>
+      </div>
+    </div>
+    <div class="shelf-scroll">
+      {% for item in festival_products %}
+      <div class="card-slot">
+        {% include "shop/_product_card.html" with item=item ribbon="festival" ribbon_label="Eid Special" %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {# ---------------- Discover: Amazon-style open grid ---------------- #}
+  {% if discover_products %}
+  <div class="discover-head">
+    <h3>Discover Something New</h3>
+    <span class="sub">— a fresh mix, every visit</span>
+  </div>
+  <div class="discover-grid">
+    {% for item in discover_products %}
+      {% include "shop/_product_card.html" with item=item %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if not hot_selling and not top_purchased and not festival_products and not discover_products %}
+  <div class="empty-state">
+    <h3 class="mb-3 display">No products found{% if query %} for "{{ query }}"{% endif %}.</h3>
+    <p class="text-muted mb-0">Try a different search term or browse a category above.</p>
+  </div>
+  {% endif %}
+
 </div>
 
 <div id="cart-toast">Added to cart ✓</div>
@@ -129,8 +249,11 @@
 <script>
 (() => {
   const CART_KEY = "shopIT_cart";
+  const WISH_KEY = "shopIT_wishlist";
   const getCart = () => JSON.parse(localStorage.getItem(CART_KEY)) || [];
   const saveCart = (cart) => { localStorage.setItem(CART_KEY, JSON.stringify(cart)); window.dispatchEvent(new Event("cartUpdated")); };
+  const getWishlist = () => JSON.parse(localStorage.getItem(WISH_KEY)) || [];
+  const saveWishlist = (w) => localStorage.setItem(WISH_KEY, JSON.stringify(w));
 
   const showToast = (msg) => {
     const toast = document.getElementById("cart-toast");
@@ -157,14 +280,43 @@
   };
 
   document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn-cart");
-    if (!btn) return;
-    const { id, name, price, image } = btn.dataset;
-    if (!id) return;
-    addToCart(id, name, parseFloat(price || 0), image);
-    flashButton(btn);
-    showToast(`${name} added to cart`);
-    if (typeof updateCartUI === "function") updateCartUI();
+    const cartBtn = e.target.closest(".btn-cart");
+    if (cartBtn) {
+      const { id, name, price, image } = cartBtn.dataset;
+      if (!id) return;
+      addToCart(id, name, parseFloat(price || 0), image);
+      flashButton(cartBtn);
+      showToast(`${name} added to cart`);
+      if (typeof updateCartUI === "function") updateCartUI();
+      return;
+    }
+
+    const wishBtn = e.target.closest(".wishlist-btn");
+    if (wishBtn) {
+      const id = wishBtn.dataset.id;
+      let wishlist = getWishlist();
+      if (wishlist.includes(id)) {
+        wishlist = wishlist.filter(w => w !== id);
+        wishBtn.classList.remove("active");
+        wishBtn.textContent = "♡";
+      } else {
+        wishlist.push(id);
+        wishBtn.classList.add("active");
+        wishBtn.textContent = "♥";
+      }
+      saveWishlist(wishlist);
+    }
+  });
+
+  // restore wishlist state on load
+  document.addEventListener("DOMContentLoaded", () => {
+    const wishlist = getWishlist();
+    document.querySelectorAll(".wishlist-btn").forEach(btn => {
+      if (wishlist.includes(btn.dataset.id)) {
+        btn.classList.add("active");
+        btn.textContent = "♥";
+      }
+    });
   });
 })();
 </script>
