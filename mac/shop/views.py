@@ -1,12 +1,34 @@
 from collections import Counter, defaultdict
 from decimal import Decimal, InvalidOperation
 import json
-
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.text import slugify
-
 from .models import Contact, Order, OrderUpdate, Product
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.get['username']
+        password = request.get['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('shop:index')
+        
+        return render(request, 'shop/login.html', {'error':'Invalid Credentials'})
+    
+    return render(request, 'shop/login.html') 
+
+
+def logout_view(request):
+    logout(request)
+    return redirect(request, 'shop:login')
+
+
 
 
 # Purely cosmetic: an icon per category slug for the sub-nav pills. Any
@@ -220,6 +242,7 @@ def _build_home_context(products, query=None, category_slug=None, interest=False
     }
 
 
+@login_required
 def index(request):
     category_slug = request.GET.get('category')
     interest = request.GET.get('interest') == '1'

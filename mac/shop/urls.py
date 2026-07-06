@@ -17,6 +17,8 @@ path('search/',views.search, name="search"),
 path('product/<int:id>/',views.product,name="product"),
 path('cart/',views.cart,name='cart'),
 path('checkout/',views.checkout,name="checkout"),
-path('api/create-order/',views.create_order, name="create-order")
+path('api/create-order/',views.create_order, name="create-order"),
+path('login/', views.login_view, name='login'),
+path('logout/', views.logout_view, name='logout')
 ]
 

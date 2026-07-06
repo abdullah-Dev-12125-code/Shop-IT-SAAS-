@@ -789,6 +789,11 @@
       opacity: .85
     }
 
+    /* Copy button-tracking */
+    .order-num-btn-copy {
+      padding-bottom: 10px;
+    }
+
     /* FOOTER */
     .footer {
       background: #fff;
@@ -1068,7 +1073,8 @@
           </div>
           <p style="font-size:12px;color:var(--muted);margin-bottom:16px">By placing your order you agree to Shop IT's
             <a href="#" style="color:#007185">Terms of Service</a> and <a href="#" style="color:#007185">Privacy
-              Policy</a>.</p>
+              Policy</a>.
+          </p>
           <button class="action-btn" onclick="placeOrder()">
             <i class="ti ti-shopping-bag"></i> Place order
           </button>
@@ -1103,7 +1109,8 @@
     <div class="success-icon">🎉</div>
     <h2>Order placed!</h2>
     <p>Thank you for shopping with Shop IT.<br>You'll receive a confirmation email shortly.</p>
-    <div class="order-num" id="order-num-display">000000</div><br>
+    <div class="order-num" id="order-num-display"><strong>000000</strong></div><br>
+    <div class="oreder-num-btn-copy">Copy</div>
     <a href="{% url 'shop:home' %}" class="cont-link">Continue shopping</a>
   </div>
 
@@ -1283,7 +1290,7 @@
       }
     }
 
-    
+
 
     /* ── UNLOCK PANEL ── */
     function unlockPanel(id) {
@@ -1413,96 +1420,97 @@
     }
 
     /* ── PLACE ORDER ── */
-/* ── CSRF HELPER (Django FIX) ── */
-function getCSRFToken() {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, 10) === 'csrftoken=') {
-        cookieValue = decodeURIComponent(cookie.substring(10));
-        break;
+    /* ── CSRF HELPER (Django FIX) ── */
+    function getCSRFToken() {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, 10) === 'csrftoken=') {
+            cookieValue = decodeURIComponent(cookie.substring(10));
+            break;
+          }
+        }
       }
+      return cookieValue;
     }
-  }
-  return cookieValue;
-}
 
-/* ── PLACE ORDER (FIXED FINAL VERSION) ── */
-function placeOrder() {
-  if (!shipDone || !payDone) {
-    showAlert('err', 'Please complete all steps first.');
-    return;
-  }
+    /* ── PLACE ORDER (FIXED FINAL VERSION) ── */
+    function placeOrder() {
+      if (!shipDone || !payDone) {
+        showAlert('err', 'Please complete all steps first.');
+        return;
+      }
 
-  const cart = getCart();
+      const cart = getCart();
 
-  const totalText = document.getElementById('ot-total').textContent || "0";
-  const total_price = parseFloat(totalText.replace('$', '').trim()) || 0;
+      const totalText = document.getElementById('ot-total').textContent || "0";
+      const total_price = parseFloat(totalText.replace('$', '').trim()) || 0;
 
-  const data = {
-    first_name: document.getElementById('ff').value.trim(),
-    last_name: document.getElementById('fl').value.trim(),
-    email: document.getElementById('fem').value.trim(),
-    phone: document.getElementById('fph').value.trim(),
-    address: document.getElementById('fad').value.trim(),
-    city: document.getElementById('fct').value.trim(),
-    zip_code: document.getElementById('fzp').value.trim(),
-    country: document.getElementById('fcn').value,
-    payment_method: payMethod,
-    total_price: total_price,
-    cart: cart
-  };
+      const data = {
+        first_name: document.getElementById('ff').value.trim(),
+        last_name: document.getElementById('fl').value.trim(),
+        email: document.getElementById('fem').value.trim(),
+        phone: document.getElementById('fph').value.trim(),
+        address: document.getElementById('fad').value.trim(),
+        city: document.getElementById('fct').value.trim(),
+        zip_code: document.getElementById('fzp').value.trim(),
+        country: document.getElementById('fcn').value,
+        payment_method: payMethod,
+        total_price: total_price,
+        cart: cart
+      };
 
 
 
-  if (!cart.length) {
-    showAlert('err', 'Your cart is empty.');
-    return;
-  }
+      if (!cart.length) {
+        showAlert('err', 'Your cart is empty.');
+        return;
+      }
 
-  fetch("{% url 'shop:create-order' %}", {
-    method: "POST",
-    credentials: "same-origin",   // ✅ IMPORTANT for Django sessions
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": getCSRFToken() // ✅ FIX CSRF ISSUE
-    },
-    body: JSON.stringify(data)
-  })
-  .then(async (res) => {
-    const text = await res.text();
+      fetch("{% url 'shop:create-order' %}", {
+        method: "POST",
+        credentials: "same-origin",   // ✅ IMPORTANT for Django sessions
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken() // ✅ FIX CSRF ISSUE
+        },
+        body: JSON.stringify(data)
+      })
+        .then(async (res) => {
+          const text = await res.text();
 
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      console.log("❌ Server returned:", text);
-      throw new Error("Response is not JSON (check Django error)");
+          try {
+            return JSON.parse(text);
+          } catch (e) {
+            console.log("❌ Server returned:", text);
+            throw new Error("Response is not JSON (check Django error)");
+          }
+        })
+        .then(res => {
+          if (res.success) {
+            localStorage.removeItem("shopIT_cart");
+            localStorage.removeItem("cart");
+
+            document.getElementById('checkout-layout').style.display = 'none';
+            document.getElementById('success-screen').classList.add('show');
+
+            document.getElementById('order-num-display').innerHTML =
+              "<span style='font-size:1.5rem; font-weight:bold;'>Tracking ID: " + res.order_id + "</span>";
+          }
+          else {
+            showAlert('err', res.error || 'Order failed!');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          showAlert('err', 'Server error (check console / Django logs)');
+        });
+
+
+
     }
-  })
-  .then(res => {
-    if (res.success) {
-      localStorage.removeItem("shopIT_cart");
-      localStorage.removeItem("cart");
-
-      document.getElementById('checkout-layout').style.display = 'none';
-      document.getElementById('success-screen').classList.add('show');
-
-      document.getElementById('order-num-display').textContent =
-        "Tracking ID:" + res.order_id;
-    } else {
-      showAlert('err', res.error || 'Order failed!');
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    showAlert('err', 'Server error (check console / Django logs)');
-  });
-
-
-
-}
 
     /* ── INIT ── */
     renderSummary();
