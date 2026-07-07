@@ -63,6 +63,15 @@ def _normalize_cart_items(cart):
 
     if not isinstance(cart, list):
         return normalized, total_price
+    
+    product_ids = [
+        item.get("id")
+        for item in cart
+        if isinstance(item, dict) and item.get("id") is not None
+    ]
+
+    products = Product.objects.in_bulk(product_ids)
+
 
     for raw_item in cart:
         if not isinstance(raw_item, dict):
@@ -77,7 +86,7 @@ def _normalize_cart_items(cart):
         if quantity <= 0:
             quantity = 1
 
-        product = Product.objects.filter(id=product_id).first() if product_id is not None else None
+        product = products.get(product_id)
 
         if product:
             item_name = product.product_name
@@ -119,36 +128,32 @@ def _group_products_by_category(products):
 
 def _build_categories(products):
     """Distinct categories -> [{'name', 'slug', 'icon'}, ...] for the sub-nav."""
-    names = []
-    for product in products:
-        if product.category and product.category not in names:
-            names.append(product.category)
 
-    categories = []
-    for name in names:
-        categories.append({
+    names = {
+        product.category
+        for product in products
+        if product.category
+    }
+
+    return [
+        {
             "name": name,
             "slug": slugify(name),
             "icon": CATEGORY_ICONS.get(name.lower(), "🛍"),
-        })
-    return categories
-
+        }
+        for name in sorted(names)
+    ]
 
 def _iter_order_line_items(raw_item_json):
-    """
-    Yields (product_id_str, qty_int) pairs from a stored Order.item_json blob.
-    Handles both historical shapes: {id: qty} and [{"id": ..., "qty": ...}].
-    Silently skips anything malformed so one bad order can't break the shelves.
-    """
     try:
         items = json.loads(raw_item_json or "[]")
     except (json.JSONDecodeError, TypeError):
         return
 
     if isinstance(items, dict):
-        pairs = items.items()
+        iterator = items.items()
     elif isinstance(items, list):
-        pairs = (
+        iterator = (
             (entry.get("id"), entry.get("qty", 1))
             for entry in items
             if isinstance(entry, dict)
@@ -156,20 +161,20 @@ def _iter_order_line_items(raw_item_json):
     else:
         return
 
-    for product_id, qty in pairs:
+    for product_id, qty in iterator:
         if product_id is None:
             continue
+
         try:
             qty = int(qty)
         except (TypeError, ValueError):
             qty = 1
+
         yield str(product_id), qty
 
-
 def _ranked_products_from_orders(item_json_values, limit):
-    """Counts total quantity per product across the given orders and returns
-    the top `limit` Product objects, ranked by that count (not by DB id)."""
     counts = Counter()
+
     for raw_item_json in item_json_values:
         for product_id, qty in _iter_order_line_items(raw_item_json):
             counts[product_id] += qty
@@ -177,70 +182,97 @@ def _ranked_products_from_orders(item_json_values, limit):
     if not counts:
         return []
 
-    ranked_ids = [pid for pid, _ in counts.most_common(limit)]
-    products_by_id = Product.objects.in_bulk([int(pid) for pid in ranked_ids if pid.isdigit()])
-    return [products_by_id[int(pid)] for pid in ranked_ids if pid.isdigit() and int(pid) in products_by_id]
+    ranked_ids = [
+        int(pid)
+        for pid, _ in counts.most_common(limit)
+        if pid.isdigit()
+    ]
+
+    products = Product.objects.in_bulk(ranked_ids)
+
+    return [
+        products[pid]
+        for pid in ranked_ids
+        if pid in products
+    ]
 
 
 def _top_purchased_products(limit=TOP_PURCHASED_LIMIT):
-    """All-time best sellers, ranked by total quantity sold."""
-    values = Order.objects.values_list('item_json', flat=True)
-    return _ranked_products_from_orders(values, limit)
+    return _ranked_products_from_orders(
+        Order.objects.values_list("item_json", flat=True),
+        limit,
+    )
 
+def _hot_selling_products(
+    limit=HOT_SELLING_LIMIT,
+    recent_orders=RECENT_ORDERS_FOR_TRENDING,
+):
+    return _ranked_products_from_orders(
+        Order.objects.order_by("-created_at")
+        .values_list("item_json", flat=True)[:recent_orders],
+        limit,
+    )
 
-def _hot_selling_products(limit=HOT_SELLING_LIMIT, recent_orders=RECENT_ORDERS_FOR_TRENDING):
-    """"Trending now" -- ranked the same way as top purchased, but only over
-    the most recently placed orders (by created_at)."""
-    values = Order.objects.order_by('-created_at').values_list('item_json', flat=True)[:recent_orders]
-    return _ranked_products_from_orders(values, limit)
 
 
 def _festival_products(products, limit=FESTIVAL_LIMIT):
     matches = []
+
     for product in products:
-        haystack = " ".join(filter(None, [product.category, product.sub_category, product.desc])).lower()
+        haystack = " ".join(
+            filter(None, [product.category, product.sub_category, product.desc])
+        ).lower()
+
         if any(keyword in haystack for keyword in FESTIVAL_KEYWORDS):
             matches.append(product)
+
             if len(matches) >= limit:
                 break
+
     return matches
+
 
 
 def _build_home_context(products, query=None, category_slug=None, interest=False):
     products = list(products)
 
     if category_slug:
-        products = [p for p in products if slugify(p.category) == category_slug]
+        products = [
+            p for p in products
+            if slugify(p.category) == category_slug
+        ]
 
     hot_selling = _hot_selling_products()
     top_purchased = _top_purchased_products()
     festival_products = _festival_products(products)
 
-    # Don't repeat a product that's already sitting in a shelf above.
-    featured_ids = {p.id for p in hot_selling} | {p.id for p in top_purchased} | {p.id for p in festival_products}
-    discover_products = [p for p in products if p.id not in featured_ids]
+    featured_ids = (
+        {p.id for p in hot_selling}
+        | {p.id for p in top_purchased}
+        | {p.id for p in festival_products}
+    )
+
+    discover_products = [
+        p for p in products
+        if p.id not in featured_ids
+    ]
 
     if interest:
-        # Placeholder "For You" ranking until real personalization exists:
-        # surface whatever looks best-reviewed/rated first, falling back to
-        # newest-first if those fields aren't populated on a product.
-        discover_products = sorted(
-            discover_products,
+        discover_products.sort(
             key=lambda p: (getattr(p, "rating", 0) or 0, p.id),
             reverse=True,
         )
 
     return {
-        'allprods': _group_products_by_category(products),  # kept for backward compatibility
-        'categories': _build_categories(Product.objects.all()),
-        'hot_selling': hot_selling,
-        'top_purchased': top_purchased,
-        'festival_products': festival_products,
-        'festival_name': "Eid-ul-Adha Specials",
-        'discover_products': discover_products,
-        'query': query,
+        "allprods": _group_products_by_category(products),
+        "categories": _build_categories(Product.objects.all()),
+        "hot_selling": hot_selling,
+        "top_purchased": top_purchased,
+        "festival_products": festival_products,
+        "festival_name": "Eid-ul-Adha Specials",
+        "discover_products": discover_products,
+        "query": query,
     }
-
 
 @login_required
 def index(request):

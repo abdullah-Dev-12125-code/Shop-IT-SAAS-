@@ -143,7 +143,7 @@
   <div class="container">
     <nav class="subnav">
       {% for cat in categories %}
-      <a href="#" class="{% if request.GET.category == cat.slug %}is-active{% endif %}">
+      <a href="?category={{ cat.slug }}" class="{% if request.GET.category == cat.slug %}is-active{% endif %}">
         <span>{{ cat.icon|default:"🛍" }}</span>{{ cat.name }}
       </a>
       {% endfor %}
