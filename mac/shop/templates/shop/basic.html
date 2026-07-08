@@ -9,7 +9,9 @@
   <title>{% block title %}Shop IT{% endblock %}</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
 
   <style>
     :root {
@@ -53,15 +55,21 @@
       flex: 1;
     }
 
-    .mono { font-family: "JetBrains Mono", monospace; }
-    .display { font-family: "Fraunces", serif; }
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+    }
 
+    .display {
+      font-family: "Fraunces", serif;
+    }
+
+    /* ── NAVBAR ── */
     /* ── NAVBAR ── */
     .navbar-custom {
       background: #ffffff;
       border-bottom: 1px solid var(--line);
       padding: 0 1.5rem;
-      height: 62px;
+      height: 70px;
       display: flex;
       align-items: center;
       position: sticky;
@@ -77,16 +85,22 @@
     }
 
     .navbar-brand img {
-      height: 2.9rem;
+      height: 4rem;
+      /* Increased logo size */
       width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+      /* Prevents image from affecting text size */
     }
 
     .navbar-brand .brand-text {
       font-family: "Fraunces", serif;
       font-size: 1.35rem;
+      /* Text size stays same */
       font-weight: 600;
       color: var(--ink);
       letter-spacing: -0.3px;
+      white-space: nowrap;
     }
 
     .navbar-brand .brand-text span {
@@ -344,7 +358,9 @@
       color: #fff;
     }
 
-    .footer-section h5.brand span { color: var(--gold); }
+    .footer-section h5.brand span {
+      color: var(--gold);
+    }
 
     .footer-section p {
       font-size: 0.875rem;
@@ -455,7 +471,8 @@
       <form method="get" action="{% url 'shop:search' %}">
         <!-- SEARCH -->
         <div class="search-wrap ml-lg-3">
-          <input class="search-box" type="text" name="search" value="{{ query|default:'' }}" placeholder="Search products…">
+          <input class="search-box" type="text" name="search" value="{{ query|default:'' }}"
+            placeholder="Search products…">
           <button class="search-btn" type="submit">Search</button>
         </div>
       </form>

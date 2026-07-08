@@ -135,7 +135,7 @@ def _build_categories(products):
         if product.category
     }
 
-    return [
+    categories = [
         {
             "name": name,
             "slug": slugify(name),
@@ -144,6 +144,14 @@ def _build_categories(products):
         for name in sorted(names)
     ]
 
+    # Add All Products option at the top
+    categories.insert(0, {
+        "name": "All Products",
+        "slug": "all",
+        "icon": "🛒",
+    })
+
+    return categories
 def _iter_order_line_items(raw_item_json):
     try:
         items = json.loads(raw_item_json or "[]")
@@ -236,7 +244,9 @@ def _festival_products(products, limit=FESTIVAL_LIMIT):
 def _build_home_context(products, query=None, category_slug=None, interest=False):
     products = list(products)
 
-    if category_slug:
+    # Category filtering
+    # "all" means show every product
+    if category_slug and category_slug != "all":
         products = [
             p for p in products
             if slugify(p.category) == category_slug
@@ -259,13 +269,19 @@ def _build_home_context(products, query=None, category_slug=None, interest=False
 
     if interest:
         discover_products.sort(
-            key=lambda p: (getattr(p, "rating", 0) or 0, p.id),
+            key=lambda p: (
+                getattr(p, "rating", 0) or 0,
+                p.id
+            ),
             reverse=True,
         )
 
     return {
         "allprods": _group_products_by_category(products),
+
+        # Category list with All Products included
         "categories": _build_categories(Product.objects.all()),
+
         "hot_selling": hot_selling,
         "top_purchased": top_purchased,
         "festival_products": festival_products,
@@ -273,6 +289,8 @@ def _build_home_context(products, query=None, category_slug=None, interest=False
         "discover_products": discover_products,
         "query": query,
     }
+
+
 
 @login_required
 def index(request):
