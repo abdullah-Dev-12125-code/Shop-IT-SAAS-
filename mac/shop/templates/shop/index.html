@@ -9,6 +9,7 @@
                         (4-6 of these; used for the sub-nav strip)
   hot_selling        -> list of product dicts (the "Hot Right Now" shelf)
   top_purchased      -> list of product dicts (the "Most Bought" shelf)
+  allprods           -> list of (category_name, slides) tuples grouped by category
   festival_products  -> list of product dicts (the seasonal/festival shelf)
   festival_name      -> string, e.g. "Eid-ul-Adha Specials" (used as the shelf title)
   discover_products  -> list of product dicts (the big Amazon-style grid, unordered/random)
@@ -64,6 +65,7 @@
   .shelf { margin: 40px 0; }
   .shelf-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; padding: 0 2px; }
   .shelf-head .title-group { display: flex; align-items: center; gap: 10px; }
+  .shelf-head .controls { display: flex; align-items: center; gap: 8px; margin-left: auto; }
   .shelf-tag { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 4px 9px; border-radius: 6px; color: #fff; }
   .shelf-head h3 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; margin: 0; color: var(--ink); }
   .shelf-head .sub { color: var(--muted); font-size: 12.5px; margin-left: 2px; }
@@ -77,6 +79,27 @@
   .shelf-scroll .card-slot { flex: 0 0 232px; scroll-snap-align: start; }
 
   .shelf.festival { background: linear-gradient(180deg, rgba(201,147,46,.08), rgba(201,147,46,0)); border-radius: 20px; padding: 22px 18px 6px; }
+  .category-collections { display: flex; flex-direction: column; gap: 22px; margin: 48px 0; }
+  .category-shelf { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 18px 10px; box-shadow: var(--shadow-soft); }
+  .category-shelf .shelf-head { margin-bottom: 14px; }
+  .category-shelf .shelf-tag { background: var(--ink); }
+  .category-shelf .shelf-scroll { padding-bottom: 8px; }
+  .shelf-action, .layout-toggle { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 999px; height: 34px; padding: 0 12px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: background .15s, border-color .15s, transform .1s; }
+  .shelf-action:hover, .layout-toggle:hover { background: #f7f5f1; border-color: #d8d4c8; }
+  .shelf-action:active, .layout-toggle:active { transform: scale(.98); }
+  .shelf-actions { display: flex; align-items: center; gap: 8px; }
+  .shelf-nav { width: 34px; padding: 0; justify-content: center; }
+  .category-collections.list-mode .category-shelf .shelf-scroll { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; overflow: visible; }
+  .category-collections.list-mode .category-shelf .card-slot { flex: 1 1 auto; width: 100%; }
+  .category-collections.list-mode .category-shelf .card { width: 100%; }
+  .category-collections.list-mode .category-shelf .card-body { padding: 14px 16px 16px; }
+  .category-collections.list-mode .category-shelf .btn-row { margin-top: auto; }
+  @media (max-width: 991px) {
+    .category-collections.list-mode .category-shelf .shelf-scroll { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 576px) {
+    .category-collections.list-mode .category-shelf .shelf-scroll { grid-template-columns: 1fr; }
+  }
 
   /* ---------- Product card ---------- */
   .card { position: relative; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--card-bg); display: flex; flex-direction: column; height: 100%; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
@@ -169,8 +192,12 @@
         <h3>Hot Right Now</h3>
         <span class="sub">selling fast this week</span>
       </div>
+      <div class="shelf-actions">
+        <button class="shelf-action shelf-nav" type="button" data-shelf-target="hot" data-direction="prev" aria-label="Scroll hot shelf left">‹</button>
+        <button class="shelf-action shelf-nav" type="button" data-shelf-target="hot" data-direction="next" aria-label="Scroll hot shelf right">›</button>
+      </div>
     </div>
-    <div class="shelf-scroll">
+    <div class="shelf-scroll" data-shelf-scroll="hot">
       {% for item in hot_selling %}
       <div class="card-slot">
         {% include "shop/_product_card.html" with item=item ribbon="hot" ribbon_label="Hot" %}
@@ -189,14 +216,59 @@
         <h3>Most Bought</h3>
         <span class="sub">customer favorites, must-buy picks</span>
       </div>
+      <div class="shelf-actions">
+        <button class="shelf-action shelf-nav" type="button" data-shelf-target="top" data-direction="prev" aria-label="Scroll most bought shelf left">‹</button>
+        <button class="shelf-action shelf-nav" type="button" data-shelf-target="top" data-direction="next" aria-label="Scroll most bought shelf right">›</button>
+      </div>
     </div>
-    <div class="shelf-scroll">
+    <div class="shelf-scroll" data-shelf-scroll="top">
       {% for item in top_purchased %}
       <div class="card-slot">
         {% include "shop/_product_card.html" with item=item ribbon="top" ribbon_label="Bestseller" %}
       </div>
       {% endfor %}
     </div>
+  </div>
+  {% endif %}
+
+  {# ---------------- Category shelves: grouped by category ---------------- #}
+  {% if allprods %}
+  <div class="category-collections">
+    <div class="shelf-head" style="margin-bottom: 0;">
+      <div class="title-group">
+        <span class="shelf-tag" style="background: var(--ink);">By Category</span>
+        <h3>Browse Each Category</h3>
+        <span class="sub">products separated by category</span>
+      </div>
+      <div class="controls">
+        <button class="layout-toggle" type="button" data-layout-toggle aria-pressed="false">Show rows</button>
+      </div>
+    </div>
+
+    {% for cat, slides in allprods %}
+    <section class="category-shelf">
+      <div class="shelf-head">
+        <div class="title-group">
+          <span class="shelf-tag">{{ cat|default:"Other" }}</span>
+          <h3>{{ cat }}</h3>
+          <span class="sub">{{ slides|length }} row{% if slides|length != 1 %}s{% endif %}</span>
+        </div>
+        <div class="shelf-actions">
+          <button class="shelf-action shelf-nav" type="button" data-shelf-target="{{ forloop.counter0 }}" data-direction="prev" aria-label="Scroll {{ cat }} shelf left">‹</button>
+          <button class="shelf-action shelf-nav" type="button" data-shelf-target="{{ forloop.counter0 }}" data-direction="next" aria-label="Scroll {{ cat }} shelf right">›</button>
+        </div>
+      </div>
+      <div class="shelf-scroll" data-shelf-scroll="{{ forloop.counter0 }}">
+        {% for slide in slides %}
+          {% for item in slide %}
+          <div class="card-slot">
+            {% include "shop/_product_card.html" with item=item %}
+          </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
   </div>
   {% endif %}
 
@@ -279,7 +351,36 @@
     saveCart(cart);
   };
 
+  const scrollShelf = (target, direction) => {
+    const shelf = document.querySelector(`[data-shelf-scroll="${target}"]`);
+    if (!shelf) return;
+    const distance = Math.max(240, Math.floor(shelf.clientWidth * 0.8));
+    shelf.scrollBy({ left: direction === "next" ? distance : -distance, behavior: "smooth" });
+  };
+
+  const toggleCategoryLayout = () => {
+    const container = document.querySelector('.category-collections');
+    const toggle = document.querySelector('[data-layout-toggle]');
+    if (!container || !toggle) return;
+    const nextState = !container.classList.contains('list-mode');
+    container.classList.toggle('list-mode', nextState);
+    toggle.setAttribute('aria-pressed', String(nextState));
+    toggle.textContent = nextState ? 'Show cards' : 'Show rows';
+  };
+
   document.addEventListener("click", (e) => {
+    const shelfButton = e.target.closest("[data-shelf-target]");
+    if (shelfButton) {
+      scrollShelf(shelfButton.dataset.shelfTarget, shelfButton.dataset.direction);
+      return;
+    }
+
+    const layoutButton = e.target.closest("[data-layout-toggle]");
+    if (layoutButton) {
+      toggleCategoryLayout();
+      return;
+    }
+
     const cartBtn = e.target.closest(".btn-cart");
     if (cartBtn) {
       const { id, name, price, image } = cartBtn.dataset;

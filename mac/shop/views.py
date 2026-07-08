@@ -120,7 +120,7 @@ def _group_products_by_category(products):
 
     allprods = []
     for cat, items in grouped.items():
-        slides = [items[i:i + 4] for i in range(0, len(items), 4)]
+        slides = [items[i:i + 3] for i in range(0, len(items), 3)]
         allprods.append((cat, slides))
 
     return allprods
@@ -253,7 +253,16 @@ def _build_home_context(products, query=None, category_slug=None, interest=False
         ]
 
     hot_selling = _hot_selling_products()
+    if not hot_selling:
+        hot_selling = products[:HOT_SELLING_LIMIT]
+
     top_purchased = _top_purchased_products()
+    if not top_purchased:
+        fallback_start = HOT_SELLING_LIMIT
+        top_purchased = products[fallback_start:fallback_start + TOP_PURCHASED_LIMIT]
+        if not top_purchased:
+            top_purchased = products[:TOP_PURCHASED_LIMIT]
+
     festival_products = _festival_products(products)
 
     featured_ids = (
@@ -301,12 +310,16 @@ def index(request):
 
 
 def shops(request):
-    context = _build_home_context(Product.objects.all())
+    category_slug = request.GET.get('category')
+    interest = request.GET.get('interest') == '1'
+    context = _build_home_context(Product.objects.all(), category_slug=category_slug, interest=interest)
     return render(request, 'shop/index.html', context)
 
 
 def categories(request):
-    context = _build_home_context(Product.objects.all())
+    category_slug = request.GET.get('category')
+    interest = request.GET.get('interest') == '1'
+    context = _build_home_context(Product.objects.all(), category_slug=category_slug, interest=interest)
     return render(request, 'shop/index.html', context)
 
 

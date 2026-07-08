@@ -3,17 +3,42 @@
 
 {% block css %}
 <style>
+    /* ============================================================
+       DESIGN TOKENS
+       Brand red   #e8002d   |  Ink        #111827
+       Paper       #f7f7f5   |  Card white #ffffff
+       Muted text  #6b7280   |  Hairline   #e5e7eb
+       Success     #16a34a
+       Display face: 'Space Grotesk'  |  Body: 'Inter'  |  Codes: 'IBM Plex Mono'
+       ============================================================ */
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+        background: #f7f7f5;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .page-wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 50px 20px 90px;
+    }
+
+    /* ---------------- Header ---------------- */
     .heading {
-        padding-top: 10px;
+        text-align: center;
+        margin-bottom: 50px;
     }
 
     .heading h1 {
-        text-align: center;
-        font-weight: bolder;
-        font-size: 50px;
-        letter-spacing: 1px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 44px;
+        letter-spacing: -1px;
         color: #111827;
-        margin-bottom: 0px;
+        margin: 0;
     }
 
     .heading h1 span {
@@ -21,177 +46,343 @@
     }
 
     .heading p {
-        text-align: center;
-        letter-spacing: 2px;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        font-size: 20px;
+        margin-top: 8px;
+        color: #6b7280;
+        font-size: 15px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-weight: 500;
     }
 
-
-    /* Container for both boxes */
+    /* ---------------- Layout ---------------- */
     .tracker-container {
         display: flex;
         justify-content: center;
         align-items: flex-start;
         gap: 0px;
+        flex-wrap: wrap;
         transition: gap 0.5s ease;
-
     }
 
-    /* Once a search has been triggered, open up the gap between the two cards */
     .tracker-container.active {
-        gap: 30px;
+        gap: 28px;
     }
 
-
-    /* Main tracker box */
+    /* ---------------- Shipping-label card ---------------- */
     .box {
-        background-color: rgb(255, 255, 255);
-        height: 300px;
-        width: 400px;
-        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
-        border-radius: 50px;
+        background: #ffffff;
+        width: 380px;
         flex-shrink: 0;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
     }
 
-
-    .box-heading h6 {
-        text-align: center;
-        font-size: 20px;
-        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-        font-weight: bold;
+    .label-strip {
+        background: #111827;
+        background-image: repeating-linear-gradient(
+            90deg,
+            rgba(255,255,255,0.10) 0px,
+            rgba(255,255,255,0.10) 2px,
+            transparent 2px,
+            transparent 6px
+        );
+        padding: 18px 24px;
+        position: relative;
     }
 
-
-    .summary {
-        margin: 40px 20px;
-        padding: 20px;
-        background: #f9fafb;
-        border-radius: 12px;
-        border-left: 5px solid #e8002d;
-        border-right: 6px solid #111827;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-    }
-
-
-    .summary p {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 17px;
-        font-family: 'Segoe UI', sans-serif;
-        font-weight: 600;
-        color: #374151;
-        padding: 12px 5px;
+    .label-strip h6 {
         margin: 0;
-        border-bottom: 1px solid #e5e7eb;
+        font-family: 'Space Grotesk', sans-serif;
+        color: #ffffff;
+        font-size: 15px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
     }
 
+    .label-strip .stamp {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%) rotate(-6deg);
+        border: 2px solid #e8002d;
+        color: #e8002d;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        padding: 3px 8px;
+        border-radius: 6px;
+    }
 
-    .summary input {
-        width: 170px;
-        height: 30px;
-        padding: 5px 10px;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
+    /* perforation between the strip and the form, like a tear-off ticket */
+    .perforation {
+        position: relative;
+        height: 0;
+        border-top: 2px dashed #d1d5db;
+        margin: 0 0;
+    }
+
+    .perforation::before,
+    .perforation::after {
+        content: '';
+        position: absolute;
+        top: -9px;
+        width: 18px;
+        height: 18px;
+        background: #f7f7f5;
+        border-radius: 50%;
+    }
+
+    .perforation::before { left: -9px; }
+    .perforation::after { right: -9px; }
+
+    .box form {
+        padding: 26px 24px 24px;
+    }
+
+    .field {
+        margin-bottom: 18px;
+    }
+
+    .field label {
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #9ca3af;
+        margin-bottom: 6px;
+    }
+
+    .field input {
+        width: 100%;
+        height: 42px;
+        padding: 0 14px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
         outline: none;
-        font-size: 14px;
+        font-size: 15px;
+        font-family: 'IBM Plex Mono', monospace;
+        color: #111827;
+        transition: border-color 0.2s ease;
     }
 
+    .field input::placeholder {
+        font-family: 'Inter', sans-serif;
+        color: #b0b5bd;
+    }
 
-    .summary input:focus {
+    .field input:focus {
         border-color: #e8002d;
     }
 
-
     .submit-btn {
-        display: block;
-        margin: 20px auto 0px;
-        width: 160px;
-        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        height: 46px;
+        margin-top: 6px;
         background-color: #e8002d;
         color: white;
         border: none;
-        border-radius: 20px;
-        font-size: 16px;
-        font-weight: bold;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
         cursor: pointer;
-        transition: 0.3s;
+        transition: background-color 0.2s ease, transform 0.1s ease;
     }
-
 
     .submit-btn:hover {
         background-color: #111827;
     }
 
+    .submit-btn:active {
+        transform: scale(0.98);
+    }
 
+    .submit-btn svg {
+        width: 16px;
+        height: 16px;
+    }
 
-    /* Status card */
-
+    /* ---------------- Status panel ---------------- */
     #order-status {
-
-        /* starts completely collapsed so the order card sits centered alone */
         width: 0px;
         min-height: 300px;
-
-        background: white;
-        border-radius: 50px;
-
-        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
-
-        padding: 20px;
-
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+        padding: 0;
         box-sizing: border-box;
         overflow: hidden;
         flex-shrink: 0;
-
         opacity: 0;
-        transform: translateX(50px);
-
+        transform: translateX(30px);
         transition: width 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
-
     }
-
 
     #order-status.show {
-
-        width: 400px;
+        width: 420px;
         opacity: 1;
         transform: translateX(0);
-
     }
 
-
-
-    .status-box {
-
-        margin-top: 15px;
-        padding: 15px;
-
-        background: #f9fafb;
-
-        border-radius: 10px;
-
-        border-left: 5px solid #e8002d;
-
-        box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
-
+    .status-header {
+        background: #111827;
+        padding: 18px 24px;
     }
 
-
-    .status-box h5 {
-
+    .status-header h3 {
         margin: 0;
-        color: #111827;
-
+        color: #fff;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 15px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
     }
 
+    .status-body {
+        padding: 24px;
+    }
 
-    .status-box p {
+    /* loading spinner while ajax is in flight */
+    .loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        padding: 60px 20px;
+        color: #9ca3af;
+        font-size: 13px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
 
-        margin-top: 5px;
+    .spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid #e5e7eb;
+        border-top-color: #e8002d;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* timeline / route */
+    .route {
+        position: relative;
+        padding-left: 8px;
+    }
+
+    .route-step {
+        position: relative;
+        padding: 0 0 26px 30px;
+        border-left: 2px solid #e5e7eb;
+    }
+
+    .route-step:last-child {
+        border-left: 2px solid transparent;
+        padding-bottom: 0;
+    }
+
+    .route-step.current {
+        border-left: 2px solid #e8002d;
+    }
+
+    .route-step .dot {
+        position: absolute;
+        left: -9px;
+        top: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #e5e7eb;
+    }
+
+    .route-step.current .dot {
+        background: #e8002d;
+        box-shadow: 0 0 0 4px rgba(232, 0, 45, 0.15);
+    }
+
+    .route-step h5 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .route-step.current h5 {
+        color: #e8002d;
+    }
+
+    .route-step p {
+        margin: 4px 0 0;
+        font-size: 12.5px;
+        color: #9ca3af;
+        font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* not-found / message state */
+    .status-message {
+        text-align: center;
+        padding: 50px 20px;
         color: #6b7280;
+        font-size: 15px;
+    }
 
+    /* items receipt */
+    .receipt {
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px dashed #d1d5db;
+    }
+
+    .receipt h5 {
+        margin: 0 0 10px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #9ca3af;
+    }
+
+    .receipt-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: #374151;
+        padding: 7px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .receipt-row:last-child {
+        border-bottom: none;
+    }
+
+    .receipt-row .qty {
+        font-family: 'IBM Plex Mono', monospace;
+        color: #9ca3af;
+    }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 840px) {
+        .tracker-container.active { gap: 20px; }
+        #order-status.show { width: 380px; }
+    }
+
+    @media (max-width: 500px) {
+        .heading h1 { font-size: 34px; }
+        .box, #order-status.show { width: 100%; }
     }
 </style>
 {% endblock %}
@@ -200,83 +391,55 @@
 
 {% block body %}
 
-<div class="wrapper">
-
+<div class="page-wrap">
 
     <div class="heading">
-
         <h1>Shop <span>IT</span></h1>
-
-        <p>Track your orders here</p>
-
+        <p>Track your order</p>
     </div>
-
-
 
     <div class="tracker-container">
 
-
         <div class="box">
 
-
-            <div class="box-heading">
-                <h6>Order</h6>
+            <div class="label-strip">
+                <h6>Order lookup</h6>
+                <span class="stamp">Track</span>
             </div>
 
-
+            <div class="perforation"></div>
 
             <form id="trackerform" method="POST">
-
                 {% csrf_token %}
 
-
-                <div class="summary">
-
-
-                    <p>
-                        Order ID:
-                        <input type="text" id="orderid" name="orderid" placeholder="Enter Order id" required>
-                    </p>
-
-
-
-                    <p>
-                        Email:
-                        <input type="text" id="email" name="email" placeholder="Enter Email" required>
-                    </p>
-
-
-
-                    <button type="submit" class="submit-btn">
-                        Track Order
-                    </button>
-
-
+                <div class="field">
+                    <label for="orderid">Order ID</label>
+                    <input type="text" id="orderid" name="orderid" placeholder="e.g. ORD-10492" required>
                 </div>
 
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 11l18-8-8 18-2-8-8-2z"/>
+                    </svg>
+                    Track order
+                </button>
 
             </form>
 
-
         </div>
 
-
-
-
-        <div id="order-status">
-
-        </div>
-
-
+        <div id="order-status"></div>
 
     </div>
-
 
 </div>
 
 {% endblock %}
-
-
 
 
 
@@ -289,7 +452,16 @@
         $('.tracker-container').addClass('active');
 
         let status = document.getElementById("order-status");
-        status.classList.remove("show");
+        status.classList.add("show");
+        status.innerHTML = `
+            <div class="status-header"><h3>Your package</h3></div>
+            <div class="status-body">
+                <div class="loader">
+                    <div class="spinner"></div>
+                    Locating your order
+                </div>
+            </div>
+        `;
 
         let formdata = {
             orderid: $('#orderid').val(),
@@ -304,63 +476,72 @@
         })
             .done(function (data) {
 
-                let html = "";
+                let bodyHtml = "";
 
                 if (!data.success) {
-                    html = `
-                <h3>Order Status</h3>
-                <div class="status-box">
-                    <h5>${data.message}</h5>
-                </div>
-            `;
-
-                    status.innerHTML = html;
-                    status.classList.add("show");
+                    bodyHtml = `
+                        <div class="status-message">${data.message}</div>
+                    `;
+                    status.innerHTML = `
+                        <div class="status-header"><h3>Your package</h3></div>
+                        <div class="status-body">${bodyHtml}</div>
+                    `;
                     return;
                 }
 
-                html += "<h3>Order Status</h3>";
-
                 // =====================
-                // UPDATES
+                // ROUTE / UPDATES
+                // (first item in the array is treated as the current status)
                 // =====================
                 let updates = data.update || [];
 
-                updates.forEach(u => {
-                    html += `
-                <div class="status-box">
-                    <h5>${u.text}</h5>
-                    <p>${u.time}</p>
-                </div>
-            `;
+                bodyHtml += `<div class="route">`;
+                updates.forEach((u, i) => {
+                    bodyHtml += `
+                        <div class="route-step ${i === 0 ? 'current' : ''}">
+                            <span class="dot"></span>
+                            <h5>${u.text}</h5>
+                            <p>${u.time}</p>
+                        </div>
+                    `;
                 });
+                bodyHtml += `</div>`;
 
                 // =====================
                 // ITEMS
                 // =====================
                 if (data.items && data.items.length > 0) {
 
-                    html += `
-                <div class="status-box">
-                    <h5>Items in Order</h5>
-            `;
+                    bodyHtml += `
+                        <div class="receipt">
+                            <h5>Items in order</h5>
+                    `;
 
                     data.items.forEach(item => {
-                        html += `
-                    <p>
-                        ${item.name} × ${item.qty}
-                    </p>
-                `;
+                        bodyHtml += `
+                            <div class="receipt-row">
+                                <span>${item.name}</span>
+                                <span class="qty">× ${item.qty}</span>
+                            </div>
+                        `;
                     });
 
-                    html += `</div>`;
+                    bodyHtml += `</div>`;
                 }
 
-                status.innerHTML = html;
-                status.classList.add("show");
+                status.innerHTML = `
+                    <div class="status-header"><h3>Your package</h3></div>
+                    <div class="status-body">${bodyHtml}</div>
+                `;
 
             })
             .fail(function (error) {
+                status.innerHTML = `
+                    <div class="status-header"><h3>Your package</h3></div>
+                    <div class="status-body">
+                        <div class="status-message">Something went wrong. Please try again.</div>
+                    </div>
+                `;
                 console.log(error);
             });
     });

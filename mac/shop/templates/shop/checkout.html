@@ -733,44 +733,248 @@
       background: #fff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 48px 32px;
+      padding: 44px 36px 36px;
       text-align: center;
-      box-shadow: var(--shadow)
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden
     }
 
     .success-screen.show {
-      display: block
+      display: block;
+      animation: successIn .5s cubic-bezier(.2, .8, .2, 1)
+    }
+
+    @keyframes successIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* soft brand glow behind the check mark */
+    .success-screen::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 320px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(232, 0, 45, .10), transparent 70%);
+      pointer-events: none
+    }
+
+    .success-icon-wrap {
+      position: relative;
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .success-icon-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff5a1f, #e8002d);
+      opacity: .12;
+      animation: ringPulse 1.8s ease-out infinite
+    }
+
+    @keyframes ringPulse {
+      0% {
+        transform: scale(.7);
+        opacity: .28
+      }
+
+      100% {
+        transform: scale(1.35);
+        opacity: 0
+      }
     }
 
     .success-icon {
-      font-size: 56px;
-      margin-bottom: 16px
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff5a1f, #e8002d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(232, 0, 45, .28)
+    }
+
+    .success-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: #fff;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 26;
+      stroke-dashoffset: 26;
+      animation: drawCheck .45s .35s ease-out forwards
+    }
+
+    @keyframes drawCheck {
+      to {
+        stroke-dashoffset: 0
+      }
     }
 
     .success-screen h2 {
-      font-size: 24px;
+      font-size: 23px;
       font-weight: 800;
-      margin-bottom: 8px
+      margin-bottom: 6px;
+      letter-spacing: -.3px
     }
 
     .success-screen p {
       color: var(--muted);
       font-size: 14px;
       line-height: 1.6;
-      margin-bottom: 16px
+      margin-bottom: 22px
     }
 
+    /* tracking id pill + copy */
     .order-num {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 8px 18px;
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 20px;
+      border-radius: 11px;
+      padding: 12px 8px 12px 18px;
+      margin: 0 auto 26px;
+      max-width: 320px;
+      text-align: left
+    }
+
+    .order-num-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      display: block;
+      margin-bottom: 2px
+    }
+
+    .order-num-id {
       font-family: monospace;
-      letter-spacing: .05em
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+      letter-spacing: .04em
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      border: 1.5px solid var(--border2);
+      color: #111;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s, color .15s
+    }
+
+    .copy-btn:hover {
+      background: #111;
+      color: #fff;
+      border-color: #111
+    }
+
+    .copy-btn.copied {
+      background: var(--green-bg);
+      border-color: var(--green-border);
+      color: var(--green)
+    }
+
+    .copy-btn svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0
+    }
+
+    /* mini "what's next" route, echoes the top checkout stepper */
+    .next-route {
+      display: flex;
+      justify-content: space-between;
+      max-width: 400px;
+      margin: 0 auto 30px;
+      position: relative
+    }
+
+    .next-route::before {
+      content: '';
+      position: absolute;
+      top: 9px;
+      left: 26px;
+      right: 26px;
+      height: 2px;
+      background: var(--border)
+    }
+
+    .next-step {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1
+    }
+
+    .next-step .dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .next-step.active .dot {
+      border-color: transparent;
+      background: linear-gradient(135deg, #ff5a1f, #e8002d)
+    }
+
+    .next-step .dot svg {
+      width: 10px;
+      height: 10px;
+      stroke: #fff;
+      stroke-width: 3;
+      fill: none
+    }
+
+    .next-step span.lbl {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600
+    }
+
+    .next-step.active span.lbl {
+      color: #111
     }
 
     .cont-link {
@@ -787,11 +991,6 @@
 
     .cont-link:hover {
       opacity: .85
-    }
-
-    /* Copy button-tracking */
-    .order-num-btn-copy {
-      padding-bottom: 10px;
     }
 
     /* FOOTER */
@@ -1106,11 +1305,49 @@
 
   <!-- SUCCESS SCREEN -->
   <div class="success-screen" id="success-screen">
-    <div class="success-icon">🎉</div>
+    <div class="success-icon-wrap">
+      <div class="success-icon-ring"></div>
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6" /></svg>
+      </div>
+    </div>
     <h2>Order placed!</h2>
     <p>Thank you for shopping with Shop IT.<br>You'll receive a confirmation email shortly.</p>
-    <div class="order-num" id="order-num-display"><strong>000000</strong></div><br>
-    <div class="oreder-num-btn-copy">Copy</div>
+
+    <div class="order-num">
+      <div>
+        <span class="order-num-label">Tracking ID</span>
+        <span class="order-num-id" id="order-num-display">—</span>
+      </div>
+      <button class="copy-btn" id="copy-btn" onclick="copyTrackingId()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <rect x="9" y="9" width="12" height="12" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+        <span id="copy-btn-label">Copy</span>
+      </button>
+    </div>
+
+    <div class="next-route">
+      <div class="next-step active">
+        <div class="dot"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6" /></svg></div>
+        <span class="lbl">Confirmed</span>
+      </div>
+      <div class="next-step">
+        <div class="dot"></div>
+        <span class="lbl">Packed</span>
+      </div>
+      <div class="next-step">
+        <div class="dot"></div>
+        <span class="lbl">Shipped</span>
+      </div>
+      <div class="next-step">
+        <div class="dot"></div>
+        <span class="lbl">Delivered</span>
+      </div>
+    </div>
+
     <a href="{% url 'shop:home' %}" class="cont-link">Continue shopping</a>
   </div>
 
@@ -1496,8 +1733,7 @@
             document.getElementById('checkout-layout').style.display = 'none';
             document.getElementById('success-screen').classList.add('show');
 
-            document.getElementById('order-num-display').innerHTML =
-              "<span style='font-size:1.5rem; font-weight:bold;'>Tracking ID: " + res.order_id + "</span>";
+            document.getElementById('order-num-display').textContent = res.order_id;
           }
           else {
             showAlert('err', res.error || 'Order failed!');
@@ -1510,6 +1746,42 @@
 
 
 
+    }
+
+    /* ── COPY TRACKING ID ── */
+    function copyTrackingId() {
+      var id = document.getElementById('order-num-display').textContent.trim();
+      var btn = document.getElementById('copy-btn');
+      var label = document.getElementById('copy-btn-label');
+      if (!id || id === '—') return;
+
+      function showCopied() {
+        btn.classList.add('copied');
+        label.textContent = 'Copied!';
+        setTimeout(function () {
+          btn.classList.remove('copied');
+          label.textContent = 'Copy';
+        }, 1800);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(id).then(showCopied).catch(function () {
+          fallbackCopy(id, showCopied);
+        });
+      } else {
+        fallbackCopy(id, showCopied);
+      }
+    }
+
+    function fallbackCopy(text, cb) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); cb(); } catch (e) { /* no-op */ }
+      document.body.removeChild(ta);
     }
 
     /* ── INIT ── */
