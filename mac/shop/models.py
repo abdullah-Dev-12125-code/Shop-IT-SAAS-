@@ -1,10 +1,40 @@
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 
 #Create your model here
 
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    profile_image = models.ImageField(
+        upload_to="profile/",
+        default="profile/default.png",
+        blank=True
+    )
+
+    phone = models.CharField(
+        max_length=20,
+        blank=True
+    )
+
+    address = models.TextField(
+        blank=True
+    )
+
+    bio = models.TextField(
+        max_length=300,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.user.username
 
 
 class Product(models.Model):

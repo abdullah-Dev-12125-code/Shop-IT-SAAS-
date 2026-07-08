@@ -19,6 +19,7 @@ path('cart/',views.cart,name='cart'),
 path('checkout/',views.checkout,name="checkout"),
 path('api/create-order/',views.create_order, name="create-order"),
 path('login/', views.login_view, name='login'),
-path('logout/', views.logout_view, name='logout')
+path('logout/', views.logout_view, name='logout'),
+path('profile/', views.profile, name='profile')
 ]
 

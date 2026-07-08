@@ -10,18 +10,18 @@ from django.contrib.auth.decorators import login_required
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.get['username']
-        password = request.get['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
             return redirect('shop:index')
-        
-        return render(request, 'shop/login.html', {'error':'Invalid Credentials'})
-    
-    return render(request, 'shop/login.html') 
+
+        return render(request, 'shop/login.html', {'error': 'Invalid credentials'})
+
+    return render(request, 'shop/login.html')
 
 
 def logout_view(request):
@@ -322,7 +322,7 @@ def categories(request):
     context = _build_home_context(Product.objects.all(), category_slug=category_slug, interest=interest)
     return render(request, 'shop/index.html', context)
 
-
+@login_required
 def tracker(request):
     if request.method == "POST":
         orderid = request.POST.get('orderid', 0)
@@ -398,7 +398,7 @@ def tracker(request):
 
     return render(request, 'shop/tracker.html')
 
-
+@login_required
 def create_order(request):
     if request.method == 'POST':
         try:
@@ -447,7 +447,7 @@ def create_order(request):
 def about(request):
     return render(request, 'shop/about.html')
 
-
+@login_required
 def contact(request):
     thank = False
     if request.method == "POST":
@@ -461,11 +461,12 @@ def contact(request):
         thank = True
     return render(request, 'shop/contact.html',{'thank': thank})
 
+
 def product(request,id):
     context = { 'product': Product.objects.get(id = id) } 
     return render(request, 'shop/product.html', context)
 
-
+@login_required
 def checkout(request):
     return render(request, 'shop/checkout.html')
 
@@ -500,3 +501,7 @@ def search(request):
 
     context = _build_home_context(products, query=query, category_slug=category_slug, interest=interest)
     return render(request, 'shop/index.html', context)
+
+
+def profile(request):
+    return render(request, 'shop/profile.html')

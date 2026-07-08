@@ -1,0 +1,497 @@
+{% extends 'shop/basic.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+    /* ============================================================
+       Shares the same token system as the rest of Shop IT:
+       Brand red #e8002d | Ink #111827 | Muted #6b7280 | Border #e8e8e8
+       Display/body: Inter | Codes: IBM Plex Mono
+       ============================================================ */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+    * { box-sizing: border-box; }
+
+    .profile-wrap {
+        font-family: 'Inter', system-ui, sans-serif;
+        color: #111827;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+    }
+
+    /* ---------------- Cover + avatar ---------------- */
+    .profile-cover {
+        position: relative;
+        height: 150px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #ff5a1f, #e8002d);
+        background-image:
+            repeating-linear-gradient(120deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 2px, transparent 2px, transparent 14px),
+            linear-gradient(135deg, #ff5a1f, #e8002d);
+        overflow: visible;
+    }
+
+    .cover-edit {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(4px);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 20px;
+        padding: 7px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.15s ease;
+    }
+
+    .cover-edit:hover {
+        background: rgba(255, 255, 255, 0.28);
+    }
+
+    .cover-edit i {
+        font-size: 15px;
+    }
+
+    .avatar-block {
+        position: absolute;
+        left: 32px;
+        bottom: -46px;
+        display: flex;
+        align-items: flex-end;
+        gap: 18px;
+    }
+
+    .avatar-ring {
+        width: 104px;
+        height: 104px;
+        border-radius: 50%;
+        background: #fff;
+        padding: 4px;
+        box-shadow: 0 6px 18px rgba(17, 24, 39, 0.15);
+        flex-shrink: 0;
+    }
+
+    .avatar-ring img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* ---------------- Identity block ---------------- */
+    .identity {
+        margin-top: 62px;
+        padding: 0 8px 28px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        border-bottom: 1px solid #e8e8e8;
+    }
+
+    .identity h1 {
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.4px;
+        margin-bottom: 3px;
+    }
+
+    .identity .handle {
+        font-size: 14px;
+        color: #6b7280;
+        font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .verified {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #16a34a;
+        background: #f0faf4;
+        border: 1px solid #b6e8c8;
+        border-radius: 20px;
+        padding: 3px 10px;
+        margin-left: 8px;
+        vertical-align: middle;
+    }
+
+    .verified i { font-size: 13px; }
+
+    /* ---------------- Layout ---------------- */
+    .profile-layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 22px;
+        margin-top: 26px;
+        align-items: start;
+    }
+
+    /* ---------------- Cards ---------------- */
+    .p-card {
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .p-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 22px;
+        border-bottom: 1px solid #efefef;
+        background: #fafafa;
+    }
+
+    .p-card-head h3 {
+        font-size: 14.5px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .p-card-head h3 i {
+        color: #e8002d;
+        font-size: 17px;
+    }
+
+    .p-card-body {
+        padding: 22px;
+    }
+
+    /* bio text */
+    .bio-text {
+        font-size: 14.5px;
+        line-height: 1.75;
+        color: #374151;
+    }
+
+    .bio-empty {
+        font-size: 13.5px;
+        color: #9ca3af;
+        font-style: italic;
+    }
+
+    /* contact rows */
+    .info-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 13px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .info-row:last-child { border-bottom: none; }
+
+    .info-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #fff0f0;
+        color: #e8002d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 17px;
+    }
+
+    .info-text label {
+        display: block;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #9ca3af;
+        margin-bottom: 2px;
+    }
+
+    .info-text .val {
+        font-size: 14.5px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .info-text .val.mono {
+        font-family: 'IBM Plex Mono', monospace;
+        font-weight: 500;
+    }
+
+    .info-text .val.muted {
+        color: #9ca3af;
+        font-weight: 500;
+        font-style: italic;
+    }
+
+    /* ---------------- Sidebar member card ---------------- */
+    .id-card {
+        background: #111827;
+        border-radius: 16px;
+        padding: 22px;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        margin-bottom: 20px;
+    }
+
+    .id-card::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(232, 0, 45, 0.35), transparent 70%);
+    }
+
+    .id-card-label {
+        font-size: 10.5px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 14px;
+        position: relative;
+    }
+
+    .id-card-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        margin-bottom: 12px;
+        position: relative;
+    }
+
+    .id-card-name {
+        font-size: 16px;
+        font-weight: 700;
+        position: relative;
+    }
+
+    .id-card-id {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.65);
+        margin-top: 3px;
+        position: relative;
+        letter-spacing: 0.03em;
+    }
+
+    .id-card-since {
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.2);
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        position: relative;
+    }
+
+    .id-card-since span:first-child { color: rgba(255, 255, 255, 0.5); }
+    .id-card-since span:last-child { font-weight: 600; }
+
+    .edit-full-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #ff5a1f, #e8002d);
+        color: #fff;
+        border: none;
+        border-radius: 11px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+
+    .edit-full-btn:hover { opacity: 0.88; }
+
+    .side-links {
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .side-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #111827;
+        text-decoration: none;
+        border-bottom: 1px solid #f3f4f6;
+        transition: background 0.15s;
+    }
+
+    .side-link:last-child { border-bottom: none; }
+    .side-link:hover { background: #fafafa; }
+    .side-link i { color: #6b7280; font-size: 17px; }
+    .side-link .chev { margin-left: auto; color: #d1d5db; }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 780px) {
+        .profile-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .avatar-block { left: 20px; }
+        .identity { padding-left: 4px; }
+    }
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="profile-wrap">
+
+    <!-- Cover + avatar -->
+    <div class="profile-cover">
+        <a href="#" class="cover-edit">
+            <i class="ti ti-camera"></i> Change cover
+        </a>
+        <div class="avatar-block">
+            <div class="avatar-ring">
+                <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}">
+            </div>
+        </div>
+    </div>
+
+    <!-- Identity -->
+    <div class="identity">
+        <div>
+            <h1>
+                {% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %}
+                <span class="verified"><i class="ti ti-rosette-discount-check"></i> Verified</span>
+            </h1>
+            <div class="handle">@{{ profile.user.username }}</div>
+        </div>
+        <a href="#" class="edit-full-btn" style="width:auto; padding:11px 22px;">
+            <i class="ti ti-pencil"></i> Edit profile
+        </a>
+    </div>
+
+    <div class="profile-layout">
+
+        <!-- LEFT COLUMN -->
+        <div>
+            <div class="p-card">
+                <div class="p-card-head">
+                    <h3><i class="ti ti-user"></i> About</h3>
+                </div>
+                <div class="p-card-body">
+                    {% if profile.bio %}
+                        <p class="bio-text">{{ profile.bio }}</p>
+                    {% else %}
+                        <p class="bio-empty">No bio added yet. Tell other shoppers a little about yourself.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="p-card">
+                <div class="p-card-head">
+                    <h3><i class="ti ti-address-book"></i> Contact details</h3>
+                </div>
+                <div class="p-card-body" style="padding-top:6px; padding-bottom:6px;">
+
+                    <div class="info-row">
+                        <div class="info-icon"><i class="ti ti-mail"></i></div>
+                        <div class="info-text">
+                            <label>Email</label>
+                            <div class="val">{{ profile.user.email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon"><i class="ti ti-phone"></i></div>
+                        <div class="info-text">
+                            <label>Phone</label>
+                            {% if profile.phone %}
+                                <div class="val mono">{{ profile.phone }}</div>
+                            {% else %}
+                                <div class="val muted">Not provided</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon"><i class="ti ti-map-pin"></i></div>
+                        <div class="info-text">
+                            <label>Address</label>
+                            {% if profile.address %}
+                                <div class="val">{{ profile.address }}</div>
+                            {% else %}
+                                <div class="val muted">Not provided</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN / SIDEBAR -->
+        <div>
+            <div class="id-card">
+                <div class="id-card-label">Shop IT member</div>
+                <img class="id-card-avatar" src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}">
+                <div class="id-card-name">
+                    {% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %}
+                </div>
+                <div class="id-card-id">ID SHOPIT-{{ profile.user.id|stringformat:"05d" }}</div>
+                <div class="id-card-since">
+                    <span>Member since</span>
+                    <span>{{ profile.user.date_joined|date:"M Y" }}</span>
+                </div>
+            </div>
+
+            <a href="#" class="edit-full-btn">
+                <i class="ti ti-settings"></i> Edit profile
+            </a>
+            <div style="height:16px"></div>
+
+            <div class="side-links">
+                <a href="{% url 'shop:TrackUs' %}" class="side-link">
+                    <i class="ti ti-truck"></i> Track an order <i class="ti ti-chevron-right chev"></i>
+                </a>
+                <a href="#" class="side-link">
+                    <i class="ti ti-lock"></i> Change password <i class="ti ti-chevron-right chev"></i>
+                </a>
+                <a href="#" class="side-link">
+                    <i class="ti ti-logout"></i> Log out <i class="ti ti-chevron-right chev"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
