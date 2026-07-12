@@ -396,6 +396,13 @@
       .panel-features { display: none; }
       .auth-panel::after { font-size: 300px; bottom: -100px; }
     }
+
+    a {
+      text-decoration: none;
+      color: white;
+      
+    }
+
   </style>
 </head>
 
@@ -405,12 +412,12 @@
 
     <!-- LEFT BRAND PANEL -->
     <aside class="auth-panel">
-      <div class="brand-mark">Shop<span>IT</span></div>
+      <a href=""><div class="brand-mark">Shop<span>IT</span></div></a>
 
       <div class="panel-mid">
         <div class="panel-eyebrow">Welcome back</div>
         <h1>Great things are exactly where you left them.</h1>
-        <p>Sign in to pick up your cart, track recent orders, and get back to browsing what's trending.</p>
+        <p>Sign up to create your cart, track your orders, and get access to browsing what's trending.</p>
       </div>
 
       <div class="panel-features">
@@ -481,7 +488,7 @@
         <div class="auth-divider">or</div>
 
         <div class="auth-footer">
-          New to Shop IT? <a href="{% url 'shop:signup' %}">Create an account</a>
+          Already have an account ? <a href="{% url 'shop:login' %}">Login </a>
         </div>
 
       </div>

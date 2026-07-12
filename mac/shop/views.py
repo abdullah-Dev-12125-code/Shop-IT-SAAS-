@@ -1,12 +1,13 @@
-from collections import Counter, defaultdict
-from decimal import Decimal, InvalidOperation
-import json
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from django.utils.text import slugify
-from .models import Contact, Order, OrderUpdate, Product
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .models import Contact, Order, OrderUpdate, Product
+from django.shortcuts import render, redirect
+from decimal import Decimal, InvalidOperation
+from collections import Counter, defaultdict
+from django.http import JsonResponse
+from django.utils.text import slugify
+import json
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -19,17 +20,19 @@ def login_view(request):
             login(request, user)
             return redirect('shop:index')
 
-        return render(request, 'shop/login.html', {'error': 'Invalid credentials'})
+        return render(request, 'shop/login.html', {
+            'error': 'Invalid credentials'
+        })
 
     return render(request, 'shop/login.html')
 
 
 def logout_view(request):
     logout(request)
-    return redirect(request, 'shop:login')
+    return redirect('shop:login')
 
-
-
+def sign_up(request):
+    return render(request, 'shop/signup.html')
 
 # Purely cosmetic: an icon per category slug for the sub-nav pills. Any
 # category not listed here just falls back to a generic tag icon, so new
@@ -301,7 +304,6 @@ def _build_home_context(products, query=None, category_slug=None, interest=False
 
 
 
-@login_required
 def index(request):
     category_slug = request.GET.get('category')
     interest = request.GET.get('interest') == '1'
@@ -398,6 +400,7 @@ def tracker(request):
 
     return render(request, 'shop/tracker.html')
 
+
 @login_required
 def create_order(request):
     if request.method == 'POST':
@@ -461,7 +464,6 @@ def contact(request):
         thank = True
     return render(request, 'shop/contact.html',{'thank': thank})
 
-
 def product(request,id):
     context = { 'product': Product.objects.get(id = id) } 
     return render(request, 'shop/product.html', context)
@@ -470,7 +472,7 @@ def product(request,id):
 def checkout(request):
     return render(request, 'shop/checkout.html')
 
-
+@login_required
 def cart(request):
     return render(request, 'shop/cart.html')
 

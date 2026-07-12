@@ -25,15 +25,12 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'shop.apps.ShopConfig',
-    'blog',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'debug_toolbar',
 ]
 
@@ -79,10 +76,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mac.wsgi.application'
 
 
-AUTH_USER_MODEL = "blog.CustomUser"
+
 
 
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/shop/login'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
  
