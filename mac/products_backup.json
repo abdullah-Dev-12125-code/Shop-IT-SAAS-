@@ -1,0 +1,1122 @@
+[
+{
+    "model": "shop.product",
+    "pk": 435,
+    "fields": {
+        "product_name": "Aurora Noise-Canceling Headphones",
+        "category": "Audio",
+        "sub_category": "Headphones",
+        "price": 179,
+        "desc": "Wireless over-ear headphones with active noise cancellation, deep bass, and all-day comfort for travel or focused work.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=400&fit=crop",
+        "image": "shop/images/5afe10516ab94ec7894030fdfae6c2bc.jpg",
+        "stock_status": "In Stock",
+        "available_now": 18
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 436,
+    "fields": {
+        "product_name": "PulseFit Smart Watch",
+        "category": "Wearables",
+        "sub_category": "Smart Watch",
+        "price": 149,
+        "desc": "A sleek fitness watch that tracks heart rate, steps, sleep, and workouts while keeping notifications on your wrist.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=400&fit=crop",
+        "image": "shop/images/f375c9ffd5d0452a83f5328824958658.jpg",
+        "stock_status": "In Stock",
+        "available_now": 15
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 437,
+    "fields": {
+        "product_name": "Nova Mechanical Keyboard",
+        "category": "Computing",
+        "sub_category": "Keyboard",
+        "price": 129,
+        "desc": "A compact mechanical keyboard with tactile switches, RGB lighting, and a solid aluminum frame for fast typing.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&h=400&fit=crop",
+        "image": "shop/images/bd3147ad708e45bc9118b0fa2de5aa4c.jpg",
+        "stock_status": "In Stock",
+        "available_now": 21
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 438,
+    "fields": {
+        "product_name": "Orbit Gaming Mouse",
+        "category": "Gaming",
+        "sub_category": "Mouse",
+        "price": 89,
+        "desc": "An ergonomic gaming mouse with a precision sensor, programmable buttons, and a lightweight shell for quick aim.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&h=400&fit=crop",
+        "image": "shop/images/af62122b1dc2452c8dd97b9df3ef42df.jpg",
+        "stock_status": "In Stock",
+        "available_now": 24
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 439,
+    "fields": {
+        "product_name": "Lumen Desk Lamp",
+        "category": "Home Office",
+        "sub_category": "Lighting",
+        "price": 59,
+        "desc": "A modern desk lamp with adjustable brightness, warm and cool modes, and a slim design for clean workspaces.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1534105615256-13940a56ff44?w=600&h=400&fit=crop",
+        "image": "shop/images/2c5e6c9b20a6432dbd2acc188e99963d.jpg",
+        "stock_status": "In Stock",
+        "available_now": 30
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 440,
+    "fields": {
+        "product_name": "TrailCam Action Camera",
+        "category": "Cameras",
+        "sub_category": "Action Camera",
+        "price": 219,
+        "desc": "Rugged 4K action camera built for biking, hiking, and travel with stabilization and water resistance.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&h=400&fit=crop",
+        "image": "shop/images/d27985c5841a495da59d41b870eef76e.jpg",
+        "stock_status": "In Stock",
+        "available_now": 9
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 441,
+    "fields": {
+        "product_name": "PureAir Smart Purifier",
+        "category": "Home",
+        "sub_category": "Air Purifier",
+        "price": 249,
+        "desc": "A quiet smart air purifier that filters dust, pollen, and odors while showing live air quality on the display.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&h=400&fit=crop",
+        "image": "shop/images/04861f9d499d426580a14c410d071d78.jpg",
+        "stock_status": "In Stock",
+        "available_now": 12
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 442,
+    "fields": {
+        "product_name": "Glide Pro Wireless Earbuds",
+        "category": "Audio",
+        "sub_category": "Earbuds",
+        "price": 99,
+        "desc": "Pocket-friendly wireless earbuds with a charging case, low-latency mode, and clear call quality.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=600&h=400&fit=crop",
+        "image": "shop/images/15fe29ae101547c7ba028edb8b3d2a37.jpg",
+        "stock_status": "In Stock",
+        "available_now": 26
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 443,
+    "fields": {
+        "product_name": "Metro USB-C Hub",
+        "category": "Accessories",
+        "sub_category": "Hub",
+        "price": 69,
+        "desc": "A versatile USB-C hub with HDMI, USB-A, SD card, and charging passthrough for modern laptops.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?w=600&h=400&fit=crop",
+        "image": "shop/images/28972f87ea814813990e3e86e5b30f6a.jpg",
+        "stock_status": "In Stock",
+        "available_now": 14
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 444,
+    "fields": {
+        "product_name": "CrystalBook Laptop Stand",
+        "category": "Accessories",
+        "sub_category": "Stand",
+        "price": 45,
+        "desc": "An adjustable aluminum laptop stand that raises your screen, improves airflow, and cleans up the desk.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&h=400&fit=crop",
+        "image": "shop/images/597fb1df22b5474f9e754308437697e9.jpg",
+        "stock_status": "In Stock",
+        "available_now": 17
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 445,
+    "fields": {
+        "product_name": "Vertex 27-Inch 4K Monitor",
+        "category": "Computing",
+        "sub_category": "Monitor",
+        "price": 349,
+        "desc": "A stunning 27-inch 4K IPS monitor with HDR10, thin bezels, and USB-C connectivity for creative professionals.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600&h=400&fit=crop",
+        "image": "shop/images/2ad0af56101549d68afab905138a729d.jpg",
+        "stock_status": "In Stock",
+        "available_now": 8
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 446,
+    "fields": {
+        "product_name": "Bolt 65W GaN Charger",
+        "category": "Accessories",
+        "sub_category": "Charger",
+        "price": 39,
+        "desc": "Ultra-compact 65W GaN fast charger with dual USB-C ports that can charge a laptop and phone at the same time.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&h=400&fit=crop",
+        "image": "shop/images/dd4b66e762d84581b41599e44bf57469.jpg",
+        "stock_status": "In Stock",
+        "available_now": 32
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 447,
+    "fields": {
+        "product_name": "SonicBar Bluetooth Speaker",
+        "category": "Audio",
+        "sub_category": "Speaker",
+        "price": 79,
+        "desc": "Portable Bluetooth speaker with 360-degree sound, IPX7 waterproof rating, and 20-hour battery life for outdoor adventures.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&h=400&fit=crop",
+        "image": "shop/images/f506d905bdd04e70bfce1248e9d4256c.jpg",
+        "stock_status": "In Stock",
+        "available_now": 19
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 448,
+    "fields": {
+        "product_name": "ErgoFlex Office Chair",
+        "category": "Home Office",
+        "sub_category": "Chair",
+        "price": 299,
+        "desc": "Ergonomic mesh office chair with adjustable lumbar support, headrest, and breathable fabric for all-day comfort.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&h=400&fit=crop",
+        "image": "shop/images/c05881b5803a40a2b53d1aa10be95603.jpg",
+        "stock_status": "In Stock",
+        "available_now": 6
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 449,
+    "fields": {
+        "product_name": "SnapLens Mirrorless Camera",
+        "category": "Cameras",
+        "sub_category": "Mirrorless",
+        "price": 599,
+        "desc": "Compact mirrorless camera with a 24MP sensor, 4K video, and fast autofocus for vlogging and street photography.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=400&fit=crop",
+        "image": "shop/images/530a13d8a3dc459a9c6cab54e22c4615.jpg",
+        "stock_status": "In Stock",
+        "available_now": 5
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 450,
+    "fields": {
+        "product_name": "FlexDesk Standing Desk",
+        "category": "Home Office",
+        "sub_category": "Desk",
+        "price": 449,
+        "desc": "Electric height-adjustable standing desk with memory presets, cable management tray, and a spacious bamboo top.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=600&h=400&fit=crop",
+        "image": "shop/images/0b317214176d4275be6b8ab3ef732495.jpg",
+        "stock_status": "In Stock",
+        "available_now": 7
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 451,
+    "fields": {
+        "product_name": "Halo Over-Ear Studio Headphones",
+        "category": "Audio",
+        "sub_category": "Headphones",
+        "price": 209,
+        "desc": "Studio-style headphones tuned for balanced sound, plush ear cushions, and long listening sessions.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=400&fit=crop",
+        "image": "shop/images/94da15681ce241e09c222936109bd771.jpg",
+        "stock_status": "In Stock",
+        "available_now": 13
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 452,
+    "fields": {
+        "product_name": "Drift ANC Travel Earbuds",
+        "category": "Audio",
+        "sub_category": "Earbuds",
+        "price": 119,
+        "desc": "Compact travel earbuds with active noise cancellation, fast pairing, and a pocket charging case.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&h=400&fit=crop",
+        "image": "shop/images/8a42d9854a5f4e8f8acb422da00562f3.jpg",
+        "stock_status": "In Stock",
+        "available_now": 20
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 453,
+    "fields": {
+        "product_name": "Prism RGB Gaming Keyboard",
+        "category": "Gaming",
+        "sub_category": "Keyboard",
+        "price": 159,
+        "desc": "Hot-swappable gaming keyboard with bright RGB effects, programmable macros, and smooth mechanical switches.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=600&h=400&fit=crop",
+        "image": "shop/images/6d70b105c7ac4fdcbc3ea28bd3fed9cb.jpg",
+        "stock_status": "In Stock",
+        "available_now": 10
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 454,
+    "fields": {
+        "product_name": "Vector Pro Gaming Mouse",
+        "category": "Gaming",
+        "sub_category": "Mouse",
+        "price": 95,
+        "desc": "Lightweight esports mouse with a high-precision sensor, adjustable DPI, and a braided cable.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&h=400&fit=crop",
+        "image": "shop/images/8d50ce1f7ec54e95af98e9bdac32b417.jpg",
+        "stock_status": "In Stock",
+        "available_now": 22
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 455,
+    "fields": {
+        "product_name": "Titan Streaming Microphone",
+        "category": "Gaming",
+        "sub_category": "Microphone",
+        "price": 139,
+        "desc": "USB condenser microphone with a clean voice pickup, mute button, and shock mount for streaming or podcasts.",
+        "pub_date": "2026-07-09",
+        "image_url": "/media/shop/images/a5ed34c2bee8439581c27d6b8815ba95.jpg",
+        "image": "shop/images/ee81f9ef2daf4b96a7bfa700623bc4d0.jpg",
+        "stock_status": "In Stock",
+        "available_now": 11
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 456,
+    "fields": {
+        "product_name": "Nebula 144Hz Gaming Monitor",
+        "category": "Gaming",
+        "sub_category": "Monitor",
+        "price": 279,
+        "desc": "Fast 144Hz monitor with low input lag, vivid colors, and adaptive sync for competitive play.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=600&h=400&fit=crop",
+        "image": "shop/images/f44a928a12b64475bfbfb5b0e5bc2e01.jpg",
+        "stock_status": "In Stock",
+        "available_now": 9
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 457,
+    "fields": {
+        "product_name": "Pixel Pro Webcam",
+        "category": "Computing",
+        "sub_category": "Webcam",
+        "price": 89,
+        "desc": "Sharp 1080p webcam with autofocus, privacy shutter, and low-light correction for meetings and content creation.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1593642532744-d377ab507dc8?w=600&h=400&fit=crop",
+        "image": "shop/images/ea92b991619d4737a00ac29c9bc10e24.jpg",
+        "stock_status": "In Stock",
+        "available_now": 18
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 458,
+    "fields": {
+        "product_name": "Crest Bluetooth Keyboard",
+        "category": "Computing",
+        "sub_category": "Keyboard",
+        "price": 79,
+        "desc": "Slim Bluetooth keyboard that pairs with laptops, tablets, and phones for flexible everyday typing.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&h=400&fit=crop",
+        "image": "shop/images/fb833edc0dad4363b9c755df5d93c71f.jpg",
+        "stock_status": "In Stock",
+        "available_now": 25
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 459,
+    "fields": {
+        "product_name": "Arc Ergonomic Mouse",
+        "category": "Computing",
+        "sub_category": "Mouse",
+        "price": 65,
+        "desc": "Comfort-first mouse with a vertical grip, precise tracking, and quiet clicks for long workdays.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1527814050087-3793815479db?w=600&h=400&fit=crop",
+        "image": "shop/images/afecc1b96694419a84f262f2abccfded.jpg",
+        "stock_status": "In Stock",
+        "available_now": 16
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 460,
+    "fields": {
+        "product_name": "Orbit Laptop Dock",
+        "category": "Accessories",
+        "sub_category": "Dock",
+        "price": 129,
+        "desc": "Single-cable laptop dock with HDMI, Ethernet, USB ports, and PD charging for a tidy desk setup.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop",
+        "image": "shop/images/7b2b48dd18f74ca9be85d65f7cc0a323.jpg",
+        "stock_status": "In Stock",
+        "available_now": 12
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 461,
+    "fields": {
+        "product_name": "Cloud Carry Laptop Sleeve",
+        "category": "Accessories",
+        "sub_category": "Sleeve",
+        "price": 29,
+        "desc": "Padded laptop sleeve with a soft lining, water-resistant shell, and a slim profile for daily commutes.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1593642532871-8b12e02d091c?w=600&h=400&fit=crop",
+        "image": "shop/images/96ed7ecb03c9418fa06f524eb3ac4d23.jpg",
+        "stock_status": "In Stock",
+        "available_now": 34
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 462,
+    "fields": {
+        "product_name": "Stratus Power Bank",
+        "category": "Accessories",
+        "sub_category": "Power Bank",
+        "price": 49,
+        "desc": "High-capacity power bank with fast charging, dual outputs, and enough power for long trips.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop",
+        "image": "shop/images/def31022658243f69ead4d1ecdd6c268.jpg",
+        "stock_status": "In Stock",
+        "available_now": 23
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 463,
+    "fields": {
+        "product_name": "Beacon Wireless Charger",
+        "category": "Accessories",
+        "sub_category": "Charger",
+        "price": 35,
+        "desc": "Fast wireless charging pad with a non-slip finish and LED status indicator for desks and nightstands.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&h=400&fit=crop",
+        "image": "shop/images/7c2c2e1c87134ece94bc37c8cf28d4ef.jpg",
+        "stock_status": "In Stock",
+        "available_now": 27
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 464,
+    "fields": {
+        "product_name": "Halo Desk Organizer",
+        "category": "Home Office",
+        "sub_category": "Organizer",
+        "price": 25,
+        "desc": "Minimal desk organizer with compartments for pens, sticky notes, cables, and daily essentials.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop",
+        "image": "shop/images/35578d40de374418837ba72c91bc345c.jpg",
+        "stock_status": "In Stock",
+        "available_now": 20
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 465,
+    "fields": {
+        "product_name": "Nimbus Filing Tray",
+        "category": "Home Office",
+        "sub_category": "Organizer",
+        "price": 31,
+        "desc": "Stackable filing tray that keeps documents, notebooks, and mail sorted in one neat place.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=400&fit=crop",
+        "image": "shop/images/500239f5332b49b084223ba736d7194d.jpg",
+        "stock_status": "In Stock",
+        "available_now": 14
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 466,
+    "fields": {
+        "product_name": "Studio Drafting Lamp",
+        "category": "Home Office",
+        "sub_category": "Lighting",
+        "price": 74,
+        "desc": "Adjustable LED lamp with a wide arm, focused beam, and touch controls for precise task lighting.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&h=400&fit=crop",
+        "image": "shop/images/15118d0699f2461c8a14ecbe2dd4a345.jpg",
+        "stock_status": "In Stock",
+        "available_now": 8
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 467,
+    "fields": {
+        "product_name": "Northstar Wireless Charger",
+        "category": "Home Office",
+        "sub_category": "Accessories",
+        "price": 42,
+        "desc": "Desk-friendly wireless charging stand that keeps your phone visible while it powers up.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&h=400&fit=crop",
+        "image": "shop/images/7fe6748bb68b4dbd91d8f792197416b1.jpg",
+        "stock_status": "In Stock",
+        "available_now": 19
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 468,
+    "fields": {
+        "product_name": "Breeze Smart Air Cooler",
+        "category": "Home",
+        "sub_category": "Cooling",
+        "price": 189,
+        "desc": "Compact room cooler with oscillation, timer controls, and quiet operation for summer comfort.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&h=400&fit=crop",
+        "image": "shop/images/a779bf47f21f48d38bfa499f7f057f71.jpg",
+        "stock_status": "In Stock",
+        "available_now": 11
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 469,
+    "fields": {
+        "product_name": "Mist Aroma Diffuser",
+        "category": "Home",
+        "sub_category": "Diffuser",
+        "price": 37,
+        "desc": "Ultrasonic diffuser with soothing mist, color night light, and automatic shutoff.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop",
+        "image": "shop/images/e6b1f76aca604f5d8e1d47d74e0ea653.jpg",
+        "stock_status": "In Stock",
+        "available_now": 29
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 470,
+    "fields": {
+        "product_name": "QuietClean Robot Vacuum",
+        "category": "Home",
+        "sub_category": "Vacuum",
+        "price": 329,
+        "desc": "Smart robot vacuum that maps rooms, avoids obstacles, and keeps floors tidy with minimal effort.",
+        "pub_date": "2026-07-09",
+        "image_url": "/media/shop/images/a7b38d22834e420eafca1b734d38e421.jpg",
+        "image": "shop/images/0dde1f1bb3d0452691164102090f107d.jpg",
+        "stock_status": "In Stock",
+        "available_now": 6
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 471,
+    "fields": {
+        "product_name": "Glow Smart Plug Kit",
+        "category": "Home",
+        "sub_category": "Smart Home",
+        "price": 54,
+        "desc": "Two-pack smart plugs for scheduling lamps, fans, and other small appliances from your phone.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1558002038-1055907df827?w=600&h=400&fit=crop",
+        "image": "shop/images/f96208fcd3cd4bdda002f69fb0d40053.jpg",
+        "stock_status": "In Stock",
+        "available_now": 31
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 472,
+    "fields": {
+        "product_name": "Frost Ceramic Heater",
+        "category": "Home",
+        "sub_category": "Heater",
+        "price": 89,
+        "desc": "Portable ceramic heater with thermostat control, safety shutoff, and fast warm-up performance.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&h=400&fit=crop",
+        "image": "shop/images/78237edf369049dabd71ea7627fcdaec.jpg",
+        "stock_status": "In Stock",
+        "available_now": 13
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 473,
+    "fields": {
+        "product_name": "Summit Action Camera",
+        "category": "Cameras",
+        "sub_category": "Action Camera",
+        "price": 239,
+        "desc": "Adventure-ready action camera with electronic stabilization, waterproof housing, and crisp 4K capture.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=400&fit=crop",
+        "image": "shop/images/242b9d2dd1c24a0bb742b7f951209c10.jpg",
+        "stock_status": "In Stock",
+        "available_now": 7
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 474,
+    "fields": {
+        "product_name": "Aperture Compact Tripod",
+        "category": "Cameras",
+        "sub_category": "Tripod",
+        "price": 58,
+        "desc": "Lightweight tripod with adjustable height, phone mount support, and stable legs for everyday shooting.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=400&fit=crop",
+        "image": "shop/images/b912bbcdcfe1444ca96fd7dbdfbd3c1b.jpg",
+        "stock_status": "In Stock",
+        "available_now": 22
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 475,
+    "fields": {
+        "product_name": "FrameShot Camera Bag",
+        "category": "Cameras",
+        "sub_category": "Bag",
+        "price": 71,
+        "desc": "Protective camera bag with padded dividers, quick-access pockets, and weather-resistant fabric.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&h=400&fit=crop",
+        "image": "shop/images/0807383dfcdb445c99da95b5f1cc8f76.jpg",
+        "stock_status": "In Stock",
+        "available_now": 18
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 476,
+    "fields": {
+        "product_name": "Luma Portrait Lens Kit",
+        "category": "Cameras",
+        "sub_category": "Lens",
+        "price": 419,
+        "desc": "Portrait lens kit that delivers sharp subject separation, smooth background blur, and clean low-light results.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=400&fit=crop",
+        "image": "shop/images/fa3e38ec8f1b4978b1aabc538ee8cf05.jpg",
+        "stock_status": "In Stock",
+        "available_now": 4
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 477,
+    "fields": {
+        "product_name": "Stride Fitness Band",
+        "category": "Fitness",
+        "sub_category": "Band",
+        "price": 49,
+        "desc": "Resistance band set for strength training, stretching, and mobility work at home or on the go.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&h=400&fit=crop",
+        "image": "shop/images/c0c745876d66441198004c08e946c658.jpg",
+        "stock_status": "In Stock",
+        "available_now": 28
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 478,
+    "fields": {
+        "product_name": "ZenFlow Yoga Mat",
+        "category": "Fitness",
+        "sub_category": "Mat",
+        "price": 43,
+        "desc": "Cushioned yoga mat with a grippy texture and extra length for balance, stretching, and floor workouts.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&h=400&fit=crop",
+        "image": "shop/images/118e883ea9fb4acca8348955a92ef7f3.jpg",
+        "stock_status": "In Stock",
+        "available_now": 26
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 479,
+    "fields": {
+        "product_name": "CorePulse Smart Scale",
+        "category": "Fitness",
+        "sub_category": "Scale",
+        "price": 59,
+        "desc": "Bluetooth smart scale that tracks body weight and body composition trends in your companion app.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=400&fit=crop",
+        "image": "shop/images/200678bda9c04c62bd72562bc7a36605.jpg",
+        "stock_status": "In Stock",
+        "available_now": 15
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 480,
+    "fields": {
+        "product_name": "Stride Pro Water Bottle",
+        "category": "Fitness",
+        "sub_category": "Bottle",
+        "price": 24,
+        "desc": "Insulated water bottle that keeps drinks cold during workouts, hikes, and busy commutes.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1517705008128-361805f42e86?w=600&h=400&fit=crop",
+        "image": "shop/images/a1d5ddd42a9b4c728df521f7097dcb3b.jpg",
+        "stock_status": "In Stock",
+        "available_now": 33
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 481,
+    "fields": {
+        "product_name": "Nomad Weekender Backpack",
+        "category": "Travel",
+        "sub_category": "Backpack",
+        "price": 84,
+        "desc": "Carry-on friendly backpack with a laptop sleeve, organizer pockets, and a durable weather-resistant finish.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=400&fit=crop",
+        "image": "shop/images/6e3916f650cd4f32b037224594ce2441.jpg",
+        "stock_status": "In Stock",
+        "available_now": 17
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 482,
+    "fields": {
+        "product_name": "Voyage Carry-On Suitcase",
+        "category": "Travel",
+        "sub_category": "Luggage",
+        "price": 159,
+        "desc": "Lightweight carry-on suitcase with smooth wheels, a telescoping handle, and a hard-shell exterior.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=400&fit=crop",
+        "image": "shop/images/f20e5ea5e1c64cf4bf25cbcbcaf64ff5.jpg",
+        "stock_status": "In Stock",
+        "available_now": 10
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 483,
+    "fields": {
+        "product_name": "CloudRest Neck Pillow",
+        "category": "Travel",
+        "sub_category": "Pillow",
+        "price": 27,
+        "desc": "Memory foam neck pillow that supports long flights and road trips with a soft, removable cover.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&h=400&fit=crop",
+        "image": "shop/images/40a051e2cf444ff1b7f41853b6d4d149.jpg",
+        "stock_status": "In Stock",
+        "available_now": 27
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 484,
+    "fields": {
+        "product_name": "TrailSip Insulated Bottle",
+        "category": "Travel",
+        "sub_category": "Bottle",
+        "price": 29,
+        "desc": "Leak-resistant insulated bottle designed to keep water cold through travel days and outdoor use.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1517705008128-361805f42e86?w=600&h=400&fit=crop",
+        "image": "shop/images/700eb20e6d49424bbd0e89ea77c81597.jpg",
+        "stock_status": "In Stock",
+        "available_now": 24
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 485,
+    "fields": {
+        "product_name": "BlendCraft Countertop Blender",
+        "category": "Kitchen",
+        "sub_category": "Blender",
+        "price": 119,
+        "desc": "High-speed blender for smoothies, soups, and sauces with a sturdy jar and multiple speed settings.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=600&h=400&fit=crop",
+        "image": "shop/images/25817c03aa274c3483a42d6b2fd9e222.jpg",
+        "stock_status": "In Stock",
+        "available_now": 9
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 486,
+    "fields": {
+        "product_name": "BrewStone Coffee Grinder",
+        "category": "Kitchen",
+        "sub_category": "Grinder",
+        "price": 67,
+        "desc": "Compact burr grinder that gives coffee lovers a consistent grind for espresso or pour-over brewing.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop",
+        "image": "shop/images/be7ca67b3b2543529d0a9b9f25fe4289.jpg",
+        "stock_status": "In Stock",
+        "available_now": 18
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 487,
+    "fields": {
+        "product_name": "CrispAir Air Fryer",
+        "category": "Kitchen",
+        "sub_category": "Air Fryer",
+        "price": 109,
+        "desc": "Easy-to-use air fryer with preset buttons, fast heating, and a roomy basket for everyday meals.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop",
+        "image": "shop/images/2dd6a785f6e44286ab4bb8c321f58996.jpg",
+        "stock_status": "In Stock",
+        "available_now": 12
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 488,
+    "fields": {
+        "product_name": "CopperBoil Electric Kettle",
+        "category": "Kitchen",
+        "sub_category": "Kettle",
+        "price": 48,
+        "desc": "Quick-boil electric kettle with an auto shutoff base and a clean stainless steel finish.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=400&fit=crop",
+        "image": "shop/images/ec8ba7dbd48943148f10fd6207de046c.jpg",
+        "stock_status": "In Stock",
+        "available_now": 22
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 489,
+    "fields": {
+        "product_name": "Luma Smart Bulb Pack",
+        "category": "Smart Home",
+        "sub_category": "Lighting",
+        "price": 39,
+        "desc": "Color-changing smart bulb pair with app control, schedules, and voice assistant support.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&h=400&fit=crop",
+        "image": "shop/images/bddd1da01d1941709973c0bf2b99e667.jpg",
+        "stock_status": "In Stock",
+        "available_now": 35
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 490,
+    "fields": {
+        "product_name": "WatchTower Security Camera",
+        "category": "Smart Home",
+        "sub_category": "Camera",
+        "price": 79,
+        "desc": "Indoor security camera with motion alerts, night vision, and live view from your phone.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1558002038-1055907df827?w=600&h=400&fit=crop",
+        "image": "shop/images/544a7498e9064a9ba700092205e8b0bc.jpg",
+        "stock_status": "In Stock",
+        "available_now": 16
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 491,
+    "fields": {
+        "product_name": "EchoLink Voice Hub",
+        "category": "Smart Home",
+        "sub_category": "Hub",
+        "price": 129,
+        "desc": "Voice-controlled smart home hub for music, reminders, weather, and connected devices.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&h=400&fit=crop",
+        "image": "shop/images/df52659650484413bff2ed1f9874d6fb.jpg",
+        "stock_status": "In Stock",
+        "available_now": 8
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 492,
+    "fields": {
+        "product_name": "SecureView Video Doorbell",
+        "category": "Smart Home",
+        "sub_category": "Doorbell",
+        "price": 149,
+        "desc": "Smart doorbell camera with two-way audio, motion detection, and mobile notifications.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1558002038-1055907df827?w=600&h=400&fit=crop",
+        "image": "shop/images/2d5a043f1bd849458bde11ad88c29e61.jpg",
+        "stock_status": "In Stock",
+        "available_now": 11
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 493,
+    "fields": {
+        "product_name": "SilkAir Hair Dryer",
+        "category": "Beauty",
+        "sub_category": "Hair Dryer",
+        "price": 89,
+        "desc": "Fast-drying hair dryer with multiple heat settings, a cool shot button, and a lightweight body.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&h=400&fit=crop",
+        "image": "shop/images/f6c67cbbf4594c31919fc4cda2e8e293.jpg",
+        "stock_status": "In Stock",
+        "available_now": 20
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 494,
+    "fields": {
+        "product_name": "GlossLine Hair Straightener",
+        "category": "Beauty",
+        "sub_category": "Styling Tool",
+        "price": 74,
+        "desc": "Ceramic straightener that smooths hair quickly while helping reduce heat damage and frizz.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&h=400&fit=crop",
+        "image": "shop/images/567ae47e815642718707fc04229c5df9.jpg",
+        "stock_status": "In Stock",
+        "available_now": 14
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 495,
+    "fields": {
+        "product_name": "PureGlow Facial Steamer",
+        "category": "Beauty",
+        "sub_category": "Skincare",
+        "price": 52,
+        "desc": "Gentle facial steamer for at-home skincare routines, helping open pores and hydrate skin.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&h=400&fit=crop",
+        "image": "shop/images/d6c2d9f54b824366a9cfe31de7a90b14.jpg",
+        "stock_status": "In Stock",
+        "available_now": 17
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 496,
+    "fields": {
+        "product_name": "TrimPro Grooming Kit",
+        "category": "Beauty",
+        "sub_category": "Grooming",
+        "price": 64,
+        "desc": "All-in-one grooming kit with multiple attachments for beard, hair, and body trimming.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?w=600&h=400&fit=crop",
+        "image": "shop/images/f2ddb0c022ae49aaa3bf783f0d5b62a4.jpg",
+        "stock_status": "In Stock",
+        "available_now": 23
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 497,
+    "fields": {
+        "product_name": "EcoSip Travel Mug",
+        "category": "Accessories",
+        "sub_category": "Mug",
+        "price": 21,
+        "desc": "Leak-resistant travel mug that keeps coffee warm and fits comfortably in car cup holders.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1517705008128-361805f42e86?w=600&h=400&fit=crop",
+        "image": "shop/images/ad69c22d5aca4ed088610dcbcb243d0d.jpg",
+        "stock_status": "In Stock",
+        "available_now": 29
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 498,
+    "fields": {
+        "product_name": "Rover Portable Speaker",
+        "category": "Audio",
+        "sub_category": "Speaker",
+        "price": 95,
+        "desc": "Rugged portable speaker with deep bass, Bluetooth pairing, and splash resistance for day trips.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&h=400&fit=crop",
+        "image": "shop/images/62bced1f469a418ab445bdb69c082f26.jpg",
+        "stock_status": "In Stock",
+        "available_now": 18
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 499,
+    "fields": {
+        "product_name": "Edge Foldable Tablet Stand",
+        "category": "Accessories",
+        "sub_category": "Stand",
+        "price": 32,
+        "desc": "Foldable stand for tablets and phones that makes video calls, watching, and reading more comfortable.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop",
+        "image": "shop/images/05365cb5b076418da1539a14765acb56.jpg",
+        "stock_status": "In Stock",
+        "available_now": 31
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 500,
+    "fields": {
+        "product_name": "Pulse Air Monitor",
+        "category": "Computing",
+        "sub_category": "Monitor",
+        "price": 289,
+        "desc": "27-inch productivity monitor with slim bezels, sharp text rendering, and a clean matte finish.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600&h=400&fit=crop",
+        "image": "shop/images/31fc4fe6146047f59c1b55e0b7ea1a46.jpg",
+        "stock_status": "In Stock",
+        "available_now": 10
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 501,
+    "fields": {
+        "product_name": "Harbor Leather Laptop Bag",
+        "category": "Accessories",
+        "sub_category": "Bag",
+        "price": 99,
+        "desc": "Professional laptop bag with a padded compartment, polished finish, and room for daily essentials.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1514477917009-389c76a86b68?w=600&h=400&fit=crop",
+        "image": "shop/images/f2807dee4f1f43b2b5c36b044eec76ac.jpg",
+        "stock_status": "In Stock",
+        "available_now": 12
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 502,
+    "fields": {
+        "product_name": "Vista Desk Mat",
+        "category": "Home Office",
+        "sub_category": "Accessories",
+        "price": 27,
+        "desc": "Large desk mat that protects your surface, keeps devices steady, and adds a clean workspace look.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1593642532871-8b12e02d091c?w=600&h=400&fit=crop",
+        "image": "shop/images/fe1bdb7da05e41c7a5f9f9e9f062f671.jpg",
+        "stock_status": "In Stock",
+        "available_now": 25
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 503,
+    "fields": {
+        "product_name": "Journey Noise-Canceling Neckbuds",
+        "category": "Audio",
+        "sub_category": "Earbuds",
+        "price": 132,
+        "desc": "Lightweight neckband earbuds with active noise cancellation and long battery life for commuting.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&h=400&fit=crop",
+        "image": "shop/images/b3929bad67d743109295eeb04f21dd94.jpg",
+        "stock_status": "In Stock",
+        "available_now": 14
+    }
+},
+{
+    "model": "shop.product",
+    "pk": 504,
+    "fields": {
+        "product_name": "Summit Smart Scale Pro",
+        "category": "Fitness",
+        "sub_category": "Scale",
+        "price": 72,
+        "desc": "Connected smart scale with body metrics tracking and clean, easy-to-read display.",
+        "pub_date": "2026-07-09",
+        "image_url": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=400&fit=crop",
+        "image": "shop/images/0a2b53eba69a4123858373c58503fd6c.jpg",
+        "stock_status": "In Stock",
+        "available_now": 13
+    }
+}
+]

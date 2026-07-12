@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'mac.wsgi.application'
 
 
 
-
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/shop'
 LOGIN_URL = '/shop/login'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+AUTH_USER_MODEL =  "shop.CustomUser"
+LOGOUT_REDIRECT_URL = '/shop/login/'
 
  
 

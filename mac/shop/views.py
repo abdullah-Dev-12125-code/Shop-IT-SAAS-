@@ -4,35 +4,58 @@ from .models import Contact, Order, OrderUpdate, Product
 from django.shortcuts import render, redirect
 from decimal import Decimal, InvalidOperation
 from collections import Counter, defaultdict
+from .forms import SignupForm, LoginForm
 from django.http import JsonResponse
 from django.utils.text import slugify
 import json
 
 
 def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+    if request.method == "POST":
+        form = LoginForm(request.POST)
 
-        if user is not None:
-            login(request, user)
-            return redirect('shop:index')
+        if form.is_valid():
 
-        return render(request, 'shop/login.html', {
-            'error': 'Invalid credentials'
-        })
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
 
-    return render(request, 'shop/login.html')
+            user = authenticate(
+                request,
+                username=email,
+                password=password
+            )
+
+            if user:
+                login(request, user)
+                return redirect("shop:index")
+
+    else:
+        form = LoginForm()
+
+    return render(request, "shop/login.html", {"form": form})
 
 
 def logout_view(request):
     logout(request)
     return redirect('shop:login')
 
+
 def sign_up(request):
-    return render(request, 'shop/signup.html')
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("shop:index")
+        
+    else:
+        form = SignupForm()
+
+
+    return render(request, 'shop/signup.html', {"form":form})
+
 
 # Purely cosmetic: an icon per category slug for the sub-nav pills. Any
 # category not listed here just falls back to a generic tag icon, so new
