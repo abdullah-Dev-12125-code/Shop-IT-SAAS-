@@ -28,7 +28,7 @@ def login_view(request):
 
             if user:
                 login(request, user)
-                return redirect("shop:index")
+                return redirect("shop:home")
 
     else:
         form = LoginForm()
@@ -48,7 +48,7 @@ def sign_up(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect("shop:index")
+            return redirect("shop:home")
         
     else:
         form = SignupForm()
