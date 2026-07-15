@@ -40,7 +40,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',  # must be first
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,7 +79,6 @@ WSGI_APPLICATION = 'mac.wsgi.application'
 
 LOGIN_REDIRECT_URL = '/shop'
 LOGIN_URL = '/shop/login'
-AUTH_USER_MODEL =  "shop.CustomUser"
 LOGOUT_REDIRECT_URL = '/shop/login/'
 
  
@@ -89,8 +87,12 @@ LOGOUT_REDIRECT_URL = '/shop/login/'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'myshop',
+        'USER': 'postgres',
+        'PASSWORD': 'abdullah1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

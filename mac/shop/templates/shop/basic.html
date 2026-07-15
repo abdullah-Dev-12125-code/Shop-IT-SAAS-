@@ -63,6 +63,18 @@
       font-family: "Fraunces", serif;
     }
 
+    a {
+      text-decoration: none;
+      color: black;
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: black;
+
+    }
+
+
     /* ── NAVBAR ── */
     /* ── NAVBAR ── */
     .navbar-custom {
@@ -479,7 +491,7 @@
     </div>
 
     <div class="nav-item-profile"> 
-      profile
+      <a href="{% url 'shop:profile' %}">profile</a>
     </div>
 
 

@@ -388,10 +388,10 @@
     <div class="identity">
         <div>
             <h1>
-                {% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %}
+                <!-- {% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %} -->
                 <span class="verified"><i class="ti ti-rosette-discount-check"></i> Verified</span>
             </h1>
-            <div class="handle">@{{ profile.user.username }}</div>
+            <div class="handle">@{{ profile.user.email }}</div>
         </div>
         <a href="#" class="edit-full-btn" style="width:auto; padding:11px 22px;">
             <i class="ti ti-pencil"></i> Edit profile
@@ -463,7 +463,7 @@
                 <div class="id-card-label">Shop IT member</div>
                 <img class="id-card-avatar" src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}">
                 <div class="id-card-name">
-                    {% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %}
+                    <!-- {% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %} -->
                 </div>
                 <div class="id-card-id">ID SHOPIT-{{ profile.user.id|stringformat:"05d" }}</div>
                 <div class="id-card-since">

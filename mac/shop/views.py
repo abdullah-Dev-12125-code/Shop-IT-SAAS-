@@ -1,60 +1,12 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from .models import Contact, Order, OrderUpdate, Product
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from decimal import Decimal, InvalidOperation
 from collections import Counter, defaultdict
-from .forms import SignupForm, LoginForm
 from django.http import JsonResponse
 from django.utils.text import slugify
 import json
 
 
-def login_view(request):
-
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-
-        if form.is_valid():
-
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
-
-            user = authenticate(
-                request,
-                username=email,
-                password=password
-            )
-
-            if user:
-                login(request, user)
-                return redirect("shop:home")
-
-    else:
-        form = LoginForm()
-
-    return render(request, "shop/login.html", {"form": form})
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('shop:login')
-
-
-def sign_up(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect("shop:home")
-        
-    else:
-        form = SignupForm()
-
-
-    return render(request, 'shop/signup.html', {"form":form})
 
 
 # Purely cosmetic: an icon per category slug for the sub-nav pills. Any
@@ -347,7 +299,7 @@ def categories(request):
     context = _build_home_context(Product.objects.all(), category_slug=category_slug, interest=interest)
     return render(request, 'shop/index.html', context)
 
-@login_required
+
 def tracker(request):
     if request.method == "POST":
         orderid = request.POST.get('orderid', 0)
@@ -424,7 +376,7 @@ def tracker(request):
     return render(request, 'shop/tracker.html')
 
 
-@login_required
+
 def create_order(request):
     if request.method == 'POST':
         try:
@@ -473,7 +425,7 @@ def create_order(request):
 def about(request):
     return render(request, 'shop/about.html')
 
-@login_required
+
 def contact(request):
     thank = False
     if request.method == "POST":
@@ -491,11 +443,11 @@ def product(request,id):
     context = { 'product': Product.objects.get(id = id) } 
     return render(request, 'shop/product.html', context)
 
-@login_required
+
 def checkout(request):
     return render(request, 'shop/checkout.html')
 
-@login_required
+
 def cart(request):
     return render(request, 'shop/cart.html')
 
@@ -529,4 +481,5 @@ def search(request):
 
 
 def profile(request):
-    return render(request, 'shop/profile.html')
+    user = 'abdullah'
+    return render(request, 'shop/profile.html', {"user": user})
