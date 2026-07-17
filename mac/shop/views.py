@@ -1,10 +1,72 @@
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from .models import Contact, Order, OrderUpdate, Product
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from decimal import Decimal, InvalidOperation
 from collections import Counter, defaultdict
 from django.http import JsonResponse
 from django.utils.text import slugify
 import json
+
+def signup_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        
+        if password1 != password2:
+            error = {"error": "Password didn't matched"}
+            return render(request, 'shop/signup.html', error)
+        
+        elif User.objects.filter(username=username).exists():
+            error = {"error": "User with that name already exists"}
+            return render(request, 'shop/signup.html', error)
+        
+        elif User.objects.filter(email=email).exists():
+            error = {"error": "User with that email exists"}
+            return render(request, 'shop/signup.html', error)
+
+        else:
+            user = User.objects.create_user(username=username,email=email, password=password1)
+            login(request, user)
+            return redirect('shop:shop')        
+
+    return render(request, 'shop/signup.html')
+
+def login_user(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = authenticate(request, email=email, password=password)
+        
+        try:
+            user_obj = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user_obj = None
+
+        if user_obj:
+            user = authenticate(request, username=user_obj.username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('shop:shop')
+
+        return render(request, 'shop/login.html', {'error': 'Invalid email or password.'})
+    
+    return render(request, 'shop/login.html')
+
+def logout_user(request):
+    logout(request)
+    return redirect('shop:login')
+
+
+
+
+
+
 
 
 
@@ -13,15 +75,55 @@ import json
 # category not listed here just falls back to a generic tag icon, so new
 # categories in the catalog never break the nav.
 CATEGORY_ICONS = {
-    "electronics": "💻",
-    "gaming": "🎮",
+    "computing": "🖥️",
+    "electronics": "🔌",
+    "gaming": "🕹️",
+    "school": "🏫",
     "school accessories": "🎒",
-    "school": "🎒",
-    "fashion": "👕",
-    "home & living": "🏠",
-    "home": "🏠",
-    "beauty": "💄",
-    "sports": "🏸",
+    "books": "📚",
+    "stationery": "🖊️",
+    "fashion": "🛍️",
+    "men": "👔",
+    "women": "👗",
+    "kids": "🧸",
+    "shoes": "👟",
+    "accessories": "🕶️",
+    "watches": "⌚",
+    "jewelry": "💎",
+    "beauty": "💅",
+    "health": "🩺",
+    "fitness": "💪",
+    "sports": "🏆",
+    "toys": "🪀",
+    "baby": "👶",
+    "home": "🏡",
+    "home & living": "🛋️",
+    "furniture": "🪑",
+    "kitchen": "🍽️",
+    "appliances": "🧺",
+    "groceries": "🛒",
+    "food": "🍕",
+    "drinks": "🥤",
+    "pets": "🐾",
+    "automotive": "🚘",
+    "motorcycles": "🏍️",
+    "tools": "🛠️",
+    "office": "💼",
+    "garden": "🌿",
+    "travel": "🧳",
+    "luggage": "🎒",
+    "phones": "📱",
+    "computers": "💻",
+    "cameras": "📸",
+    "audio": "🎧",
+    "music": "🎼",
+    "movies": "🎥",
+    "software": "🖥️",
+    "gifts": "🎁",
+    "art": "🖌️",
+    "crafts": "🧶",
+    "medical": "🩹",
+    "other": "📦",
 }
 
 # Interim way to flag "festival" products until Product has a dedicated
@@ -278,7 +380,6 @@ def _build_home_context(products, query=None, category_slug=None, interest=False
     }
 
 
-
 def index(request):
     category_slug = request.GET.get('category')
     interest = request.GET.get('interest') == '1'
@@ -299,7 +400,7 @@ def categories(request):
     context = _build_home_context(Product.objects.all(), category_slug=category_slug, interest=interest)
     return render(request, 'shop/index.html', context)
 
-
+@login_required
 def tracker(request):
     if request.method == "POST":
         orderid = request.POST.get('orderid', 0)
@@ -376,7 +477,7 @@ def tracker(request):
     return render(request, 'shop/tracker.html')
 
 
-
+@login_required
 def create_order(request):
     if request.method == 'POST':
         try:
@@ -439,14 +540,16 @@ def contact(request):
         thank = True
     return render(request, 'shop/contact.html',{'thank': thank})
 
+
 def product(request,id):
     context = { 'product': Product.objects.get(id = id) } 
     return render(request, 'shop/product.html', context)
 
+@login_required
 
 def checkout(request):
     return render(request, 'shop/checkout.html')
-
+@login_required
 
 def cart(request):
     return render(request, 'shop/cart.html')
@@ -479,6 +582,7 @@ def search(request):
     context = _build_home_context(products, query=query, category_slug=category_slug, interest=interest)
     return render(request, 'shop/index.html', context)
 
+@login_required
 
 def profile(request):
     user = 'abdullah'

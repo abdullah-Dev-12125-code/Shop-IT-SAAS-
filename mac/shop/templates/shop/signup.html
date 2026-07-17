@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign up — Shop IT</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --ink: #12151c;
@@ -22,7 +24,11 @@
       --shadow-hover: 0 16px 36px rgba(18, 21, 28, .14);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -31,7 +37,9 @@
       min-height: 100vh;
     }
 
-    .mono { font-family: 'JetBrains Mono', monospace; }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
 
     /* ================= SHELL ================= */
     .auth-shell {
@@ -56,13 +64,11 @@
       content: "";
       position: absolute;
       inset: 0;
-      background-image: repeating-linear-gradient(
-        115deg,
-        rgba(255, 255, 255, 0.035) 0px,
-        rgba(255, 255, 255, 0.035) 2px,
-        transparent 2px,
-        transparent 26px
-      );
+      background-image: repeating-linear-gradient(115deg,
+          rgba(255, 255, 255, 0.035) 0px,
+          rgba(255, 255, 255, 0.035) 2px,
+          transparent 2px,
+          transparent 26px);
       pointer-events: none;
     }
 
@@ -87,7 +93,9 @@
       letter-spacing: -0.3px;
     }
 
-    .brand-mark span { color: var(--gold); }
+    .brand-mark span {
+      color: var(--gold);
+    }
 
     .panel-mid {
       position: relative;
@@ -171,8 +179,15 @@
     }
 
     @keyframes cardIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .auth-card .eyebrow {
@@ -217,7 +232,9 @@
       margin-top: 6px;
     }
 
-    .field { margin-bottom: 18px; }
+    .field {
+      margin-bottom: 18px;
+    }
 
     .field label {
       display: block;
@@ -247,7 +264,9 @@
       border-color: var(--coral);
     }
 
-    .field input::placeholder { color: #b7b4aa; }
+    .field input::placeholder {
+      color: #b7b4aa;
+    }
 
     .field input:focus {
       border-color: var(--teal);
@@ -264,9 +283,13 @@
       margin-top: 6px;
     }
 
-    .pw-wrap { position: relative; }
+    .pw-wrap {
+      position: relative;
+    }
 
-    .pw-wrap input { padding-right: 46px; }
+    .pw-wrap input {
+      padding-right: 46px;
+    }
 
     .pw-toggle {
       position: absolute;
@@ -286,7 +309,9 @@
       transition: background .15s ease;
     }
 
-    .pw-toggle:hover { background: #f4f2ec; }
+    .pw-toggle:hover {
+      background: #f4f2ec;
+    }
 
     .pw-toggle svg {
       width: 18px;
@@ -329,7 +354,9 @@
       text-decoration: none;
     }
 
-    .terms-row a:hover { text-decoration: underline; }
+    .terms-row a:hover {
+      text-decoration: underline;
+    }
 
     .auth-submit {
       width: 100%;
@@ -350,8 +377,13 @@
       box-shadow: 0 8px 20px rgba(232, 84, 47, .28);
     }
 
-    .auth-submit:hover { opacity: .92; }
-    .auth-submit:active { transform: scale(.98); }
+    .auth-submit:hover {
+      opacity: .92;
+    }
+
+    .auth-submit:active {
+      transform: scale(.98);
+    }
 
     .auth-submit:disabled {
       opacity: .6;
@@ -378,7 +410,8 @@
       font-size: 12px;
     }
 
-    .auth-divider::before, .auth-divider::after {
+    .auth-divider::before,
+    .auth-divider::after {
       content: "";
       flex: 1;
       height: 1px;
@@ -397,7 +430,9 @@
       text-decoration: none;
     }
 
-    .auth-footer a:hover { text-decoration: underline; }
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
 
     .back-home {
       display: inline-flex;
@@ -409,27 +444,48 @@
       margin-bottom: 28px;
     }
 
-    .back-home:hover { color: var(--ink); }
-    .back-home svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .back-home:hover {
+      color: var(--ink);
+    }
+
+    .back-home svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
 
     /* ================= RESPONSIVE ================= */
     @media (max-width: 900px) {
-      .auth-shell { grid-template-columns: 1fr; }
+      .auth-shell {
+        grid-template-columns: 1fr;
+      }
+
       .auth-panel {
         padding: 32px 28px;
         min-height: 260px;
       }
-      .panel-mid h1 { font-size: 26px; }
-      .panel-features { display: none; }
-      .auth-panel::after { font-size: 300px; bottom: -100px; }
+
+      .panel-mid h1 {
+        font-size: 26px;
+      }
+
+      .panel-features {
+        display: none;
+      }
+
+      .auth-panel::after {
+        font-size: 300px;
+        bottom: -100px;
+      }
     }
 
     a {
       text-decoration: none;
       color: white;
-      
-    }
 
+    }
   </style>
 </head>
 
@@ -439,7 +495,9 @@
 
     <!-- LEFT BRAND PANEL -->
     <aside class="auth-panel">
-      <a href="#"><div class="brand-mark">Shop<span>IT</span></div></a>
+      <a href="#">
+        <div class="brand-mark">Shop<span>IT</span></div>
+      </a>
 
       <div class="panel-mid">
         <div class="panel-eyebrow">Join Shop IT</div>
@@ -449,15 +507,22 @@
 
       <div class="panel-features">
         <div class="panel-feature">
-          <span class="icn"><svg viewBox="0 0 24 24"><path d="M3 12l3-8h8l3 8M3 12v6a1 1 0 0 0 1 1h1m14-7v6a1 1 0 0 1-1 1h-1M7 19a2 2 0 1 0 4 0M17 19a2 2 0 1 0 4-.001"/></svg></span>
+          <span class="icn"><svg viewBox="0 0 24 24">
+              <path
+                d="M3 12l3-8h8l3 8M3 12v6a1 1 0 0 0 1 1h1m14-7v6a1 1 0 0 1-1 1h-1M7 19a2 2 0 1 0 4 0M17 19a2 2 0 1 0 4-.001" />
+            </svg></span>
           Fast, trackable delivery
         </div>
         <div class="panel-feature">
-          <span class="icn"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"/></svg></span>
+          <span class="icn"><svg viewBox="0 0 24 24">
+              <path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" />
+            </svg></span>
           Secure, encrypted checkout
         </div>
         <div class="panel-feature">
-          <span class="icn"><svg viewBox="0 0 24 24"><path d="M4 4v6h6M20 20v-6h-6M4 10a8 8 0 0 1 14.9-3M20 14a8 8 0 0 1-14.9 3"/></svg></span>
+          <span class="icn"><svg viewBox="0 0 24 24">
+              <path d="M4 4v6h6M20 20v-6h-6M4 10a8 8 0 0 1 14.9-3M20 14a8 8 0 0 1-14.9 3" />
+            </svg></span>
           Easy 30-day returns
         </div>
       </div>
@@ -468,7 +533,9 @@
       <div class="auth-card">
 
         <a href="/" class="back-home">
-          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
           Back to shop
         </a>
 
@@ -489,15 +556,8 @@
 
           <div class="field">
             <label for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="youremail@example.com"
-              autocomplete="email"
-              value="{{ form.email.value|default:'' }}"
-              class="{% if form.email.errors %}has-error{% endif %}"
-              autofocus
+            <input type="email" id="email" name="email" placeholder="youremail@example.com" autocomplete="email"
+              value="{{ form.email.value|default:'' }}" class="{% if form.email.errors %}has-error{% endif %}" autofocus
               required>
             {% if form.email.errors %}
             <div class="field-error">{{ form.email.errors.0 }}</div>
@@ -505,18 +565,29 @@
           </div>
 
           <div class="field">
+            <label for="username">Username</label>
+
+            <input type="text" id="username" name="username" placeholder="Choose a username" autocomplete="username"
+              value="{{ form.username.value|default:'' }}" class="{% if form.username.errors %}has-error{% endif %}"
+              required>
+
+            {% if form.username.errors %}
+            <div class="field-error">
+              {{ form.username.errors.0 }}
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="field">
             <label for="password1">Password</label>
             <div class="pw-wrap">
-              <input
-                type="password"
-                id="password1"
-                name="password1"
-                placeholder="••••••••"
-                autocomplete="new-password"
-                class="{% if form.password1.errors %}has-error{% endif %}"
-                required>
+              <input type="password" id="password1" name="password1" placeholder="••••••••" autocomplete="new-password"
+                class="{% if form.password1.errors %}has-error{% endif %}" required>
               <button type="button" class="pw-toggle pw-toggle-1" aria-label="Show password">
-                <svg viewBox="0 0 24 24" class="pw-icon-1"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg viewBox="0 0 24 24" class="pw-icon-1">
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
               </button>
             </div>
             {% if form.password1.errors %}
@@ -529,16 +600,13 @@
           <div class="field">
             <label for="password2">Confirm password</label>
             <div class="pw-wrap">
-              <input
-                type="password"
-                id="password2"
-                name="password2"
-                placeholder="••••••••"
-                autocomplete="new-password"
-                class="{% if form.password2.errors %}has-error{% endif %}"
-                required>
+              <input type="password" id="password2" name="password2" placeholder="••••••••" autocomplete="new-password"
+                class="{% if form.password2.errors %}has-error{% endif %}" required>
               <button type="button" class="pw-toggle pw-toggle-2" aria-label="Show password">
-                <svg viewBox="0 0 24 24" class="pw-icon-2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg viewBox="0 0 24 24" class="pw-icon-2">
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
               </button>
             </div>
             {% if form.password2.errors %}
@@ -553,14 +621,16 @@
 
           <button type="submit" class="auth-submit" id="submit-btn">
             Create account
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
           </button>
         </form>
 
         <div class="auth-divider">or</div>
 
         <div class="auth-footer">
-          Already have an account? <a href="{% url 'shop:login' %}">Login</a>
+          Already have an account? <a href="{% url 'shop:signup' %}">Login</a>
         </div>
 
       </div>

@@ -111,58 +111,6 @@ If a variable isn't provided the section simply won't render (guarded with
     font-size: 11px;
   }
 
-  /* ---------- Account / login button in the subnav ---------- */
-  .nav-account {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-left: 12px;
-    margin-left: 6px;
-  }
-
-  .nav-divider {
-    width: 1px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.12);
-    flex-shrink: 0;
-  }
-
-  .nav-login-btn {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: linear-gradient(135deg, var(--coral), #d1451e);
-    color: #fff !important;
-    border-radius: 999px;
-    padding: 8px 16px !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    border-bottom: none !important;
-    box-shadow: 0 4px 14px rgba(232, 84, 47, .28);
-    transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
-  }
-
-  .nav-login-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(232, 84, 47, .38);
-    opacity: .95;
-    color: #fff !important;
-  }
-
-  .nav-login-btn:active {
-    transform: translateY(0) scale(.97);
-  }
-
-  .nav-login-btn svg {
-    width: 14px;
-    height: 14px;
-    stroke: #fff;
-    fill: none;
-    stroke-width: 2.2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
   /* ---------- Hero strip ---------- */
   .shop-hero {
     text-align: center;
@@ -719,7 +667,7 @@ If a variable isn't provided the section simply won't render (guarded with
 
   @media (max-width: 576px) {
     .shelf-scroll .card-slot {
-      flex: 0 0 168px;
+      flex: 0 0 170px;
     }
 
     .card-img-wrap {
@@ -740,26 +688,6 @@ If a variable isn't provided the section simply won't render (guarded with
       </a>
       {% endfor %}
       <a href="#" class="interest">For You</a>
-
-      <div class="nav-account">
-        <div class="nav-divider"></div>
-        {% if request.user.is_authenticated %}
-        <a href="{% url 'shop:profile' %}" class="nav-login-btn">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="8" r="4" />
-            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-          </svg>
-          My account
-        </a>
-        {% else %}
-        <a href="#" class="nav-login-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
-          </svg>
-          Login
-        </a>
-        {% endif %}
-      </div>
     </nav>
   </div>
 </div>

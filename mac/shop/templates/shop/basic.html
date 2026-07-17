@@ -76,17 +76,17 @@
 
 
     /* ── NAVBAR ── */
-    /* ── NAVBAR ── */
     .navbar-custom {
       background: #ffffff;
       border-bottom: 1px solid var(--line);
       padding: 0 1.5rem;
-      height: 70px;
+      min-height: 70px;
       display: flex;
       align-items: center;
       position: sticky;
       top: 0;
       z-index: 1000;
+      flex-wrap: wrap;
     }
 
     .navbar-brand {
@@ -126,11 +126,69 @@
       padding: 0.5rem 0.8rem !important;
       border-radius: 8px;
       transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
     }
 
     .nav-link:hover {
       background: var(--teal-tint);
       color: var(--teal-deep) !important;
+    }
+
+    /* ---------- Nav-links strip: slides on smaller screens instead of
+       disappearing into an unreachable Bootstrap collapse ---------- */
+    .navbar-collapse {
+      display: flex !important;
+      flex-basis: auto;
+      align-items: center;
+    }
+
+    .navbar-nav {
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
+
+    @media (max-width: 991.98px) {
+      .navbar-custom {
+        height: auto;
+        padding: 0.6rem 1rem;
+      }
+
+      .navbar-collapse {
+        flex-basis: 100%;
+        width: 100%;
+        order: 3;
+        margin-top: 0.5rem;
+      }
+
+      .navbar-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 2px;
+        padding: 2px 2px 6px;
+        margin: 0 -2px;
+        mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+      }
+
+      .navbar-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .navbar-nav .nav-item {
+        flex: 0 0 auto;
+      }
+
+      .cart-nav-item {
+        margin-left: 4px !important;
+      }
+
+      form[action*="search"] {
+        order: 2;
+        width: 100%;
+      }
     }
 
     /* ── SEARCH ── */
@@ -209,11 +267,166 @@
       align-items: center;
     }
 
-    /* profile */
-    .nav-item-profile {
-      padding-left: 10px;
+    /* ── ACCOUNT (login / profile dropdown) ── */
+    .nav-account-wrap {
+      display: flex;
+      align-items: center;
+      margin-left: 12px;
+      flex: 0 0 auto;
     }
 
+    .nav-login-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #374151 !important;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: transparent;
+      white-space: nowrap;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .nav-login-btn:hover {
+      background: var(--teal-tint);
+      border-color: var(--teal);
+      color: var(--teal-deep) !important;
+    }
+
+    .nav-login-btn svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-profile {
+      position: relative;
+    }
+
+    .nav-profile-trigger {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 12px 5px 5px;
+      color: #374151 !important;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .nav-profile:hover .nav-profile-trigger,
+    .nav-profile:focus-within .nav-profile-trigger {
+      background: var(--teal-tint);
+      border-color: var(--teal);
+      color: var(--teal-deep) !important;
+    }
+
+    .nav-profile-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--teal-deep));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .nav-profile-caret {
+      width: 9px;
+      height: 9px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      transition: transform 0.15s ease;
+    }
+
+    .nav-profile:hover .nav-profile-caret,
+    .nav-profile:focus-within .nav-profile-caret {
+      transform: rotate(180deg);
+    }
+
+    /* invisible bridge so moving the cursor down to the dropdown doesn't close it */
+    .nav-profile::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: 10px;
+    }
+
+    .nav-profile-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 176px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 16px 48px rgba(18, 21, 28, .16);
+      border: 1px solid var(--line);
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(6px);
+      transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+      z-index: 1200;
+    }
+
+    .nav-profile:hover .nav-profile-dropdown,
+    .nav-profile:focus-within .nav-profile-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .nav-profile-dropdown a,
+    .nav-profile-dropdown button {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      padding: 9px 10px;
+      border: none;
+      background: transparent;
+      color: var(--ink) !important;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+      text-decoration: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s;
+    }
+
+    .nav-profile-dropdown a:hover,
+    .nav-profile-dropdown button:hover {
+      background: #f4f2ec;
+    }
+
+    .nav-profile-dropdown .logout-item {
+      color: var(--coral) !important;
+    }
+
+    .nav-profile-dropdown .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 4px 2px;
+    }
 
     /* ── POPOVER ── */
     .cart-popover {
@@ -410,12 +623,16 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 991px) {
       .search-wrap {
-        margin: 0.8rem 0;
+        margin: 0.8rem 0 0;
         max-width: 100%;
       }
 
       .cart-popover {
         display: none !important;
+      }
+
+      .nav-account-wrap {
+        margin-left: auto;
       }
     }
 
@@ -490,10 +707,48 @@
       </form>
     </div>
 
-    <div class="nav-item-profile"> 
-      <a href="{% url 'shop:profile' %}">profile</a>
+    <!-- ACCOUNT: login pill or profile dropdown -->
+    <div class="nav-account-wrap">
+      {% if request.user.is_authenticated %}
+      <div class="nav-profile" tabindex="0">
+        <a href="{% url 'shop:profile' %}" class="nav-profile-trigger">
+          <span class="nav-profile-avatar">{{ request.user.username|slice:":1"|upper }}</span>
+          {{ request.user.first_name|default:request.user.username }}
+          <svg class="nav-profile-caret" viewBox="0 0 24 24">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </a>
+        <div class="nav-profile-dropdown">
+          <a href="{% url 'shop:profile' %}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+            </svg>
+            My account
+          </a>
+          <div class="divider"></div>
+          <form action="{% url 'shop:logout' %}" method="post" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" class="logout-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+              </svg>
+              Logout
+            </button>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <a href="{% url 'shop:login' %}" class="nav-login-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
+        </svg>
+        Login
+      </a>
+      {% endif %}
     </div>
-
 
   </nav>
 
