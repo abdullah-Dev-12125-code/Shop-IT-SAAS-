@@ -6,6 +6,63 @@
     ribbon       -> "hot" | "top" | "festival"  (adds the corner ribbon)
     ribbon_label -> text shown on the ribbon, e.g. "Hot", "Bestseller", "Eid Special"
 {% endcomment %}
+
+<style>
+.btn-view {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+
+    color: var(--teal);
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+
+    transition: all .25s ease;
+}
+
+.btn-view svg {
+    width: 21px;
+    height: 21px;
+}
+
+/* Eye outline */
+.eye-shape {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+}
+
+/* Pupil */
+.eye-pupil {
+    fill: currentColor;
+}
+
+/* Small shine */
+.eye-glow {
+    fill: white;
+}
+
+
+/* Hover */
+.btn-view:hover {
+    background: var(--teal);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(15,110,92,.25);
+}
+
+.btn-view:hover .eye-glow {
+    fill: var(--teal);
+}
+
+
+</style>
 <div class="card">
   <div class="card-img-wrap">
     {% if ribbon %}<span class="ribbon {{ ribbon }}">{{ ribbon_label }}</span>{% endif %}
@@ -48,7 +105,15 @@
     </div>
 
     <div class="btn-row">
-      <a href="{% url 'shop:product' item.id %}" class="btn-view" title="View product">👁</a>
+      <a href="{% url 'shop:product' item.id %}" class="btn-view" title="View product">
+        <svg viewBox="0 0 24 24">
+        <path class="eye-shape"
+            d="M2.2 12C4.4 7.8 7.8 5.5 12 5.5S19.6 7.8 21.8 12C19.6 16.2 16.2 18.5 12 18.5S4.4 16.2 2.2 12Z" />
+
+        <circle class="eye-pupil" cx="12" cy="12" r="3.2" />
+        <circle class="eye-glow" cx="13.2" cy="10.8" r="1" />
+    </svg>
+    </a>
       <button class="btn-cart"
         data-id="{{ item.id }}"
         data-name="{{ item.product_name|escapejs }}"

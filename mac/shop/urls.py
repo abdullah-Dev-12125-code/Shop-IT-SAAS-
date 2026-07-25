@@ -22,6 +22,7 @@ path('profile/', views.profile, name="profile"),
 path('signup/', views.signup_user, name="signup"),
 path('login/', views.login_user, name="login"),
 path('logout/', views.logout_user, name="logout"),
-path('forgot/', views.forgot_pass, name="forgot")
+path('forgot/', views.forgot_pass, name="forgot"),
+path('verify/', views.verification, name="verification")
 ]
 

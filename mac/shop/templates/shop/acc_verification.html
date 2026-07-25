@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset password — Shop IT</title>
+    <title>Verify your email — Shop IT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
@@ -35,7 +35,6 @@
             color: var(--ink);
             background: var(--paper);
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         .mono {
@@ -44,17 +43,12 @@
 
         /* ================= SHELL ================= */
         .auth-shell {
-            display: flex;
+            display: grid;
+            grid-template-columns: 42% 58%;
             min-height: 100vh;
         }
 
-        /* ================= LEFT BRAND PANEL =================
-           This is the page's entrance animation: the panel starts at
-           100% width (fully covering the page, like it just slid in
-           from the left) and shrinks down to its resting 42% a moment
-           after load, revealing the form. Same visual language as the
-           signup page's transition, just played once on page load
-           instead of on a click. */
+        /* ================= LEFT BRAND PANEL ================= */
         .auth-panel {
             position: relative;
             background: linear-gradient(160deg, var(--teal-deep), #0d3d33 70%, #0a2e27);
@@ -64,8 +58,6 @@
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
-            flex: 0 0 100%;
-            transition: flex-basis .65s cubic-bezier(.65, 0, .35, 1);
         }
 
         .auth-panel::before {
@@ -172,21 +164,30 @@
             stroke-linejoin: round;
         }
 
-        /* ================= RIGHT FORM SIDE =================
-           Hidden until the panel has retreated, then fades in. */
+        /* ================= RIGHT FORM SIDE ================= */
         .auth-form-wrap {
-            flex: 1 1 auto;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 40px 24px;
-            opacity: 0;
-            transition: opacity .4s ease .2s;
         }
 
         .auth-card {
             width: 100%;
             max-width: 380px;
+            animation: cardIn .5s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .auth-card .eyebrow {
@@ -213,6 +214,11 @@
             margin-bottom: 28px;
         }
 
+        .auth-card .sub strong {
+            color: var(--ink);
+            font-weight: 700;
+        }
+
         .auth-alert {
             background: #fdeee9;
             border: 1px solid #f3c2b0;
@@ -235,56 +241,57 @@
             margin-bottom: 20px;
         }
 
-        .field-error {
-            color: var(--coral);
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 6px;
+        /* ============= VERIFICATION CODE INPUT =============
+           Six single-character boxes rather than one text field — the
+           usual pattern for a code sent by email/SMS. JS keeps a hidden
+           "code" input in sync so the form still posts one clean value. */
+        .otp-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
         }
 
-        .field {
-            margin-bottom: 18px;
-        }
-
-        .field label {
-            display: block;
-            font-size: 11.5px;
+        .otp-digit {
+            flex: 1;
+            height: 58px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
             font-weight: 700;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            color: #4b4a44;
-            margin-bottom: 7px;
-        }
-
-        .field input {
-            width: 100%;
-            height: 46px;
+            color: var(--ink);
             border: 1.5px solid var(--line);
             border-radius: 10px;
-            padding: 0 14px;
-            font-size: 14.5px;
-            font-family: inherit;
-            color: var(--ink);
             background: #fff;
             outline: none;
             transition: border-color .15s ease, box-shadow .15s ease;
         }
 
-        .field input.has-error {
-            border-color: var(--coral);
-        }
-
-        .field input::placeholder {
-            color: #b7b4aa;
-        }
-
-        .field input:focus {
+        .otp-digit:focus {
             border-color: var(--teal);
             box-shadow: 0 0 0 3px rgba(15, 110, 92, .12);
         }
 
-        .field input.has-error:focus {
+        .otp-digit.has-error {
+            border-color: var(--coral);
+        }
+
+        .otp-digit.has-error:focus {
             box-shadow: 0 0 0 3px rgba(232, 84, 47, .12);
+        }
+
+        .field-error {
+            color: var(--coral);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 6px;
+            margin-bottom: 18px;
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px;
+            margin-bottom: 26px;
         }
 
         .auth-submit {
@@ -363,6 +370,28 @@
             text-decoration: underline;
         }
 
+        /* Resend row: plain button so it can be disabled/re-enabled by
+           the countdown without touching form submission at all. */
+        .resend-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: inherit;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--teal);
+            cursor: pointer;
+        }
+
+        .resend-btn:hover:not(:disabled) {
+            text-decoration: underline;
+        }
+
+        .resend-btn:disabled {
+            color: var(--muted);
+            cursor: default;
+        }
+
         .back-home {
             display: inline-flex;
             align-items: center;
@@ -385,32 +414,15 @@
             stroke-width: 2;
         }
 
-        /* ============================================================
-           ENTRANCE STATE
-           JS adds .revealed to .auth-shell a moment after load. Until
-           then the panel fills the screen; once added, the panel
-           shrinks to 42% and the form fades in. This is the only state
-           toggle on this page — everything else is the resting layout.
-           ============================================================ */
-        .auth-shell.revealed .auth-panel {
-            flex-basis: 42%;
-        }
-
-        .auth-shell.revealed .auth-form-wrap {
-            opacity: 1;
-        }
-
         /* ================= RESPONSIVE ================= */
         @media (max-width: 900px) {
             .auth-shell {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
 
             .auth-panel {
                 padding: 32px 28px;
-                flex: 0 0 auto;
-                min-height: 100vh;
-                transition: min-height .65s cubic-bezier(.65, 0, .35, 1);
+                min-height: 260px;
             }
 
             .panel-mid h1 {
@@ -426,8 +438,9 @@
                 bottom: -100px;
             }
 
-            .auth-shell.revealed .auth-panel {
-                min-height: 260px;
+            .otp-digit {
+                height: 50px;
+                font-size: 19px;
             }
         }
 
@@ -449,9 +462,9 @@
             </a>
 
             <div class="panel-mid">
-                <div class="panel-eyebrow">Account recovery</div>
-                <h1>Let's get you back into your account.</h1>
-                <p>We'll email you a secure link to set a new password — it only takes a minute.</p>
+                <div class="panel-eyebrow">Verify it's you</div>
+                <h1>One more step to secure your account.</h1>
+                <p>We just want to make sure this email really belongs to you before we finish setting things up.</p>
             </div>
 
             <div class="panel-features">
@@ -488,9 +501,11 @@
                     Back to shop
                 </a>
 
-                <div class="eyebrow">Account recovery</div>
-                <h1>Reset your password</h1>
-                <p class="sub">Enter the email on your account and we'll send you a link to reset it.</p>
+                <div class="eyebrow">Verification</div>
+                <h1>Enter your code</h1>
+                <p class="sub">
+                    We sent a 6-digit code to <strong>{{ email }}</strong>. Enter it below to continue.
+                </p>
 
                 {% if success %}
                 <div class="auth-success">{{ success }}</div>
@@ -500,20 +515,37 @@
                 <div class="auth-alert">{{ error }}</div>
                 {% endif %}
 
-                <form method="POST" id="forgot-password-form" novalidate>
+                <form method="POST" id="verify-form" novalidate>
                     {% csrf_token %}
 
-                    <div class="field">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="youremail@example.com"
-                            autocomplete="email" autofocus required>
-                        {% if form.email.errors %}
-                        <div class="field-error">{{ form.email.errors.0 }}</div>
-                        {% endif %}
+                    <!-- The 6 boxes are purely visual/UX; their digits are
+                         combined into this single hidden field on submit,
+                         so the backend just reads request.POST['code']. -->
+                    <input type="hidden" name="code" id="code-hidden">
+
+                    <div class="otp-row" id="otp-row">
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit"
+                            data-index="0" autocomplete="one-time-code" autofocus>
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit"
+                            data-index="1">
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit"
+                            data-index="2">
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit"
+                            data-index="3">
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit"
+                            data-index="4">
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit"
+                            data-index="5">
                     </div>
 
-                    <button type="submit" class="auth-submit">
-                        <a href="{% url 'shop:verification' %}">Send reset link</a>
+                    {% if form.code.errors %}
+                    <div class="field-error">{{ form.code.errors.0 }}</div>
+                    {% else %}
+                    <div class="field-hint">The code expires in 10 minutes.</div>
+                    {% endif %}
+
+                    <button type="submit" class="auth-submit" id="verify-submit-btn">
+                        Verify code
                         <svg viewBox="0 0 24 24">
                             <path d="M5 12h14M13 6l6 6-6 6" />
                         </svg>
@@ -523,7 +555,14 @@
                 <div class="auth-divider">or</div>
 
                 <div class="auth-footer">
-                    Remembered it? <a href="{% url 'shop:signup' %}">Back to sign in</a>
+                    Didn't get it?
+                    <!-- Resend re-submits to the same view with a "resend"
+                         flag; swap the action/name to match your endpoint. -->
+                    <form method="POST" id="resend-form" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="resend" value="1">
+                        <button type="submit" class="resend-btn" id="resend-btn">Resend code</button>
+                    </form>
                 </div>
 
             </div>
@@ -533,22 +572,88 @@
 
     <script>
         // =====================================================================
-        // Entrance animation: the panel starts covering the whole page (as if
-        // it had just slid in) and shrinks to its resting 42% a beat after
-        // load, revealing the form. Double requestAnimationFrame makes sure
-        // the browser paints the "covering" state on screen for at least one
-        // frame before the transition to 42% starts — otherwise the browser
-        // can collapse the two states and the panel would just appear already
-        // open, with no visible slide. Only a class toggle, no reload.
+        // Verification code UX:
+        // 1. Auto-advance to the next box as each digit is typed, and move
+        //    back on backspace when a box is already empty.
+        // 2. Support pasting a full 6-digit code into any box.
+        // 3. Keep a hidden "code" input in sync with the 6 boxes so the form
+        //    posts one plain value.
+        // 4. Auto-submit once all 6 digits are filled.
+        // 5. A 60s countdown disables "Resend code" right after this page
+        //    loads, so people aren't tempted to spam it — it re-enables on
+        //    its own once the countdown finishes.
         // =====================================================================
-        window.addEventListener('DOMContentLoaded', function () {
-            var shell = document.querySelector('.auth-shell');
-            requestAnimationFrame(function () {
-                requestAnimationFrame(function () {
-                    shell.classList.add('revealed');
+        (function () {
+            const boxes = Array.from(document.querySelectorAll('.otp-digit'));
+            const hiddenCode = document.getElementById('code-hidden');
+            const verifyForm = document.getElementById('verify-form');
+
+            function syncHiddenValue() {
+                hiddenCode.value = boxes.map(function (b) { return b.value; }).join('');
+            }
+
+            boxes.forEach(function (box, i) {
+                box.addEventListener('input', function () {
+                    box.value = box.value.replace(/[^0-9]/g, '').slice(0, 1);
+                    box.classList.remove('has-error');
+
+                    if (box.value && i < boxes.length - 1) {
+                        boxes[i + 1].focus();
+                    }
+
+                    syncHiddenValue();
+
+                    if (boxes.every(function (b) { return b.value.length === 1; })) {
+                        verifyForm.submit();
+                    }
+                });
+
+                box.addEventListener('keydown', function (e) {
+                    if (e.key === 'Backspace' && !box.value && i > 0) {
+                        boxes[i - 1].focus();
+                    }
+                });
+
+                box.addEventListener('paste', function (e) {
+                    const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+                    if (!pasted) return;
+                    e.preventDefault();
+
+                    pasted.slice(0, boxes.length).split('').forEach(function (digit, idx) {
+                        if (boxes[idx]) boxes[idx].value = digit;
+                    });
+
+                    syncHiddenValue();
+                    const nextEmpty = boxes.findIndex(function (b) { return !b.value; });
+                    (nextEmpty === -1 ? boxes[boxes.length - 1] : boxes[nextEmpty]).focus();
+
+                    if (boxes.every(function (b) { return b.value.length === 1; })) {
+                        verifyForm.submit();
+                    }
                 });
             });
-        });
+
+            verifyForm.addEventListener('submit', syncHiddenValue);
+
+            // ----- Resend countdown -----
+            const resendBtn = document.getElementById('resend-btn');
+            const resendDefaultLabel = 'Resend code';
+            let secondsLeft = 60;
+
+            function tickCountdown() {
+                if (secondsLeft <= 0) {
+                    resendBtn.disabled = false;
+                    resendBtn.textContent = resendDefaultLabel;
+                    return;
+                }
+                resendBtn.disabled = true;
+                resendBtn.textContent = 'Resend in ' + secondsLeft + 's';
+                secondsLeft -= 1;
+                setTimeout(tickCountdown, 1000);
+            }
+
+            tickCountdown();
+        })();
     </script>
 
 </body>

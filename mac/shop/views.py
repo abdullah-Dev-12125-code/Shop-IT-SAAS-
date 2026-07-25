@@ -88,6 +88,9 @@ def login_user(request):
 def forgot_pass(request):
     return render(request, 'shop/forgot.html')
 
+def verification(request):
+    return render(request, 'shop/acc_verification.html')
+
 def logout_user(request):
     logout(request)
     return redirect('shop:login')
