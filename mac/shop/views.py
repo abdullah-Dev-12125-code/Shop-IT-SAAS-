@@ -11,29 +11,56 @@ import json
 
 def signup_user(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        
-        if password1 != password2:
-            error = {"error": "Password didn't matched"}
-            return render(request, 'shop/signup.html', error)
-        
+
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
+
+        errors = None
+
+        if not username:
+            errors = "The username field is required"
+
+        elif not email:
+            errors = "The email field is required"
+
+        elif not password1:
+            errors = "The password field is empty"
+
+        elif not password2:
+            errors = "The confirmation password is empty"
+
+        elif password1 != password2:
+            errors = "Passwords do not match"
+
         elif User.objects.filter(username=username).exists():
-            error = {"error": "User with that name already exists"}
-            return render(request, 'shop/signup.html', error)
-        
+            errors = "Username already exists"
+
         elif User.objects.filter(email=email).exists():
-            error = {"error": "User with that email exists"}
-            return render(request, 'shop/signup.html', error)
+            errors = "Email already exists"
 
-        else:
-            user = User.objects.create_user(username=username,email=email, password=password1)
-            login(request, user)
-            return redirect('shop:shop')        
+        if errors:
+            return render(
+                request,
+                "shop/signup.html",
+                {"error": errors}
+            )
 
-    return render(request, 'shop/signup.html')
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password1
+        )
+
+        login(request, user)
+
+        return redirect("shop:shop")
+
+
+    return render(request, "shop/signup.html")
+
 
 def login_user(request):
     if request.method == 'POST':
@@ -57,6 +84,9 @@ def login_user(request):
         return render(request, 'shop/login.html', {'error': 'Invalid email or password.'})
     
     return render(request, 'shop/login.html')
+
+def forgot_pass(request):
+    return render(request, 'shop/forgot.html')
 
 def logout_user(request):
     logout(request)

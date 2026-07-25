@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset password — Shop IT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #12151c;
+            --paper: #fbfaf8;
+            --teal: #0f6e5c;
+            --teal-deep: #0a4f42;
+            --gold: #c9932e;
+            --coral: #e8542f;
+            --line: #e6e3dc;
+            --muted: #6f6d64;
+            --radius: 14px;
+            --shadow-soft: 0 8px 24px rgba(18, 21, 28, .07);
+            --shadow-hover: 0 16px 36px rgba(18, 21, 28, .14);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            background: var(--paper);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ================= SHELL ================= */
+        .auth-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ================= LEFT BRAND PANEL =================
+           This is the page's entrance animation: the panel starts at
+           100% width (fully covering the page, like it just slid in
+           from the left) and shrinks down to its resting 42% a moment
+           after load, revealing the form. Same visual language as the
+           signup page's transition, just played once on page load
+           instead of on a click. */
+        .auth-panel {
+            position: relative;
+            background: linear-gradient(160deg, var(--teal-deep), #0d3d33 70%, #0a2e27);
+            color: #fff;
+            padding: 48px 52px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            flex: 0 0 100%;
+            transition: flex-basis .65s cubic-bezier(.65, 0, .35, 1);
+        }
+
+        .auth-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(115deg,
+                    rgba(255, 255, 255, 0.035) 0px,
+                    rgba(255, 255, 255, 0.035) 2px,
+                    transparent 2px,
+                    transparent 26px);
+            pointer-events: none;
+        }
+
+        .auth-panel::after {
+            content: "“";
+            position: absolute;
+            font-family: 'Fraunces', serif;
+            font-size: 480px;
+            line-height: 1;
+            color: var(--gold);
+            opacity: 0.08;
+            right: -60px;
+            bottom: -140px;
+            pointer-events: none;
+        }
+
+        .brand-mark {
+            position: relative;
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-mark span {
+            color: var(--gold);
+        }
+
+        .panel-mid {
+            position: relative;
+            max-width: 380px;
+        }
+
+        .panel-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .panel-mid h1 {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 34px;
+            line-height: 1.2;
+            letter-spacing: -0.4px;
+            margin-bottom: 14px;
+        }
+
+        .panel-mid p {
+            font-size: 14.5px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        .panel-features {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13.5px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .panel-feature .icn {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .panel-feature svg {
+            width: 15px;
+            height: 15px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ================= RIGHT FORM SIDE =================
+           Hidden until the panel has retreated, then fades in. */
+        .auth-form-wrap {
+            flex: 1 1 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            opacity: 0;
+            transition: opacity .4s ease .2s;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .auth-card .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--teal);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .auth-card h1 {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 30px;
+            letter-spacing: -0.4px;
+            margin-bottom: 6px;
+        }
+
+        .auth-card .sub {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .auth-alert {
+            background: #fdeee9;
+            border: 1px solid #f3c2b0;
+            color: var(--coral);
+            font-size: 13.5px;
+            font-weight: 600;
+            padding: 11px 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .auth-success {
+            background: #eaf5f1;
+            border: 1px solid #b9dcd0;
+            color: var(--teal-deep);
+            font-size: 13.5px;
+            font-weight: 600;
+            padding: 11px 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .field-error {
+            color: var(--coral);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #4b4a44;
+            margin-bottom: 7px;
+        }
+
+        .field input {
+            width: 100%;
+            height: 46px;
+            border: 1.5px solid var(--line);
+            border-radius: 10px;
+            padding: 0 14px;
+            font-size: 14.5px;
+            font-family: inherit;
+            color: var(--ink);
+            background: #fff;
+            outline: none;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .field input.has-error {
+            border-color: var(--coral);
+        }
+
+        .field input::placeholder {
+            color: #b7b4aa;
+        }
+
+        .field input:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(15, 110, 92, .12);
+        }
+
+        .field input.has-error:focus {
+            box-shadow: 0 0 0 3px rgba(232, 84, 47, .12);
+        }
+
+        .auth-submit {
+            width: 100%;
+            height: 48px;
+            background: linear-gradient(135deg, var(--coral), #d1451e);
+            color: #fff;
+            border: none;
+            border-radius: 11px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: opacity .2s ease, transform .1s ease;
+            box-shadow: 0 8px 20px rgba(232, 84, 47, .28);
+        }
+
+        .auth-submit:hover {
+            opacity: .92;
+        }
+
+        .auth-submit:active {
+            transform: scale(.98);
+        }
+
+        .auth-submit:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-submit svg {
+            width: 16px;
+            height: 16px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 26px 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+
+        .auth-footer {
+            text-align: center;
+            font-size: 13.5px;
+            color: var(--muted);
+        }
+
+        .auth-footer a {
+            color: var(--teal);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 28px;
+        }
+
+        .back-home:hover {
+            color: var(--ink);
+        }
+
+        .back-home svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* ============================================================
+           ENTRANCE STATE
+           JS adds .revealed to .auth-shell a moment after load. Until
+           then the panel fills the screen; once added, the panel
+           shrinks to 42% and the form fades in. This is the only state
+           toggle on this page — everything else is the resting layout.
+           ============================================================ */
+        .auth-shell.revealed .auth-panel {
+            flex-basis: 42%;
+        }
+
+        .auth-shell.revealed .auth-form-wrap {
+            opacity: 1;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 900px) {
+            .auth-shell {
+                flex-direction: column;
+            }
+
+            .auth-panel {
+                padding: 32px 28px;
+                flex: 0 0 auto;
+                min-height: 100vh;
+                transition: min-height .65s cubic-bezier(.65, 0, .35, 1);
+            }
+
+            .panel-mid h1 {
+                font-size: 26px;
+            }
+
+            .panel-features {
+                display: none;
+            }
+
+            .auth-panel::after {
+                font-size: 300px;
+                bottom: -100px;
+            }
+
+            .auth-shell.revealed .auth-panel {
+                min-height: 260px;
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="auth-shell">
+
+        <!-- LEFT BRAND PANEL -->
+        <aside class="auth-panel">
+            <a href="#">
+                <div class="brand-mark">Shop<span>IT</span></div>
+            </a>
+
+            <div class="panel-mid">
+                <div class="panel-eyebrow">Account recovery</div>
+                <h1>Let's get you back into your account.</h1>
+                <p>We'll email you a secure link to set a new password — it only takes a minute.</p>
+            </div>
+
+            <div class="panel-features">
+                <div class="panel-feature">
+                    <span class="icn"><svg viewBox="0 0 24 24">
+                            <path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" />
+                        </svg></span>
+                    Secure, encrypted checkout
+                </div>
+                <div class="panel-feature">
+                    <span class="icn"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M3 12l3-8h8l3 8M3 12v6a1 1 0 0 0 1 1h1m14-7v6a1 1 0 0 1-1 1h-1M7 19a2 2 0 1 0 4 0M17 19a2 2 0 1 0 4-.001" />
+                        </svg></span>
+                    Fast, trackable delivery
+                </div>
+                <div class="panel-feature">
+                    <span class="icn"><svg viewBox="0 0 24 24">
+                            <path d="M4 4v6h6M20 20v-6h-6M4 10a8 8 0 0 1 14.9-3M20 14a8 8 0 0 1-14.9 3" />
+                        </svg></span>
+                    Easy 30-day returns
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT FORM -->
+        <main class="auth-form-wrap">
+            <div class="auth-card">
+
+                <a href="/" class="back-home">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back to shop
+                </a>
+
+                <div class="eyebrow">Account recovery</div>
+                <h1>Reset your password</h1>
+                <p class="sub">Enter the email on your account and we'll send you a link to reset it.</p>
+
+                {% if success %}
+                <div class="auth-success">{{ success }}</div>
+                {% endif %}
+
+                {% if error %}
+                <div class="auth-alert">{{ error }}</div>
+                {% endif %}
+
+                <form method="POST" id="forgot-password-form" novalidate>
+                    {% csrf_token %}
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="youremail@example.com"
+                            autocomplete="email" autofocus required>
+                        {% if form.email.errors %}
+                        <div class="field-error">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="auth-submit">
+                        Send reset link
+                        <svg viewBox="0 0 24 24">
+                            <path d="M5 12h14M13 6l6 6-6 6" />
+                        </svg>
+                    </button>
+                </form>
+
+                <div class="auth-divider">or</div>
+
+                <div class="auth-footer">
+                    Remembered it? <a href="{% url 'shop:signup' %}">Back to sign in</a>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        // =====================================================================
+        // Entrance animation: the panel starts covering the whole page (as if
+        // it had just slid in) and shrinks to its resting 42% a beat after
+        // load, revealing the form. Double requestAnimationFrame makes sure
+        // the browser paints the "covering" state on screen for at least one
+        // frame before the transition to 42% starts — otherwise the browser
+        // can collapse the two states and the panel would just appear already
+        // open, with no visible slide. Only a class toggle, no reload.
+        // =====================================================================
+        window.addEventListener('DOMContentLoaded', function () {
+            var shell = document.querySelector('.auth-shell');
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    shell.classList.add('revealed');
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
