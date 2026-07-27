@@ -1,0 +1,230 @@
+{% extends 'shop/basic.html' %}
+
+{% block css %}
+<style>
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .wrapper h1 {
+        margin-top: 20px;
+        margin-bottom: 3px;
+        font-family: 'Fraunces', serif;
+        letter-spacing: 1px;
+    }
+
+    .wrapper span {
+        color: #666;
+        font-family: 'Gill Sans', sans-serif;
+        margin-bottom: 15px;
+    }
+
+    .order-page {
+        width: min(95%, 1200px);
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
+    }
+
+
+    /* Navigation */
+
+    .nav {
+        height: 55px;
+        background: #1f1e20;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-items ul {
+        display: flex;
+        gap: 50px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-items a {
+        color: white;
+        text-decoration: none;
+        font-family: 'Gill Sans', sans-serif;
+        transition: .2s;
+    }
+
+    .nav-items a:hover {
+        color: #4da3ff;
+    }
+
+
+    /* Orders */
+
+    .orders-content {
+        padding: 20px;
+    }
+
+    .orders-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+
+    .order-card {
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 18px;
+        transition: .25s;
+    }
+
+    .order-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .1);
+    }
+
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+
+    .order-header h3 {
+        margin: 0;
+        font-size: 17px;
+        font-family: 'Gill Sans', sans-serif;
+    }
+
+
+    .status {
+        background: #e8f7ed;
+        color: #218739;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+    }
+
+
+    .order-details {
+        margin-top: 15px;
+        color: #555;
+        font-family: 'Gill Sans', sans-serif;
+        font-size: 14px;
+    }
+
+    .order-details p {
+        margin: 6px 0;
+    }
+
+
+    .details-btn {
+        margin-top: 15px;
+        width: 100%;
+        padding: 8px;
+        border: none;
+        border-radius: 7px;
+        background: #1f1e20;
+        color: white;
+        cursor: pointer;
+    }
+
+    .details-btn:hover {
+        background: #4da3ff;
+    }
+
+
+    @media(max-width:900px) {
+        .orders-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media(max-width:600px) {
+        .orders-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .nav-items ul {
+            gap: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+
+    <div class="wrapper">
+
+        <h1>Orders</h1>
+        <span>We keep track of every order</span>
+
+
+        <div class="order-page">
+
+
+            <div class="nav">
+                <div class="nav-items">
+                    <ul>
+                        <li><a href="{% url 'shop:order-list' %}">Orders</a></li>
+                        <li><a href="#">Order History</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="orders-content">
+
+                <div class="orders-grid">
+
+                    {% for order in orders %}
+
+                    <div class="order-card">
+
+                        <div class="order-header">
+                            <h3>Order #{{ order.id }}</h3>
+                            <span class="status">
+                                Processing
+                            </span>
+                        </div>
+
+                        <div class="order-details">
+                            <p>Date: {{ order.created_at }}</p>
+                            <p>Total: Rs {{ order.total_price }}</p>
+                            <p>Payment: {{ order.payment_method }}</p>
+                            <p>Name: {{ order.first_name }} {{ order.last_name }}</p>
+                        </div>
+
+                        <button class="details-btn">
+                            View Details
+                        </button>
+
+                    </div>
+
+                    {% empty %}
+
+                    <p>No orders found.</p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -536,6 +536,7 @@ def create_order(request):
             payment_method = data["payment_method"],
             total_price = server_total,
             item_json = json.dumps(normalized_cart),
+            email_linked = request.user.email
         
         )
 
@@ -620,3 +621,12 @@ def search(request):
 def profile(request):
     user = 'abdullah'
     return render(request, 'shop/profile.html', {"user": user})
+
+@login_required
+def orders(request):
+    return render(request, 'shop/orders.html')
+
+def order_list(request):
+    orders = Order.objects.filter(email_linked=request.user.email)
+
+    return render(request, 'shop/orders.html', {"orders": orders})

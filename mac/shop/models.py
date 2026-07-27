@@ -48,6 +48,7 @@ class Contact(models.Model):
 
 
 class Order(models.Model):
+    email_linked = models.EmailField(null=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
