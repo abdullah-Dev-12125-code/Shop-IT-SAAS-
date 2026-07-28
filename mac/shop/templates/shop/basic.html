@@ -71,9 +71,7 @@
     a:hover {
       text-decoration: none;
       color: black;
-
     }
-
 
     /* ── NAVBAR ── */
     .navbar-custom {
@@ -98,17 +96,14 @@
 
     .navbar-brand img {
       height: 4rem;
-      /* Increased logo size */
       width: auto;
       object-fit: contain;
       flex-shrink: 0;
-      /* Prevents image from affecting text size */
     }
 
     .navbar-brand .brand-text {
       font-family: "Fraunces", serif;
       font-size: 1.35rem;
-      /* Text size stays same */
       font-weight: 600;
       color: var(--ink);
       letter-spacing: -0.3px;
@@ -117,6 +112,49 @@
 
     .navbar-brand .brand-text span {
       color: var(--teal);
+    }
+
+    /* ── NAVBAR ICON STYLING ── */
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2.2;
+      vertical-align: middle;
+      display: inline-block;
+      margin-right: 4px;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .nav-link .nav-icon {
+      opacity: 0.9;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .nav-link:hover .nav-icon {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .search-icon {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2.2;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .nav-login-btn .nav-icon,
+    .nav-profile-dropdown .nav-icon {
+      margin-right: 6px;
+    }
+
+    .nav-profile-dropdown .logout-item .nav-icon {
+      opacity: 0.8;
+    }
+
+    .nav-profile-dropdown .logout-item:hover .nav-icon {
+      opacity: 1;
     }
 
     .nav-link {
@@ -134,8 +172,6 @@
       color: var(--teal-deep) !important;
     }
 
-    /* ---------- Nav-links strip: slides on smaller screens instead of
-       disappearing into an unreachable Bootstrap collapse ---------- */
     .navbar-collapse {
       display: flex !important;
       flex-basis: auto;
@@ -230,6 +266,9 @@
       font-weight: 700;
       font-family: inherit;
       transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .search-btn:hover {
@@ -288,22 +327,14 @@
       background: transparent;
       white-space: nowrap;
       transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      cursor: pointer;
+      text-decoration: none;
     }
 
     .nav-login-btn:hover {
       background: var(--teal-tint);
       border-color: var(--teal);
       color: var(--teal-deep) !important;
-    }
-
-    .nav-login-btn svg {
-      width: 13px;
-      height: 13px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
     }
 
     .nav-profile {
@@ -322,6 +353,8 @@
       font-weight: 700;
       white-space: nowrap;
       transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      cursor: pointer;
+      text-decoration: none;
     }
 
     .nav-profile:hover .nav-profile-trigger,
@@ -359,7 +392,6 @@
       transform: rotate(180deg);
     }
 
-    /* invisible bridge so moving the cursor down to the dropdown doesn't close it */
     .nav-profile::after {
       content: "";
       position: absolute;
@@ -558,6 +590,188 @@
       background: var(--teal-deep);
     }
 
+    /* ════════════════════════════════════════════════════════════════ */
+    /* CATEGORY SUBNAV - SMOOTH SCROLLABLE STYLES */
+    /* ════════════════════════════════════════════════════════════════ */
+
+    .subnav-wrap {
+      padding: 0;
+      margin: 0;
+      background: var(--ink);
+      border-bottom: 1px solid #232733;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .subnav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+      padding: 0 16px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+      position: relative;
+    }
+
+    /* WEBKIT SCROLLBAR (Chrome, Safari, Edge) */
+    .subnav::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .subnav::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .subnav::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .subnav::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    /* CATEGORY PILLS */
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      color: #cfd3dc;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 13px 16px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .category-pill:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .category-pill.is-active {
+      color: #fff;
+      border-bottom-color: var(--gold);
+    }
+
+    .category-pill.interest {
+      margin-left: auto;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .category-pill.interest:hover {
+      color: #ffd700;
+      transform: translateY(-2px);
+    }
+
+    /* CATEGORY ICON */
+    .cat-icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      display: inline-block;
+      flex-shrink: 0;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    /* SCROLL SNAP */
+    .subnav {
+      scroll-snap-type: x proximity;
+    }
+
+    .category-pill {
+      scroll-snap-align: start;
+      scroll-snap-stop: auto;
+    }
+
+    /* ACCESSIBILITY */
+    .category-pill:focus,
+    .nav-link:focus {
+      outline: 2px solid var(--gold);
+      outline-offset: -2px;
+      border-radius: 4px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .subnav {
+        padding: 0 12px;
+      }
+
+      .category-pill {
+        font-size: 12.5px;
+        padding: 11px 12px;
+      }
+
+      .search-wrap {
+        margin: 0.8rem 0 0;
+        max-width: 100%;
+      }
+
+      .cart-popover {
+        display: none !important;
+      }
+
+      .nav-account-wrap {
+        margin-left: auto;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .category-pill {
+        font-size: 12px;
+        padding: 10px 10px;
+        gap: 5px;
+      }
+
+      .category-pill span {
+        display: none;
+      }
+
+      .category-pill.is-active span,
+      .category-pill.interest span {
+        display: inline;
+      }
+
+      .cat-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      .nav-icon {
+        width: 14px;
+        height: 14px;
+        margin-right: 3px;
+      }
+
+      .subnav {
+        padding: 0 8px;
+        gap: 2px;
+      }
+
+      .search-wrap {
+        max-width: 100%;
+      }
+
+      .footer-container {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+    }
+
     /* ── FOOTER ── */
     .site-footer {
       background: var(--ink);
@@ -620,22 +834,6 @@
       color: #6b7280;
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 991px) {
-      .search-wrap {
-        margin: 0.8rem 0 0;
-        max-width: 100%;
-      }
-
-      .cart-popover {
-        display: none !important;
-      }
-
-      .nav-account-wrap {
-        margin-left: auto;
-      }
-    }
-
     @media (max-width: 768px) {
       .footer-container {
         flex-direction: column;
@@ -646,6 +844,22 @@
 
   {% block css %}{% endblock %}
 </head>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  });
+
+  window.addEventListener('cartUpdated', function() {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  });
+</script>
 
 <body>
 
@@ -660,18 +874,42 @@
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav ml-auto align-items-lg-center">
 
-        <li class="nav-item"><a class="nav-link" href="{% url 'shop:home' %}">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'shop:shops' %}">Shop</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'shop:categories' %}">Categories</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'shop:orders' %}">Orders</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'shop:TrackUs' %}">Tracker</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'shop:contact' %}">Contact</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'shop:home' %}">
+            <i data-lucide="home" class="nav-icon"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'shop:shops' %}">
+            <i data-lucide="shopping-bag" class="nav-icon"></i> Shop
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'shop:categories' %}">
+            <i data-lucide="grid" class="nav-icon"></i> Categories
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'shop:orders' %}">
+            <i data-lucide="package" class="nav-icon"></i> Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'shop:TrackUs' %}">
+            <i data-lucide="truck" class="nav-icon"></i> Tracker
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'shop:contact' %}">
+            <i data-lucide="mail" class="nav-icon"></i> Contact
+          </a>
+        </li>
 
         <!-- CART -->
         <li class="nav-item cart-nav-item ml-lg-3">
           <a class="nav-link" href="{% url 'shop:cart' %}">
             <span class="cart-link-wrap">
-              🛒 Cart
+              <i data-lucide="shopping-cart" class="nav-icon"></i> Cart
               <span class="cart-badge cart-count">0</span>
             </span>
           </a>
@@ -703,7 +941,9 @@
         <div class="search-wrap ml-lg-3">
           <input class="search-box" type="text" name="search" value="{{ query|default:'' }}"
             placeholder="Search products…">
-          <button class="search-btn" type="submit">Search</button>
+          <button class="search-btn" type="submit">
+            <i data-lucide="search" class="search-icon"></i>
+          </button>
         </div>
       </form>
     </div>
@@ -721,21 +961,14 @@
         </a>
         <div class="nav-profile-dropdown">
           <a href="{% url 'shop:profile' %}">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-            </svg>
+            <i data-lucide="user" class="nav-icon"></i>
             My account
           </a>
           <div class="divider"></div>
           <form action="{% url 'shop:logout' %}" method="post" style="margin:0;">
             {% csrf_token %}
             <button type="submit" class="logout-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
-              </svg>
+              <i data-lucide="log-out" class="nav-icon"></i>
               Logout
             </button>
           </form>
@@ -743,15 +976,14 @@
       </div>
       {% else %}
       <a href="{% url 'shop:login' %}" class="nav-login-btn">
-        <svg viewBox="0 0 24 24">
-          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
-        </svg>
+        <i data-lucide="log-in" class="nav-icon"></i>
         Login
       </a>
       {% endif %}
     </div>
 
   </nav>
+
 
   <!-- CONTENT -->
   <main class="main-content">
@@ -788,11 +1020,6 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
   <script>
-    /*
-      CART STORAGE HELPERS
-      ────────────────────
-      CART_KEY must match exactly what index.html uses when saving items.
-    */
     const CART_KEY = "shopIT_cart";
     const LEGACY_CART_KEY = "cart";
 
@@ -825,29 +1052,17 @@
       window.dispatchEvent(new Event("cartUpdated"));
     }
 
-    /*
-      updateCartUI()
-      ──────────────
-      Reads localStorage and re-renders:
-        1. The red badge count on the navbar cart icon
-        2. The hover popover item list
-        3. The popover item count chip
-        4. The popover total price row
-    */
     function updateCartUI() {
       const cart = getCart();
       const totalQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
 
-      /* Badge on cart icon */
       document.querySelectorAll(".cart-count").forEach(el => {
         el.textContent = totalQty;
       });
 
-      /* Popover count chip */
       const countBadge = document.getElementById("cpop-count-badge");
       if (countBadge) countBadge.textContent = totalQty + " item" + (totalQty !== 1 ? "s" : "");
 
-      /* Popover item list */
       const list = document.getElementById("cpop-items-list");
       const totalRow = document.getElementById("cpop-total");
       const totalPrice = document.getElementById("cpop-total-price");
@@ -884,17 +1099,20 @@
       }[m]));
     }
 
-    /* Run on page load */
     document.addEventListener("DOMContentLoaded", updateCartUI);
-
-    /*
-      Listen for cart changes from other tabs / index page
-      (index.html dispatches a "cartUpdated" event after saving)
-    */
     window.addEventListener("cartUpdated", updateCartUI);
     window.addEventListener("storage", function (e) {
       if (e.key === CART_KEY) updateCartUI();
     });
+
+    // Smooth scrolling for category nav
+    const categoryNav = document.getElementById('categoryNav');
+    if (categoryNav) {
+      categoryNav.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        categoryNav.scrollLeft += e.deltaY;
+      }, { passive: false });
+    }
   </script>
 
   {% block js %}{% endblock %}

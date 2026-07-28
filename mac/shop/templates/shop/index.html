@@ -69,32 +69,63 @@ If a variable isn't provided the section simply won't render (guarded with
     display: flex;
     align-items: center;
     gap: 4px;
+
+    width: max-content;
+    min-width: 100%;
+
     overflow-x: auto;
-    scrollbar-width: none;
-    padding: 0 8px;
+    overflow-y: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, .25) transparent;
+
+    padding: 0 16px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .subnav::-webkit-scrollbar {
-    display: none;
+  .subnav {
+    touch-action: pan-x;
   }
+
+  /* Chrome / Edge / Safari */
+  .subnav::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .subnav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .subnav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .25);
+    border-radius: 10px;
+  }
+
 
   .subnav a {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     white-space: nowrap;
+    flex-shrink: 0;
+
     color: #cfd3dc;
     text-decoration: none;
     font-size: 13.5px;
     font-weight: 600;
     padding: 13px 16px;
+
     border-bottom: 2px solid transparent;
-    transition: color .15s, border-color .15s;
+    transition: color .15s, border-color .15s, transform .1s;
   }
 
+
   .subnav a:hover {
-    color: #fff;
+    color: white;
+    transform: translateY(-2px);
   }
+
 
   .subnav a.is-active {
     color: #fff;
@@ -102,7 +133,6 @@ If a variable isn't provided the section simply won't render (guarded with
   }
 
   .subnav a.interest {
-    margin-left: auto;
     color: var(--gold);
   }
 
@@ -677,17 +707,32 @@ If a variable isn't provided the section simply won't render (guarded with
 </style>
 {% endblock %}
 
-{% block body %}
 
+{% block body %}
 <div class="subnav-wrap">
-  <div class="container">
-    <nav class="subnav">
+  <div class="container-fluid">
+    <nav class="subnav" id="categoryNav">
+
       {% for cat in categories %}
-      <a href="?category={{ cat.slug }}" class="{% if request.GET.category == cat.slug %}is-active{% endif %}">
-        <span>{{ cat.icon|default:"🛍" }}</span>{{ cat.name }}
+      <a href="?category={{ cat.slug }}"
+        class="category-pill {% if request.GET.category == cat.slug %}is-active{% endif %}" title="{{ cat.name }}">
+
+        {% if cat.icon %}
+        <i data-lucide="{{ cat.icon }}" class="cat-icon"></i>
+        {% else %}
+        <i data-lucide="shopping-bag" class="cat-icon"></i>
+        {% endif %}
+
+        <span>{{ cat.name }}</span>
       </a>
       {% endfor %}
-      <a href="#" class="interest">For You</a>
+
+
+      <a href="?interest=1" class="category-pill interest" title="For You">
+        <i data-lucide="star" class="cat-icon"></i>
+        <span>For You</span>
+      </a>
+
     </nav>
   </div>
 </div>
@@ -726,31 +771,7 @@ If a variable isn't provided the section simply won't render (guarded with
   </div>
   {% endif %}
 
-  {# ---------------- Shelf: Most Bought / Must-Buy ---------------- #}
-  {% if top_purchased %}
-  <div class="shelf top">
-    <div class="shelf-head">
-      <div class="title-group">
-        <span class="shelf-tag">✓ Top</span>
-        <h3>Most Bought</h3>
-        <span class="sub">customer favorites, must-buy picks</span>
-      </div>
-      <div class="shelf-actions">
-        <button class="shelf-action shelf-nav" type="button" data-shelf-target="top" data-direction="prev"
-          aria-label="Scroll most bought shelf left">‹</button>
-        <button class="shelf-action shelf-nav" type="button" data-shelf-target="top" data-direction="next"
-          aria-label="Scroll most bought shelf right">›</button>
-      </div>
-    </div>
-    <div class="shelf-scroll" data-shelf-scroll="top">
-      {% for item in top_purchased %}
-      <div class="card-slot">
-        {% include "shop/_product_card.html" with item=item ribbon="top" ribbon_label="Bestseller" %}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  {% endif %}
+
 
   {# ---------------- Category shelves: grouped by category ---------------- #}
   {% if allprods %}
@@ -843,10 +864,7 @@ If a variable isn't provided the section simply won't render (guarded with
 {% block js %}
 <script>
   (() => {
-    const CART_KEY = "shopIT_cart";
     const WISH_KEY = "shopIT_wishlist";
-    const getCart = () => JSON.parse(localStorage.getItem(CART_KEY)) || [];
-    const saveCart = (cart) => { localStorage.setItem(CART_KEY, JSON.stringify(cart)); window.dispatchEvent(new Event("cartUpdated")); };
     const getWishlist = () => JSON.parse(localStorage.getItem(WISH_KEY)) || [];
     const saveWishlist = (w) => localStorage.setItem(WISH_KEY, JSON.stringify(w));
 
@@ -943,5 +961,7 @@ If a variable isn't provided the section simply won't render (guarded with
       });
     });
   })();
+
+
 </script>
 {% endblock %}

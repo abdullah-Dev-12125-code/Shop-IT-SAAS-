@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
     /* ============================================================
-       Shares the same token system as the rest of Shop IT:
+       Shop IT Design System - Enhanced with Animations
        Brand red #e8002d | Ink #111827 | Muted #6b7280 | Border #e8e8e8
        Display/body: Inter | Codes: IBM Plex Mono
        ============================================================ */
@@ -13,47 +13,108 @@
 
     * { box-sizing: border-box; }
 
+    :root {
+        --brand-red: #e8002d;
+        --brand-orange: #ff5a1f;
+        --ink: #111827;
+        --muted: #6b7280;
+        --border: #e8e8e8;
+        --bg-light: #fafafa;
+        --bg-card: #fff;
+        --success: #16a34a;
+        --success-light: #f0faf4;
+    }
+
     .profile-wrap {
         font-family: 'Inter', system-ui, sans-serif;
-        color: #111827;
-        max-width: 1000px;
+        color: var(--ink);
+        max-width: 1100px;
         margin: 0 auto;
         padding: 40px 20px 80px;
     }
 
-    /* ---------------- Cover + avatar ---------------- */
+    /* ============= Animations ============= */
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+
+    /* ============= Cover + Avatar ============= */
     .profile-cover {
         position: relative;
-        height: 150px;
-        border-radius: 18px;
-        background: linear-gradient(135deg, #ff5a1f, #e8002d);
+        height: 180px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
         background-image:
             repeating-linear-gradient(120deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 2px, transparent 2px, transparent 14px),
-            linear-gradient(135deg, #ff5a1f, #e8002d);
+            linear-gradient(135deg, var(--brand-orange), var(--brand-red));
         overflow: visible;
+        box-shadow: 0 8px 32px rgba(232, 0, 45, 0.15);
+        animation: slideInDown 0.6s ease-out;
     }
 
     .cover-edit {
         position: absolute;
-        top: 14px;
-        right: 14px;
+        top: 16px;
+        right: 16px;
         display: flex;
         align-items: center;
         gap: 6px;
-        background: rgba(255, 255, 255, 0.16);
-        backdrop-filter: blur(4px);
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
         color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.35);
-        border-radius: 20px;
-        padding: 7px 14px;
-        font-size: 13px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 24px;
+        padding: 8px 16px;
+        font-size: 12.5px;
         font-weight: 600;
         text-decoration: none;
-        transition: background 0.15s ease;
+        transition: all 0.3s ease;
+        cursor: pointer;
     }
 
     .cover-edit:hover {
-        background: rgba(255, 255, 255, 0.28);
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .cover-edit i {
@@ -62,21 +123,27 @@
 
     .avatar-block {
         position: absolute;
-        left: 32px;
-        bottom: -46px;
+        left: 36px;
+        bottom: -54px;
         display: flex;
         align-items: flex-end;
-        gap: 18px;
+        gap: 20px;
+        animation: slideInUp 0.7s ease-out 0.2s both;
     }
 
     .avatar-ring {
-        width: 104px;
-        height: 104px;
+        width: 120px;
+        height: 120px;
         border-radius: 50%;
-        background: #fff;
-        padding: 4px;
-        box-shadow: 0 6px 18px rgba(17, 24, 39, 0.15);
+        background: var(--bg-card);
+        padding: 5px;
+        box-shadow: 0 12px 32px rgba(17, 24, 39, 0.18);
         flex-shrink: 0;
+        transition: transform 0.3s ease;
+    }
+
+    .avatar-ring:hover {
+        transform: scale(1.05);
     }
 
     .avatar-ring img {
@@ -87,282 +154,479 @@
         display: block;
     }
 
-    /* ---------------- Identity block ---------------- */
+    /* ============= Identity Block ============= */
     .identity {
-        margin-top: 62px;
+        margin-top: 70px;
         padding: 0 8px 28px;
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
         flex-wrap: wrap;
-        gap: 12px;
-        border-bottom: 1px solid #e8e8e8;
+        gap: 16px;
+        border-bottom: 2px solid var(--border);
+        animation: fadeIn 0.8s ease-out 0.3s both;
     }
 
     .identity h1 {
-        font-size: 26px;
+        font-size: 32px;
         font-weight: 800;
-        letter-spacing: -0.4px;
-        margin-bottom: 3px;
+        letter-spacing: -0.6px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
 
     .identity .handle {
-        font-size: 14px;
-        color: #6b7280;
+        font-size: 15px;
+        color: var(--muted);
         font-family: 'IBM Plex Mono', monospace;
+        display: block;
+        margin-top: 6px;
     }
 
     .verified {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-size: 11.5px;
+        gap: 5px;
+        font-size: 12px;
         font-weight: 700;
-        color: #16a34a;
-        background: #f0faf4;
-        border: 1px solid #b6e8c8;
-        border-radius: 20px;
-        padding: 3px 10px;
-        margin-left: 8px;
+        color: var(--success);
+        background: var(--success-light);
+        border: 1.5px solid #b6e8c8;
+        border-radius: 24px;
+        padding: 4px 12px;
         vertical-align: middle;
+        animation: scaleIn 0.5s ease-out 0.4s both;
     }
 
-    .verified i { font-size: 13px; }
+    .verified i { 
+        font-size: 14px;
+        animation: pulse 2s ease-in-out infinite;
+    }
 
-    /* ---------------- Layout ---------------- */
+    /* ============= Layout ============= */
     .profile-layout {
         display: grid;
-        grid-template-columns: 1fr 300px;
-        gap: 22px;
-        margin-top: 26px;
+        grid-template-columns: 1fr 320px;
+        gap: 28px;
+        margin-top: 28px;
         align-items: start;
     }
 
-    /* ---------------- Cards ---------------- */
+    /* ============= Cards ============= */
     .p-card {
-        background: #fff;
-        border: 1px solid #e8e8e8;
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
         margin-bottom: 20px;
         overflow: hidden;
+        animation: slideInUp 0.6s ease-out;
+        transition: all 0.3s ease;
+    }
+
+    .p-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        border-color: rgba(232, 0, 45, 0.2);
     }
 
     .p-card-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 16px 22px;
-        border-bottom: 1px solid #efefef;
-        background: #fafafa;
+        padding: 18px 24px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg-light);
     }
 
     .p-card-head h3 {
-        font-size: 14.5px;
+        font-size: 14px;
         font-weight: 700;
+        letter-spacing: 0.3px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
+        margin: 0;
+        text-transform: uppercase;
+        color: var(--ink);
     }
 
     .p-card-head h3 i {
-        color: #e8002d;
-        font-size: 17px;
+        color: var(--brand-red);
+        font-size: 18px;
+        transition: transform 0.3s ease;
+    }
+
+    .p-card-head:hover h3 i {
+        transform: scale(1.1);
     }
 
     .p-card-body {
-        padding: 22px;
+        padding: 24px;
     }
 
-    /* bio text */
+    /* Bio text */
     .bio-text {
-        font-size: 14.5px;
-        line-height: 1.75;
+        font-size: 15px;
+        line-height: 1.8;
         color: #374151;
+        margin: 0;
     }
 
     .bio-empty {
-        font-size: 13.5px;
-        color: #9ca3af;
+        font-size: 14px;
+        color: var(--muted);
         font-style: italic;
+        margin: 0;
     }
 
-    /* contact rows */
+    /* Contact rows */
     .info-row {
         display: flex;
         align-items: flex-start;
-        gap: 14px;
-        padding: 13px 0;
+        gap: 16px;
+        padding: 16px 0;
         border-bottom: 1px solid #f3f4f6;
+        transition: transform 0.2s ease;
+    }
+
+    .info-row:hover {
+        transform: translateX(4px);
     }
 
     .info-row:last-child { border-bottom: none; }
 
     .info-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        background: #fff0f0;
-        color: #e8002d;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: rgba(232, 0, 45, 0.08);
+        color: var(--brand-red);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        font-size: 17px;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .info-row:hover .info-icon {
+        background: rgba(232, 0, 45, 0.15);
+        transform: scale(1.1);
     }
 
     .info-text label {
         display: block;
-        font-size: 10.5px;
+        font-size: 11px;
         font-weight: 700;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: #9ca3af;
-        margin-bottom: 2px;
+        color: var(--muted);
+        margin-bottom: 4px;
     }
 
     .info-text .val {
-        font-size: 14.5px;
+        font-size: 15px;
         font-weight: 600;
-        color: #111827;
+        color: var(--ink);
     }
 
     .info-text .val.mono {
         font-family: 'IBM Plex Mono', monospace;
         font-weight: 500;
+        letter-spacing: 0.05em;
     }
 
     .info-text .val.muted {
-        color: #9ca3af;
+        color: var(--muted);
         font-weight: 500;
         font-style: italic;
     }
 
-    /* ---------------- Sidebar member card ---------------- */
+    /* ============= Sidebar ID Card ============= */
     .id-card {
-        background: #111827;
-        border-radius: 16px;
-        padding: 22px;
+        background: linear-gradient(135deg, var(--ink), #1a2332);
+        border-radius: 18px;
+        padding: 28px;
         color: #fff;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
         margin-bottom: 20px;
+        animation: scaleIn 0.6s ease-out 0.2s both;
     }
 
     .id-card::before {
         content: '';
         position: absolute;
-        top: -40px;
-        right: -40px;
-        width: 140px;
-        height: 140px;
+        top: -60px;
+        right: -60px;
+        width: 180px;
+        height: 180px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(232, 0, 45, 0.35), transparent 70%);
+        background: radial-gradient(circle, rgba(232, 0, 45, 0.4), transparent 70%);
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    .id-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%),
+            linear-gradient(-135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
+        pointer-events: none;
     }
 
     .id-card-label {
-        font-size: 10.5px;
-        letter-spacing: 0.12em;
+        font-size: 11px;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.55);
-        margin-bottom: 14px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 16px;
         position: relative;
+        font-weight: 700;
     }
 
     .id-card-avatar {
-        width: 56px;
-        height: 56px;
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid rgba(255, 255, 255, 0.25);
-        margin-bottom: 12px;
+        border: 3px solid rgba(232, 0, 45, 0.5);
+        margin-bottom: 16px;
         position: relative;
+        transition: transform 0.3s ease;
+    }
+
+    .id-card-avatar:hover {
+        transform: scale(1.08);
     }
 
     .id-card-name {
-        font-size: 16px;
-        font-weight: 700;
+        font-size: 18px;
+        font-weight: 800;
         position: relative;
+        margin: 0;
+        letter-spacing: -0.3px;
     }
 
     .id-card-id {
         font-family: 'IBM Plex Mono', monospace;
-        font-size: 12.5px;
-        color: rgba(255, 255, 255, 0.65);
-        margin-top: 3px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 6px;
         position: relative;
-        letter-spacing: 0.03em;
+        letter-spacing: 0.08em;
+        font-weight: 600;
     }
 
     .id-card-since {
-        margin-top: 16px;
-        padding-top: 14px;
+        margin-top: 20px;
+        padding-top: 16px;
         border-top: 1px dashed rgba(255, 255, 255, 0.2);
         display: flex;
         justify-content: space-between;
-        font-size: 12px;
+        font-size: 12.5px;
         position: relative;
     }
 
-    .id-card-since span:first-child { color: rgba(255, 255, 255, 0.5); }
-    .id-card-since span:last-child { font-weight: 600; }
+    .id-card-since span:first-child { 
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 500;
+    }
+    .id-card-since span:last-child { 
+        font-weight: 700;
+        color: rgba(232, 0, 45, 0.9);
+    }
 
+    /* Buttons */
     .edit-full-btn {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
         width: 100%;
-        padding: 12px;
-        background: linear-gradient(135deg, #ff5a1f, #e8002d);
+        padding: 13px 22px;
+        background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
         color: #fff;
         border: none;
-        border-radius: 11px;
+        border-radius: 12px;
         font-size: 14px;
         font-weight: 700;
         cursor: pointer;
         text-decoration: none;
-        transition: opacity 0.2s;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        animation: slideInUp 0.6s ease-out;
     }
 
-    .edit-full-btn:hover { opacity: 0.88; }
+    .edit-full-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: left 0.4s ease;
+    }
 
+    .edit-full-btn:hover::before {
+        left: 100%;
+    }
+
+    .edit-full-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(232, 0, 45, 0.25);
+    }
+
+    .edit-full-btn i {
+        font-size: 16px;
+        transition: transform 0.3s ease;
+    }
+
+    .edit-full-btn:hover i {
+        transform: rotate(10deg);
+    }
+
+    /* Side links */
     .side-links {
-        background: #fff;
-        border: 1px solid #e8e8e8;
-        border-radius: 16px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
         overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        animation: slideInUp 0.6s ease-out 0.1s both;
     }
 
     .side-link {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 14px 20px;
+        padding: 16px 22px;
         font-size: 14px;
         font-weight: 600;
-        color: #111827;
+        color: var(--ink);
         text-decoration: none;
         border-bottom: 1px solid #f3f4f6;
-        transition: background 0.15s;
+        transition: all 0.25s ease;
+        position: relative;
+    }
+
+    .side-link::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--brand-red);
+        transform: scaleY(0);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+    }
+
+    .side-link:hover::before {
+        transform: scaleY(1);
     }
 
     .side-link:last-child { border-bottom: none; }
-    .side-link:hover { background: #fafafa; }
-    .side-link i { color: #6b7280; font-size: 17px; }
-    .side-link .chev { margin-left: auto; color: #d1d5db; }
+    
+    .side-link:hover {
+        background: var(--bg-light);
+        padding-left: 26px;
+    }
 
-    /* ---------------- Responsive ---------------- */
+    .side-link i { 
+        color: var(--muted);
+        font-size: 18px;
+        transition: color 0.3s ease;
+    }
+
+    .side-link:hover i {
+        color: var(--brand-red);
+    }
+
+    .side-link .chev { 
+        margin-left: auto;
+        color: #d1d5db;
+        transition: transform 0.3s ease;
+    }
+
+    .side-link:hover .chev {
+        transform: translateX(4px);
+        color: var(--brand-red);
+    }
+
+    /* ============= Responsive ============= */
+    @media (max-width: 900px) {
+        .profile-layout {
+            grid-template-columns: 1fr 280px;
+            gap: 20px;
+        }
+
+        .identity h1 {
+            font-size: 26px;
+        }
+    }
+
     @media (max-width: 780px) {
         .profile-layout {
             grid-template-columns: 1fr;
         }
+
+        .identity {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .edit-full-btn {
+            width: 100%;
+        }
     }
 
     @media (max-width: 480px) {
-        .avatar-block { left: 20px; }
-        .identity { padding-left: 4px; }
+        .profile-wrap {
+            padding: 24px 16px 60px;
+        }
+
+        .profile-cover {
+            height: 140px;
+            border-radius: 16px;
+        }
+
+        .avatar-block {
+            left: 16px;
+            bottom: -40px;
+        }
+
+        .avatar-ring {
+            width: 100px;
+            height: 100px;
+        }
+
+        .identity {
+            margin-top: 56px;
+            padding: 0 4px 20px;
+        }
+
+        .identity h1 {
+            font-size: 22px;
+        }
+
+        .p-card-body {
+            padding: 16px;
+        }
+
+        .id-card {
+            padding: 20px;
+        }
     }
 </style>
 {% endblock %}
@@ -372,14 +636,14 @@
 
 <div class="profile-wrap">
 
-    <!-- Cover + avatar -->
+    <!-- Cover + Avatar -->
     <div class="profile-cover">
-        <a href="#" class="cover-edit">
+        <a href="#" class="cover-edit" onclick="return false;">
             <i class="ti ti-camera"></i> Change cover
         </a>
         <div class="avatar-block">
             <div class="avatar-ring">
-                <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" alt="Sarah Anderson">
             </div>
         </div>
     </div>
@@ -388,12 +652,12 @@
     <div class="identity">
         <div>
             <h1>
-                <!-- {% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %} -->
+                Sarah Anderson
                 <span class="verified"><i class="ti ti-rosette-discount-check"></i> Verified</span>
             </h1>
-            <div class="handle">@{{ profile.user.email }}</div>
+            <div class="handle">@sarah.anderson</div>
         </div>
-        <a href="#" class="edit-full-btn" style="width:auto; padding:11px 22px;">
+        <a href="#" class="edit-full-btn" style="width: auto; padding: 11px 24px;" onclick="return false;">
             <i class="ti ti-pencil"></i> Edit profile
         </a>
     </div>
@@ -402,30 +666,31 @@
 
         <!-- LEFT COLUMN -->
         <div>
+            <!-- About -->
             <div class="p-card">
                 <div class="p-card-head">
                     <h3><i class="ti ti-user"></i> About</h3>
                 </div>
                 <div class="p-card-body">
-                    {% if profile.bio %}
-                        <p class="bio-text">{{ profile.bio }}</p>
-                    {% else %}
-                        <p class="bio-empty">No bio added yet. Tell other shoppers a little about yourself.</p>
-                    {% endif %}
+                    <p class="bio-text">
+                        Tech enthusiast and coffee lover ☕ | Passionate about sustainable fashion and supporting local businesses. 
+                        Always on the lookout for innovative products that make life easier. Enjoy sharing recommendations with friends!
+                    </p>
                 </div>
             </div>
 
+            <!-- Contact Details -->
             <div class="p-card">
                 <div class="p-card-head">
                     <h3><i class="ti ti-address-book"></i> Contact details</h3>
                 </div>
-                <div class="p-card-body" style="padding-top:6px; padding-bottom:6px;">
+                <div class="p-card-body" style="padding-top: 12px; padding-bottom: 12px;">
 
                     <div class="info-row">
                         <div class="info-icon"><i class="ti ti-mail"></i></div>
                         <div class="info-text">
                             <label>Email</label>
-                            <div class="val">{{ profile.user.email }}</div>
+                            <div class="val mono">sarah.anderson@email.com</div>
                         </div>
                     </div>
 
@@ -433,11 +698,7 @@
                         <div class="info-icon"><i class="ti ti-phone"></i></div>
                         <div class="info-text">
                             <label>Phone</label>
-                            {% if profile.phone %}
-                                <div class="val mono">{{ profile.phone }}</div>
-                            {% else %}
-                                <div class="val muted">Not provided</div>
-                            {% endif %}
+                            <div class="val mono">+1 (555) 234-5678</div>
                         </div>
                     </div>
 
@@ -445,46 +706,69 @@
                         <div class="info-icon"><i class="ti ti-map-pin"></i></div>
                         <div class="info-text">
                             <label>Address</label>
-                            {% if profile.address %}
-                                <div class="val">{{ profile.address }}</div>
-                            {% else %}
-                                <div class="val muted">Not provided</div>
-                            {% endif %}
+                            <div class="val">San Francisco, CA 94102</div>
                         </div>
                     </div>
 
+                </div>
+            </div>
+
+            <!-- Stats (Optional - Add more engagement) -->
+            <div class="p-card">
+                <div class="p-card-head">
+                    <h3><i class="ti ti-trending-up"></i> Account stats</h3>
+                </div>
+                <div class="p-card-body">
+                    <div class="info-row" style="border: none; padding: 12px 0;">
+                        <div class="info-text" style="flex: 1;">
+                            <label>Total orders</label>
+                            <div class="val" style="font-size: 24px; color: var(--brand-red);">24</div>
+                        </div>
+                        <div class="info-text" style="flex: 1;">
+                            <label>Spent</label>
+                            <div class="val" style="font-size: 24px; color: var(--brand-red);">$1,240</div>
+                        </div>
+                        <div class="info-text" style="flex: 1;">
+                            <label>Member since</label>
+                            <div class="val" style="font-size: 13px;">Jan 2024</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- RIGHT COLUMN / SIDEBAR -->
         <div>
+            <!-- ID Card -->
             <div class="id-card">
-                <div class="id-card-label">Shop IT member</div>
-                <img class="id-card-avatar" src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}">
-                <div class="id-card-name">
-                    <!-- {% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %} -->
-                </div>
-                <div class="id-card-id">ID SHOPIT-{{ profile.user.id|stringformat:"05d" }}</div>
+                <div class="id-card-label">✦ Shop IT Member</div>
+                <img class="id-card-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Sarah Anderson">
+                <div class="id-card-name">Sarah Anderson</div>
+                <div class="id-card-id">ID SHOPIT-00142</div>
                 <div class="id-card-since">
                     <span>Member since</span>
-                    <span>{{ profile.user.date_joined|date:"M Y" }}</span>
+                    <span>Jan 2024</span>
                 </div>
             </div>
 
-            <a href="#" class="edit-full-btn">
+            <!-- Edit Button -->
+            <a href="#" class="edit-full-btn" onclick="return false;">
                 <i class="ti ti-settings"></i> Edit profile
             </a>
-            <div style="height:16px"></div>
+            <div style="height: 18px;"></div>
 
+            <!-- Side Links -->
             <div class="side-links">
-                <a href="{% url 'shop:TrackUs' %}" class="side-link">
+                <a href="#" class="side-link" onclick="return false;">
                     <i class="ti ti-truck"></i> Track an order <i class="ti ti-chevron-right chev"></i>
                 </a>
-                <a href="#" class="side-link">
+                <a href="#" class="side-link" onclick="return false;">
                     <i class="ti ti-lock"></i> Change password <i class="ti ti-chevron-right chev"></i>
                 </a>
-                <a href="#" class="side-link">
+                <a href="#" class="side-link" onclick="return false;">
+                    <i class="ti ti-heart"></i> Saved items <i class="ti ti-chevron-right chev"></i>
+                </a>
+                <a href="{% url 'shop:logout' %}" class="side-link" onclick="return true;">
                     <i class="ti ti-logout"></i> Log out <i class="ti ti-chevron-right chev"></i>
                 </a>
             </div>
