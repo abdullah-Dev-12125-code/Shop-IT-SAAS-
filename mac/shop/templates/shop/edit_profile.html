@@ -1,0 +1,731 @@
+{% extends 'shop/basic.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+    /* ============================================================
+       Shop IT Edit Profile - Matching Design System
+       Brand red #e8002d | Ink #111827 | Muted #6b7280 | Border #e8e8e8
+       Display/body: Inter | Codes: IBM Plex Mono
+       ============================================================ */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+    * {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --brand-red: #e8002d;
+        --brand-orange: #ff5a1f;
+        --ink: #111827;
+        --muted: #6b7280;
+        --border: #e8e8e8;
+        --bg-light: #fafafa;
+        --bg-card: #fff;
+        --success: #16a34a;
+        --success-light: #f0faf4;
+        --error: #dc2626;
+        --error-light: #fef2f2;
+    }
+
+    .edit-wrap {
+        font-family: 'Inter', system-ui, sans-serif;
+        color: var(--ink);
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+    }
+
+    /* ============= Animations ============= */
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* ============= Header ============= */
+    .edit-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 32px;
+        animation: slideInDown 0.6s ease-out;
+    }
+
+    .edit-header-back {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--bg-light);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: var(--ink);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .edit-header-back:hover {
+        background: var(--brand-red);
+        color: #fff;
+        border-color: var(--brand-red);
+        transform: translateX(-4px);
+    }
+
+    .edit-header-content h1 {
+        font-size: 28px;
+        font-weight: 800;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+
+    .edit-header-content p {
+        font-size: 14px;
+        color: var(--muted);
+        margin: 6px 0 0;
+    }
+
+    /* ============= Form Section ============= */
+    .form-section {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 28px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        animation: slideInUp 0.6s ease-out;
+        transition: all 0.3s ease;
+    }
+
+    .form-section:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        border-color: rgba(232, 0, 45, 0.2);
+    }
+
+    .form-section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        color: var(--ink);
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid var(--border);
+    }
+
+    .form-section-title i {
+        color: var(--brand-red);
+        font-size: 18px;
+    }
+
+    /* ============= Avatar Upload ============= */
+    .avatar-upload {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+    }
+
+    .avatar-preview {
+        flex-shrink: 0;
+    }
+
+    .avatar-img {
+        width: 140px;
+        height: 140px;
+        border-radius: 16px;
+        object-fit: cover;
+        border: 3px solid var(--border);
+        background: var(--bg-light);
+        transition: transform 0.3s ease;
+    }
+
+    .avatar-img:hover {
+        transform: scale(1.05);
+    }
+
+    .avatar-actions {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .upload-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        margin-bottom: 4px;
+    }
+
+    .upload-input {
+        display: none;
+    }
+
+    .upload-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 18px;
+        background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upload-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: left 0.4s ease;
+    }
+
+    .upload-btn:hover::before {
+        left: 100%;
+    }
+
+    .upload-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(232, 0, 45, 0.25);
+    }
+
+    .upload-hint {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.6;
+    }
+
+    /* ============= Form Fields ============= */
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-row.full {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--ink);
+        margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 12px 16px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 14px;
+        color: var(--ink);
+        background: var(--bg-light);
+        transition: all 0.3s ease;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: var(--muted);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--brand-red);
+        background: var(--bg-card);
+        box-shadow: 0 0 0 3px rgba(232, 0, 45, 0.1);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+        font-family: 'Inter', system-ui, sans-serif;
+        line-height: 1.6;
+    }
+
+    .form-hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+        line-height: 1.5;
+    }
+
+    /* ============= Error Messages ============= */
+    .error-message {
+        font-size: 12px;
+        color: var(--error);
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .form-group.has-error input,
+    .form-group.has-error textarea {
+        border-color: var(--error);
+        background: var(--error-light);
+    }
+
+    /* ============= Buttons ============= */
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .btn {
+        padding: 12px 28px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: left 0.4s ease;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(232, 0, 45, 0.25);
+    }
+
+    .btn-secondary {
+        background: var(--bg-light);
+        color: var(--ink);
+        border: 1.5px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+        background: var(--border);
+        border-color: var(--ink);
+    }
+
+    /* ============= Success Message ============= */
+    .success-message {
+        background: var(--success-light);
+        border: 1.5px solid var(--success);
+        border-radius: 12px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        animation: slideInDown 0.6s ease-out;
+    }
+
+    .success-message i {
+        color: var(--success);
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .success-message p {
+        font-size: 14px;
+        color: var(--success);
+        margin: 0;
+        font-weight: 600;
+    }
+
+    /* ============= Profile Banner ============= */
+
+    .profile-banner {
+        width: 100%;
+        height: 240px;
+        border-radius: 18px;
+        overflow: hidden;
+        margin-bottom: 28px;
+        position: relative;
+        background: linear-gradient(135deg, #ff5a1f, #e8002d);
+        animation: slideInDown 0.6s ease-out;
+    }
+
+    .profile-banner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .banner-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.35),
+                transparent);
+    }
+
+    .banner-upload {
+        position: absolute;
+        bottom: 18px;
+        right: 18px;
+    }
+
+    /* ============= Responsive ============= */
+    @media (max-width: 680px) {
+        .edit-wrap {
+            padding: 24px 16px 60px;
+        }
+
+        .edit-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .edit-header-content h1 {
+            font-size: 22px;
+        }
+
+        .avatar-upload {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .avatar-preview {
+            order: -1;
+        }
+
+        .avatar-actions {
+            align-items: center;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .form-section {
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="edit-wrap">
+
+    <!-- Header -->
+    <div class="edit-header">
+        <a href="{% url 'shop:profile' %}" class="edit-header-back">
+            <i class="ti ti-arrow-left"></i>
+        </a>
+        <div class="edit-header-content">
+            <h1>Edit Profile</h1>
+            <p>Update your account information and preferences</p>
+        </div>
+    </div>
+
+    <!-- Success Message (Django messages) -->
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'success' %}
+    <div class="success-message">
+        <i class="ti ti-check"></i>
+        <p>{{ message }}</p>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <!-- Form -->
+    <form method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <!-- Banner Section -->
+        <!-- Form -->
+
+            <!-- ADD BANNER HERE -->
+
+            <div class="profile-banner">
+
+                {% if user.profile.banner %}
+                <img src="{{ user.profile.banner.url }}" alt="Banner">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1557683316-973673baf926?w=1200" alt="Banner">
+                {% endif %}
+
+                <div class="banner-overlay"></div>
+
+                <label for="bannerInput" class="upload-btn banner-upload">
+                    <i class="ti ti-photo"></i> Change Banner
+                </label>
+
+                <input type="file" id="bannerInput" name="banner" class="upload-input" accept="image/*">
+
+            </div>
+
+            <!-- Avatar Section -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="ti ti-photo"></i> Profile Photo
+                </div>
+                <div class="avatar-upload">
+                    <div class="avatar-preview">
+                        <img class="avatar-img"
+                            src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop{% endif %}"
+                            alt="Profile" id="avatarPreview">
+                    </div>
+                    <div class="avatar-actions">
+                        <label for="avatarInput" class="upload-btn">
+                            <i class="ti ti-upload"></i> Upload photo
+                        </label>
+                        <input type="file" id="avatarInput" name="avatar" class="upload-input" accept="image/*">
+                        <p class="upload-hint">
+                            JPG, PNG, GIF or WebP accepted.<br>
+                            Max 5MB. Square image recommended (1:1).
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="ti ti-user-circle"></i> Personal Information
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="first_name" value="{{ user.first_name }}" required>
+                        {% if form.first_name.errors %}
+                        <div class="error-message">
+                            <i class="ti ti-alert-circle"></i> {{ form.first_name.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="last_name" value="{{ user.last_name }}" required>
+                        {% if form.last_name.errors %}
+                        <div class="error-message">
+                            <i class="ti ti-alert-circle"></i> {{ form.last_name.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" name="bio"
+                            placeholder="Tell us about yourself...">{{ user.profile.bio }}</textarea>
+                        <p class="form-hint">Maximum 500 characters</p>
+                        {% if form.bio.errors %}
+                        <div class="error-message">
+                            <i class="ti ti-alert-circle"></i> {{ form.bio.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="ti ti-address-book"></i> Contact Information
+                </div>
+
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" value="{{ user.email }}" readonly>
+                        <p class="form-hint">Email is linked to your account and cannot be changed here</p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+1 (555) 234-5678"
+                            value="{{ user.profile.phone }}">
+                        <p class="form-hint">Optional. Include country code for international numbers</p>
+                        {% if form.phone.errors %}
+                        <div class="error-message">
+                            <i class="ti ti-alert-circle"></i> {{ form.phone.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address" placeholder="City, State, ZIP"
+                            value="{{ user.profile.address }}">
+                        <p class="form-hint">Optional. Used for order shipping</p>
+                        {% if form.address.errors %}
+                        <div class="error-message">
+                            <i class="ti ti-alert-circle"></i> {{ form.address.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-section">
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-check"></i> Save Changes
+                    </button>
+                    <a href="{% url 'shop:profile' %}" class="btn btn-secondary">
+                        <i class="ti ti-x"></i> Cancel
+                    </a>
+                </div>
+            </div>
+
+        </form>
+
+</div>
+
+<script>
+    // Preview avatar before upload
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    avatarInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                avatarPreview.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Character limit for bio
+    const bioInput = document.getElementById('bio');
+    if (bioInput) {
+        bioInput.addEventListener('input', function () {
+            if (this.value.length > 500) {
+                this.value = this.value.substring(0, 500);
+            }
+        });
+    }
+
+    const bannerInput = document.getElementById('bannerInput');
+
+    bannerInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                document.querySelector('.profile-banner img').src = event.target.result;
+            }
+
+            reader.readAsDataURL(file);
+        }
+    });
+    
+</script>
+
+{% endblock %}

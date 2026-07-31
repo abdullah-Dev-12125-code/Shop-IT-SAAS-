@@ -11,7 +11,9 @@
        ============================================================ */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
 
-    * { box-sizing: border-box; }
+    * {
+        box-sizing: border-box;
+    }
 
     :root {
         --brand-red: #e8002d;
@@ -39,6 +41,7 @@
             opacity: 0;
             transform: translateY(-20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -50,6 +53,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -57,8 +61,13 @@
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 
     @keyframes scaleIn {
@@ -66,6 +75,7 @@
             opacity: 0;
             transform: scale(0.95);
         }
+
         to {
             opacity: 1;
             transform: scale(1);
@@ -73,8 +83,15 @@
     }
 
     @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.7;
+        }
     }
 
     /* ============= Cover + Avatar ============= */
@@ -84,7 +101,7 @@
         border-radius: 20px;
         background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
         background-image:
-            repeating-linear-gradient(120deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 2px, transparent 2px, transparent 14px),
+            repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 14px),
             linear-gradient(135deg, var(--brand-orange), var(--brand-red));
         overflow: visible;
         box-shadow: 0 8px 32px rgba(232, 0, 45, 0.15);
@@ -200,7 +217,7 @@
         animation: scaleIn 0.5s ease-out 0.4s both;
     }
 
-    .verified i { 
+    .verified i {
         font-size: 14px;
         animation: pulse 2s ease-in-out infinite;
     }
@@ -295,7 +312,9 @@
         transform: translateX(4px);
     }
 
-    .info-row:last-child { border-bottom: none; }
+    .info-row:last-child {
+        border-bottom: none;
+    }
 
     .info-icon {
         width: 40px;
@@ -376,9 +395,9 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: 
-            linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%),
-            linear-gradient(-135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
+        background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+            linear-gradient(-135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
         pointer-events: none;
     }
 
@@ -435,11 +454,12 @@
         position: relative;
     }
 
-    .id-card-since span:first-child { 
+    .id-card-since span:first-child {
         color: rgba(255, 255, 255, 0.6);
         font-weight: 500;
     }
-    .id-card-since span:last-child { 
+
+    .id-card-since span:last-child {
         font-weight: 700;
         color: rgba(232, 0, 45, 0.9);
     }
@@ -536,14 +556,16 @@
         transform: scaleY(1);
     }
 
-    .side-link:last-child { border-bottom: none; }
-    
+    .side-link:last-child {
+        border-bottom: none;
+    }
+
     .side-link:hover {
         background: var(--bg-light);
         padding-left: 26px;
     }
 
-    .side-link i { 
+    .side-link i {
         color: var(--muted);
         font-size: 18px;
         transition: color 0.3s ease;
@@ -553,7 +575,7 @@
         color: var(--brand-red);
     }
 
-    .side-link .chev { 
+    .side-link .chev {
         margin-left: auto;
         color: #d1d5db;
         transition: transform 0.3s ease;
@@ -637,13 +659,17 @@
 <div class="profile-wrap">
 
     <!-- Cover + Avatar -->
-    <div class="profile-cover">
-        <a href="#" class="cover-edit" onclick="return false;">
+    <div class="profile-cover" 
+        {% if user.profile.banner %}
+        style="background-image: url('{{ user.profile.banner.url }}'); background-size: cover; background-position: center;"
+        {% endif %}>
+        <a href="{% url 'shop:edit_profile' %}" class="cover-edit">
             <i class="ti ti-camera"></i> Change cover
         </a>
         <div class="avatar-block">
             <div class="avatar-ring">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" alt="Sarah Anderson">
+                <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop{% endif %}"
+                    alt="{{ user.first_name }} {{ user.last_name }}">
             </div>
         </div>
     </div>
@@ -652,12 +678,12 @@
     <div class="identity">
         <div>
             <h1>
-                Sarah Anderson
+                {{ user.first_name }} {{ user.last_name }}
                 <span class="verified"><i class="ti ti-rosette-discount-check"></i> Verified</span>
             </h1>
-            <div class="handle">@sarah.anderson</div>
+            <div class="handle">@{{ user.username }}</div>
         </div>
-        <a href="#" class="edit-full-btn" style="width: auto; padding: 11px 24px;" onclick="return false;">
+        <a href="{% url 'shop:edit_profile' %}" class="edit-full-btn" style="width: auto; padding: 11px 24px;">
             <i class="ti ti-pencil"></i> Edit profile
         </a>
     </div>
@@ -673,8 +699,11 @@
                 </div>
                 <div class="p-card-body">
                     <p class="bio-text">
-                        Tech enthusiast and coffee lover ☕ | Passionate about sustainable fashion and supporting local businesses. 
-                        Always on the lookout for innovative products that make life easier. Enjoy sharing recommendations with friends!
+                        {% if user.profile.bio %}
+                        {{ user.profile.bio }}
+                        {% else %}
+                        <span class="bio-empty">No bio added yet</span>
+                        {% endif %}
                     </p>
                 </div>
             </div>
@@ -690,7 +719,7 @@
                         <div class="info-icon"><i class="ti ti-mail"></i></div>
                         <div class="info-text">
                             <label>Email</label>
-                            <div class="val mono">sarah.anderson@email.com</div>
+                            <div class="val mono">{{ user.email }}</div>
                         </div>
                     </div>
 
@@ -698,7 +727,8 @@
                         <div class="info-icon"><i class="ti ti-phone"></i></div>
                         <div class="info-text">
                             <label>Phone</label>
-                            <div class="val mono">+1 (555) 234-5678</div>
+                            <div class="val mono">{% if user.profile.phone %}{{ user.profile.phone }}{% else %}<span
+                                    class="muted">Not provided</span>{% endif %}</div>
                         </div>
                     </div>
 
@@ -706,14 +736,15 @@
                         <div class="info-icon"><i class="ti ti-map-pin"></i></div>
                         <div class="info-text">
                             <label>Address</label>
-                            <div class="val">San Francisco, CA 94102</div>
+                            <div class="val">{% if user.profile.address %}{{ user.profile.address }}{% else %}<span
+                                    class="muted">Not provided</span>{% endif %}</div>
                         </div>
                     </div>
 
                 </div>
             </div>
 
-            <!-- Stats (Optional - Add more engagement) -->
+            <!-- Stats -->
             <div class="p-card">
                 <div class="p-card-head">
                     <h3><i class="ti ti-trending-up"></i> Account stats</h3>
@@ -722,15 +753,15 @@
                     <div class="info-row" style="border: none; padding: 12px 0;">
                         <div class="info-text" style="flex: 1;">
                             <label>Total orders</label>
-                            <div class="val" style="font-size: 24px; color: var(--brand-red);">24</div>
+                            <div class="val" style="font-size: 24px; color: var(--brand-red);">{{ total_orders }}</div>
                         </div>
                         <div class="info-text" style="flex: 1;">
-                            <label>Spent</label>
-                            <div class="val" style="font-size: 24px; color: var(--brand-red);">$1,240</div>
+                            <label>Total spent</label>
+                            <div class="val" style="font-size: 24px; color: var(--brand-red);">${{ total_spent }}</div>
                         </div>
                         <div class="info-text" style="flex: 1;">
                             <label>Member since</label>
-                            <div class="val" style="font-size: 13px;">Jan 2024</div>
+                            <div class="val" style="font-size: 13px;">{{ user.date_joined|date:"M Y" }}</div>
                         </div>
                     </div>
                 </div>
@@ -742,33 +773,35 @@
             <!-- ID Card -->
             <div class="id-card">
                 <div class="id-card-label">✦ Shop IT Member</div>
-                <img class="id-card-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Sarah Anderson">
-                <div class="id-card-name">Sarah Anderson</div>
-                <div class="id-card-id">ID SHOPIT-00142</div>
+                <img class="id-card-avatar"
+                    src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop{% endif %}"
+                    alt="{{ user.first_name }} {{ user.last_name }}">
+                <div class="id-card-name">{{ user.first_name }} {{ user.last_name }}</div>
+                <div class="id-card-id">ID SHOPIT-{{ user.id|stringformat:"05d" }}</div>
                 <div class="id-card-since">
                     <span>Member since</span>
-                    <span>Jan 2024</span>
+                    <span>{{ user.date_joined|date:"M Y" }}</span>
                 </div>
             </div>
 
             <!-- Edit Button -->
-            <a href="#" class="edit-full-btn" onclick="return false;">
+            <a href="{% url 'shop:edit_profile' %}" class="edit-full-btn">
                 <i class="ti ti-settings"></i> Edit profile
             </a>
             <div style="height: 18px;"></div>
 
             <!-- Side Links -->
             <div class="side-links">
-                <a href="#" class="side-link" onclick="return false;">
+                <a href="#" class="side-link">
                     <i class="ti ti-truck"></i> Track an order <i class="ti ti-chevron-right chev"></i>
                 </a>
-                <a href="#" class="side-link" onclick="return false;">
+                <a href="{% url 'shop:change_password' %}" class="side-link">
                     <i class="ti ti-lock"></i> Change password <i class="ti ti-chevron-right chev"></i>
                 </a>
-                <a href="#" class="side-link" onclick="return false;">
+                <a href="#" class="side-link">
                     <i class="ti ti-heart"></i> Saved items <i class="ti ti-chevron-right chev"></i>
                 </a>
-                <a href="{% url 'shop:logout' %}" class="side-link" onclick="return true;">
+                <a href="{% url 'shop:logout' %}" class="side-link">
                     <i class="ti ti-logout"></i> Log out <i class="ti ti-chevron-right chev"></i>
                 </a>
             </div>

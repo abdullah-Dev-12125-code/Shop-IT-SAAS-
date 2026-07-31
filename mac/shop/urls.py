@@ -18,13 +18,16 @@ path('product/<int:id>/',views.product,name="product"),
 path('cart/',views.cart,name='cart'),
 path('checkout/',views.checkout,name="checkout"),
 path('api/create-order/',views.create_order, name="create-order"),
-path('profile/', views.profile, name="profile"),
 path('signup/', views.signup_user, name="signup"),
 path('login/', views.login_user, name="login"),
 path('logout/', views.logout_user, name="logout"),
 path('forgot/', views.forgot_pass, name="forgot"),
 path('verify/', views.verification, name="verification"),
 path('orders/', views.orders, name="orders"),
-path('order-list', views.order_list, name="order-list")
+path('order-list', views.order_list, name="order-list"),
+path('profile/', views.profile_view, name='profile'),
+path('profile/edit/', views.edit_profile_view, name='edit_profile'),
+path('profile/password/', views.change_password_view, name='change_password'),
+    
 ]
 

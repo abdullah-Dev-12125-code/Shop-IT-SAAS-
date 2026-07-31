@@ -30,8 +30,7 @@ def _normalize_cart_items(cart):
         return normalized, total_price
     
     product_ids = [
-        item.get("id")
-        for item in cart
+        item.get("id") for item in cart 
         if isinstance(item, dict) and item.get("id") is not None
     ]
 
