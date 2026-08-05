@@ -254,6 +254,19 @@
   <script>
   var CART_KEY = "shopIT_cart";
   var LEGACY_CART_KEY = "cart";
+  var CART_API_URL = "{% url 'shop:cart-api' %}";
+
+  function getCookie(name) {
+    if (!document.cookie) return null;
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.indexOf(name + '=') === 0) {
+        return decodeURIComponent(cookie.substring(name.length + 1));
+      }
+    }
+    return null;
+  }
 
   function normalizeCart(cart) {
     if (!Array.isArray(cart)) return [];
@@ -280,9 +293,20 @@
   }
 
   function saveCart(cart) {
-    localStorage.setItem(CART_KEY, JSON.stringify(normalizeCart(cart)));
+    var normalized = normalizeCart(cart);
+    localStorage.setItem(CART_KEY, JSON.stringify(normalized));
     localStorage.removeItem(LEGACY_CART_KEY);
     window.dispatchEvent(new Event("cartUpdated"));
+
+    fetch(CART_API_URL, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken") || ""
+      },
+      body: JSON.stringify({ cart: normalized })
+    }).catch(function() {});
   }
 
   function esc(s) {

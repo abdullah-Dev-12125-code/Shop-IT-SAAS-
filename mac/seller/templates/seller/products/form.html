@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}</title>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; margin: 0; background: linear-gradient(180deg, #f8fafc 0%, #f3f4f6 100%); color: #111; }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 28px 20px 48px; }
+    .shell { display: grid; gap: 18px; }
+    .hero { background: #111827; color: #fff; border-radius: 18px; padding: 24px; box-shadow: 0 12px 30px rgba(17,24,39,.14); }
+    .hero h1 { margin: 0 0 6px; font-size: 28px; }
+    .hero p { margin: 0; color: rgba(255,255,255,.78); }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:18px; padding:24px; box-shadow: 0 8px 24px rgba(17,24,39,.06); }
+    .field { margin-bottom:16px; }
+    label { display:block; font-weight:700; margin-bottom:6px; font-size: 13px; color: #374151; }
+    input, textarea, select { width:100%; padding:11px 12px; border:1px solid #d1d5db; border-radius:10px; font:inherit; background:#fff; }
+    textarea { min-height:120px; resize: vertical; }
+    .errors { color:#b91c1c; margin-bottom:16px; font-weight: 600; }
+    .field ul.errorlist { margin: 8px 0 0; padding-left: 18px; color:#b91c1c; font-size: 13px; }
+    .actions { display:flex; gap:12px; margin-top:20px; flex-wrap: wrap; }
+    .btn { padding:11px 16px; border:none; border-radius:10px; font-weight:700; cursor:pointer; }
+    .btn.primary { background:#e8002d; color:#fff; }
+    .btn.secondary { background:#111827; color:#fff; text-decoration:none; display:inline-flex; align-items:center; }
+    .hint { font-size: 13px; color: #6b7280; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="shell">
+      <div class="hero">
+        <h1>{{ page_title }}</h1>
+        <p>Only your seller account can manage this product.</p>
+      </div>
+
+      <div class="card">
+
+        {% if form.errors %}
+        <div class="errors">
+          Please fix the errors below.
+        </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          {% for field in form %}
+            <div class="field">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {{ field.errors }}
+            </div>
+          {% endfor %}
+          <div class="hint">Tip: Keep product images under 5MB for faster uploads.</div>
+          <div class="actions">
+            <button type="submit" class="btn primary">Save product</button>
+            <a class="btn secondary" href="{% url 'vendor:product-list' %}">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

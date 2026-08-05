@@ -1022,6 +1022,19 @@
   <script>
     const CART_KEY = "shopIT_cart";
     const LEGACY_CART_KEY = "cart";
+    const CART_API_URL = "{% url 'shop:cart-api' %}";
+
+    function getCookie(name) {
+      if (!document.cookie) return null;
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const trimmed = cookie.trim();
+        if (trimmed.startsWith(name + '=')) {
+          return decodeURIComponent(trimmed.substring(name.length + 1));
+        }
+      }
+      return null;
+    }
 
     function normalizeCart(cart) {
       if (!Array.isArray(cart)) return [];
@@ -1047,9 +1060,36 @@
     }
 
     function saveCart(cart) {
-      localStorage.setItem(CART_KEY, JSON.stringify(normalizeCart(cart)));
+      const normalized = normalizeCart(cart);
+      localStorage.setItem(CART_KEY, JSON.stringify(normalized));
       localStorage.removeItem(LEGACY_CART_KEY);
       window.dispatchEvent(new Event("cartUpdated"));
+
+      fetch(CART_API_URL, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken") || "",
+        },
+        body: JSON.stringify({ cart: normalized }),
+      }).catch(() => {});
+    }
+
+    async function syncCartFromServer() {
+      try {
+        const response = await fetch(CART_API_URL, { credentials: "same-origin" });
+        if (!response.ok) return;
+
+        const payload = await response.json();
+        if (!payload || !Array.isArray(payload.cart)) return;
+
+        localStorage.setItem(CART_KEY, JSON.stringify(normalizeCart(payload.cart)));
+        localStorage.removeItem(LEGACY_CART_KEY);
+        window.dispatchEvent(new Event("cartUpdated"));
+      } catch (error) {
+        return;
+      }
     }
 
     function updateCartUI() {
@@ -1099,7 +1139,10 @@
       }[m]));
     }
 
-    document.addEventListener("DOMContentLoaded", updateCartUI);
+    document.addEventListener("DOMContentLoaded", function () {
+      updateCartUI();
+      syncCartFromServer();
+    });
     window.addEventListener("cartUpdated", updateCartUI);
     window.addEventListener("storage", function (e) {
       if (e.key === CART_KEY) updateCartUI();

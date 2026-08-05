@@ -11,13 +11,20 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def _csv_env(name, default=None):
+    value = os.environ.get(name, "")
+    if value:
+        return [item.strip() for item in value.split(",") if item.strip()]
+    return default if default is not None else []
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*zcgx*@_uhals_p^$eh0&v$jl$oxq9_axrl*#ei$t&e_%r^caa'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-*zcgx*@_uhals_p^$eh0&v$jl$oxq9_axrl*#ei$t&e_%r^caa')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in {'1', 'true', 'yes', 'on'}
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = _csv_env('DJANGO_ALLOWED_HOSTS', ['localhost', '127.0.0.1'])
 
 
 
@@ -32,15 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
 
 
 
 # MIDDLEWARE
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',  # must be first
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,7 +58,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CACHE = {
+if DEBUG:
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+
+CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "shop-cache",
@@ -95,11 +106,11 @@ LOGOUT_REDIRECT_URL = '/shop/login/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'myshop',
-        'USER': 'postgres',
-        'PASSWORD': 'abdullah1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('POSTGRES_DB', 'myshop'),
+        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'abdullah1234'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
 
@@ -142,6 +153,7 @@ USE_TZ = True
 # STATIC FILES
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 
@@ -157,3 +169,5 @@ MEDIA_URL = '/media/'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

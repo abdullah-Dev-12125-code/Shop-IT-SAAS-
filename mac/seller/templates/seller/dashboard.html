@@ -124,7 +124,7 @@ input, select { font-family: inherit; }
   color: #fff; font-weight: 700; font-size: 12px; flex-shrink: 0;
 }
 .store-info { min-width: 0; }
-.store-name { font-size: 13px; font-weight: 600; color: var(--text); truncate: ellipsis; white-space: nowrap; overflow: hidden; }
+.store-name { font-size: 13px; font-weight: 600; color: var(--text); text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 .store-plan { font-size: 11px; color: var(--muted); }
 .store-card svg { margin-left: auto; color: var(--muted); flex-shrink: 0; }
 
@@ -518,11 +518,11 @@ tbody tr:hover { background: var(--bg); }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
         Products
       </button>
-      <button class="nav-link" data-page="orders">
+      <a class="nav-link" data-page="orders" href="{% url 'vendor:seller-orders' %}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17H5a2 2 0 0 0-2 2v2"/><path d="M9 3H5a2 2 0 0 0-2 2v4"/><path d="M19 3h-4a2 2 0 0 0-2 2v4"/><path d="M19 17h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
         Orders
         <span class="badge">12</span>
-      </button>
+      </a>
       <button class="nav-link" data-page="customers">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Customers
@@ -564,10 +564,10 @@ tbody tr:hover { background: var(--bg); }
 
     <div class="sidebar-footer">
       <div class="store-card">
-        <div class="store-avatar">AB</div>
+        <div class="store-avatar">{{ seller_profile.store_name|default:request.user.username|slice:":2"|upper }}</div>
         <div class="store-info">
-          <div class="store-name">Abdullah's Store</div>
-          <div class="store-plan">Pro Plan</div>
+          <div class="store-name">{{ seller_profile.store_name }}</div>
+          <div class="store-plan">{{ seller_profile.parent_organization|default:"Active seller account" }}</div>
         </div>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
@@ -586,7 +586,7 @@ tbody tr:hover { background: var(--bg); }
       </button>
 
       <div class="header-greeting">
-        <div class="hello">Good morning, Abdullah 👋</div>
+        <div class="hello">Good morning, {{ request.user.first_name|default:request.user.username }} 👋</div>
         <div class="date" id="header-date"></div>
       </div>
 
@@ -601,8 +601,8 @@ tbody tr:hover { background: var(--bg); }
       </button>
 
       <button class="profile-btn">
-        <div class="profile-avatar">AB</div>
-        <span>Abdullah</span>
+        <div class="profile-avatar">{{ request.user.username|slice:":2"|upper }}</div>
+        <span>{{ request.user.first_name|default:request.user.username }}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
 
@@ -640,8 +640,8 @@ tbody tr:hover { background: var(--bg); }
               18.2%
             </span>
           </div>
-          <div class="kpi-val">PKR 284,500</div>
-          <div class="kpi-label">Total Revenue</div>
+          <div class="kpi-val">PKR {{ inventory_value|default:0 }}</div>
+          <div class="kpi-label">Inventory Value</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-top">
@@ -653,8 +653,8 @@ tbody tr:hover { background: var(--bg); }
               9.5%
             </span>
           </div>
-          <div class="kpi-val">1,248</div>
-          <div class="kpi-label">Total Orders</div>
+          <div class="kpi-val">{{ product_count|default:0 }}</div>
+          <div class="kpi-label">Total Products</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-top">
@@ -666,8 +666,8 @@ tbody tr:hover { background: var(--bg); }
               4.1%
             </span>
           </div>
-          <div class="kpi-val">3,842</div>
-          <div class="kpi-label">Total Customers</div>
+          <div class="kpi-val">{{ low_stock_count|default:0 }}</div>
+          <div class="kpi-label">Low stock products</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-top">
@@ -679,8 +679,8 @@ tbody tr:hover { background: var(--bg); }
               2.3%
             </span>
           </div>
-          <div class="kpi-val">PKR 228</div>
-          <div class="kpi-label">Avg. Order Value</div>
+          <div class="kpi-val">{{ out_of_stock_count|default:0 }}</div>
+          <div class="kpi-label">Out of stock products</div>
         </div>
       </div>
 
@@ -717,23 +717,23 @@ tbody tr:hover { background: var(--bg); }
             <span class="pill fulfilled">On track</span>
           </div>
           <div class="card-body">
-            <div class="payout-amount">PKR 42,860</div>
-            <div class="payout-sub">Estimated payout on Dec 21, 2024</div>
+            <div class="payout-amount">PKR {{ total_revenue|floatformat:0 }}</div>
+            <div class="payout-sub">Based on completed seller orders</div>
             <div class="payout-row">
               <span class="payout-key">Gross sales</span>
-              <span class="payout-val">PKR 49,200</span>
+              <span class="payout-val">PKR {{ total_revenue|floatformat:0 }}</span>
             </div>
             <div class="payout-row">
               <span class="payout-key">Platform fee (2.5%)</span>
-              <span class="payout-val">— PKR 1,230</span>
+              <span class="payout-val">— PKR {{ total_revenue|floatformat:0|floatformat:0 }}</span>
             </div>
             <div class="payout-row">
               <span class="payout-key">Refunds</span>
-              <span class="payout-val">— PKR 5,110</span>
+              <span class="payout-val">— PKR 0</span>
             </div>
             <div class="payout-row">
               <span class="payout-key">Previous payout</span>
-              <span class="payout-val green">PKR 38,400 ✓</span>
+              <span class="payout-val green">{{ total_orders }} orders ✓</span>
             </div>
             <button class="btn-outline" style="margin-top:16px;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
@@ -766,48 +766,19 @@ tbody tr:hover { background: var(--bg); }
                 </tr>
               </thead>
               <tbody>
+                {% for item in recent_order_items %}
                 <tr>
-                  <td><div class="order-id">#ORD-8821</div><div class="order-id-sub">2 mins ago</div></td>
-                  <td><div class="cust-name">Sara Ahmed</div><div class="cust-email">sara@email.com</div></td>
-                  <td class="amt">PKR 3,200</td>
+                  <td><div class="order-id">#ORD-{{ item.order.id }}</div><div class="order-id-sub">{{ item.order.created_at|timesince }} ago</div></td>
+                  <td><div class="cust-name">{{ item.order.first_name }} {{ item.order.last_name }}</div><div class="cust-email">{{ item.order.email }}</div></td>
+                  <td class="amt">PKR {{ item.line_total|floatformat:0 }}</td>
                   <td><span class="pill processing">Processing</span></td>
                   <td><button class="action-btn">View</button></td>
                 </tr>
+                {% empty %}
                 <tr>
-                  <td><div class="order-id">#ORD-8820</div><div class="order-id-sub">18 mins ago</div></td>
-                  <td><div class="cust-name">Omar Khan</div><div class="cust-email">omar@email.com</div></td>
-                  <td class="amt">PKR 8,750</td>
-                  <td><span class="pill fulfilled">Fulfilled</span></td>
-                  <td><button class="action-btn">View</button></td>
+                  <td colspan="5">No seller orders yet.</td>
                 </tr>
-                <tr>
-                  <td><div class="order-id">#ORD-8819</div><div class="order-id-sub">1 hr ago</div></td>
-                  <td><div class="cust-name">Ayesha Malik</div><div class="cust-email">ayesha@email.com</div></td>
-                  <td class="amt">PKR 1,450</td>
-                  <td><span class="pill fulfilled">Fulfilled</span></td>
-                  <td><button class="action-btn">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="order-id">#ORD-8818</div><div class="order-id-sub">2 hrs ago</div></td>
-                  <td><div class="cust-name">Bilal Hassan</div><div class="cust-email">bilal@email.com</div></td>
-                  <td class="amt">PKR 6,300</td>
-                  <td><span class="pill pending">Pending</span></td>
-                  <td><button class="action-btn">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="order-id">#ORD-8817</div><div class="order-id-sub">4 hrs ago</div></td>
-                  <td><div class="cust-name">Fatima Siddiqui</div><div class="cust-email">fatima@email.com</div></td>
-                  <td class="amt">PKR 2,100</td>
-                  <td><span class="pill cancelled">Cancelled</span></td>
-                  <td><button class="action-btn">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="order-id">#ORD-8816</div><div class="order-id-sub">5 hrs ago</div></td>
-                  <td><div class="cust-name">Zain Iqbal</div><div class="cust-email">zain@email.com</div></td>
-                  <td class="amt">PKR 14,200</td>
-                  <td><span class="pill fulfilled">Fulfilled</span></td>
-                  <td><button class="action-btn">View</button></td>
-                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
@@ -818,71 +789,32 @@ tbody tr:hover { background: var(--bg); }
           <div class="card-head">
             <div>
               <div class="card-title">Top Products</div>
-              <div class="card-sub">By revenue this month</div>
+              <div class="card-sub">By revenue from your orders</div>
             </div>
             <span class="card-link">Manage →</span>
           </div>
           <div class="product-list">
+            {% for product in top_products %}
             <div class="product-row">
-              <div class="product-rank gold">1</div>
-              <div class="product-thumb">👟</div>
+              <div class="product-rank {% if forloop.first %}gold{% endif %}">{{ forloop.counter }}</div>
+              <div class="product-thumb">{% if product.image_url or product.image %}📦{% else %}📦{% endif %}</div>
               <div class="product-info">
-                <div class="product-name">Nike Air Max 270</div>
-                <div class="product-sku">SKU-10021 · 48 sold</div>
+                <div class="product-name">{{ product.product_name }}</div>
+                <div class="product-sku">{{ product.category|default:"Uncategorized" }} · {{ product.total_sold|default:0 }} sold</div>
               </div>
               <div class="product-sales">
-                <div class="product-rev">PKR 76,800</div>
-                <div class="product-units">+22% ↑</div>
+                <div class="product-rev">PKR {{ product.total_revenue|floatformat:0 }}</div>
+                <div class="product-units">{{ product.total_sold|default:0 }} units</div>
               </div>
             </div>
+            {% empty %}
             <div class="product-row">
-              <div class="product-rank">2</div>
-              <div class="product-thumb">👜</div>
               <div class="product-info">
-                <div class="product-name">Leather Tote Bag</div>
-                <div class="product-sku">SKU-10034 · 31 sold</div>
-              </div>
-              <div class="product-sales">
-                <div class="product-rev">PKR 43,400</div>
-                <div class="product-units">+14% ↑</div>
+                <div class="product-name">No product sales yet</div>
+                <div class="product-sku">Orders containing your products will appear here.</div>
               </div>
             </div>
-            <div class="product-row">
-              <div class="product-rank">3</div>
-              <div class="product-thumb">🎧</div>
-              <div class="product-info">
-                <div class="product-name">Sony WH-1000XM5</div>
-                <div class="product-sku">SKU-10007 · 19 sold</div>
-              </div>
-              <div class="product-sales">
-                <div class="product-rev">PKR 38,000</div>
-                <div class="product-units">+8% ↑</div>
-              </div>
-            </div>
-            <div class="product-row">
-              <div class="product-rank">4</div>
-              <div class="product-thumb">⌚</div>
-              <div class="product-info">
-                <div class="product-name">Apple Watch SE</div>
-                <div class="product-sku">SKU-10015 · 12 sold</div>
-              </div>
-              <div class="product-sales">
-                <div class="product-rev">PKR 31,200</div>
-                <div class="product-units">−3% ↓</div>
-              </div>
-            </div>
-            <div class="product-row">
-              <div class="product-rank">5</div>
-              <div class="product-thumb">📱</div>
-              <div class="product-info">
-                <div class="product-name">Samsung Galaxy Tab</div>
-                <div class="product-sku">SKU-10042 · 9 sold</div>
-              </div>
-              <div class="product-sales">
-                <div class="product-rev">PKR 27,900</div>
-                <div class="product-units">+5% ↑</div>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -894,51 +826,32 @@ tbody tr:hover { background: var(--bg); }
           <div class="card-head">
             <div>
               <div class="card-title">Inventory Alerts</div>
-              <div class="card-sub">3 products need attention</div>
+              <div class="card-sub">{{ low_stock_count|add:out_of_stock_count }} products need attention</div>
             </div>
             <span class="card-link">View inventory →</span>
           </div>
           <div class="alert-list">
+            {% for product in out_of_stock_products %}
             <div class="alert-item">
               <div class="alert-dot red"></div>
               <div class="alert-text">
-                <div class="alert-name">Nike Air Max 270 (Size 42)</div>
+                <div class="alert-name">{{ product.product_name }}</div>
                 <div class="alert-desc">Out of stock — reorder immediately</div>
               </div>
               <span class="alert-qty red">0 left</span>
             </div>
+            {% endfor %}
+            {% for product in low_stock_products %}
             <div class="alert-item">
               <div class="alert-dot amber"></div>
               <div class="alert-text">
-                <div class="alert-name">Sony WH-1000XM5</div>
-                <div class="alert-desc">Low stock — only 4 units remaining</div>
+                <div class="alert-name">{{ product.product_name }}</div>
+                <div class="alert-desc">Running low — only {{ product.available_now }} units left</div>
               </div>
-              <span class="alert-qty amber">4 left</span>
+              <span class="alert-qty amber">{{ product.available_now }} left</span>
             </div>
-            <div class="alert-item">
-              <div class="alert-dot amber"></div>
-              <div class="alert-text">
-                <div class="alert-name">Leather Tote Bag (Black)</div>
-                <div class="alert-desc">Running low — 7 units left</div>
-              </div>
-              <span class="alert-qty amber">7 left</span>
-            </div>
-            <div class="alert-item">
-              <div class="alert-dot green"></div>
-              <div class="alert-text">
-                <div class="alert-name">Samsung Galaxy Tab S9</div>
-                <div class="alert-desc">Healthy stock level</div>
-              </div>
-              <span class="alert-qty green">42 left</span>
-            </div>
-            <div class="alert-item">
-              <div class="alert-dot green"></div>
-              <div class="alert-text">
-                <div class="alert-name">Apple Watch SE (44mm)</div>
-                <div class="alert-desc">Healthy stock level</div>
-              </div>
-              <span class="alert-qty green">28 left</span>
-            </div>
+            {% empty %}
+            {% endfor %}
           </div>
         </div>
 
@@ -955,37 +868,37 @@ tbody tr:hover { background: var(--bg); }
             <div class="mini-stat-row">
               <div class="mini-stat-top">
                 <span class="mini-stat-label">Repeat customers</span>
-                <span class="mini-stat-val">64%</span>
+                <span class="mini-stat-val">{{ repeat_customer_rate }}%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill brand" style="width:64%"></div></div>
+              <div class="progress-bar"><div class="progress-fill brand" data-progress="{{ repeat_customer_rate }}" style="width:0"></div></div>
             </div>
             <div class="mini-stat-row">
               <div class="mini-stat-top">
                 <span class="mini-stat-label">New customers</span>
-                <span class="mini-stat-val">36%</span>
+                <span class="mini-stat-val">{{ new_customer_rate }}%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill blue" style="width:36%"></div></div>
+              <div class="progress-bar"><div class="progress-fill blue" data-progress="{{ new_customer_rate }}" style="width:0"></div></div>
             </div>
             <div class="mini-stat-row">
               <div class="mini-stat-top">
                 <span class="mini-stat-label">Conversion rate</span>
-                <span class="mini-stat-val">3.8%</span>
+                <span class="mini-stat-val">{{ total_orders|default:0 }} orders</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill green" style="width:38%"></div></div>
+              <div class="progress-bar"><div class="progress-fill green" data-progress="{% if total_orders %}38{% else %}0{% endif %}" style="width:0"></div></div>
             </div>
             <div class="mini-stat-row">
               <div class="mini-stat-top">
                 <span class="mini-stat-label">Cart abandonment</span>
-                <span class="mini-stat-val">61%</span>
+                <span class="mini-stat-val">{{ top_product_share }}%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill amber" style="width:61%"></div></div>
+              <div class="progress-bar"><div class="progress-fill amber" data-progress="{{ top_product_share }}" style="width:0"></div></div>
             </div>
             <div class="mini-stat-row">
               <div class="mini-stat-top">
                 <span class="mini-stat-label">Avg. customer LTV</span>
-                <span class="mini-stat-val">PKR 8,420</span>
+                <span class="mini-stat-val">PKR {{ avg_order_value|floatformat:0 }}</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill brand" style="width:72%"></div></div>
+              <div class="progress-bar"><div class="progress-fill brand" data-progress="{% if avg_order_value %}72{% else %}0{% endif %}" style="width:0"></div></div>
             </div>
           </div>
         </div>
@@ -1020,11 +933,11 @@ function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.re
 menuBtn.addEventListener('click', openSidebar);
 overlay.addEventListener('click', closeSidebar);
 
+<div id="sales-chart-data" data-json='{{ sales_chart_json|escapejs }}' hidden></div>
+
 // ── Sales Chart ───────────────────────────────────────────────────
-const data = [
-  { month:'Jul', val:62 }, { month:'Aug', val:71 }, { month:'Sep', val:55 },
-  { month:'Oct', val:88 }, { month:'Nov', val:94 }, { month:'Dec', val:78 }
-];
+const salesChartNode = document.getElementById('sales-chart-data');
+const data = salesChartNode ? JSON.parse(salesChartNode.dataset.json || '[]') : [];
 const max = Math.max(...data.map(d => d.val));
 const chartEl = document.getElementById('salesChart');
 data.forEach((d, i) => {
@@ -1033,13 +946,18 @@ data.forEach((d, i) => {
   const bar = document.createElement('div');
   bar.className = 'chart-bar' + (i === data.length - 2 ? ' highlight' : '');
   bar.style.height = Math.round((d.val / max) * 100) + '%';
-  bar.title = 'PKR ' + (d.val * 3200).toLocaleString();
+  bar.title = d.month;
   const label = document.createElement('div');
   label.className = 'chart-label';
   label.textContent = d.month;
   wrap.appendChild(bar);
   wrap.appendChild(label);
   chartEl.appendChild(wrap);
+});
+
+document.querySelectorAll('.progress-fill[data-progress]').forEach(bar => {
+  const width = Number(bar.dataset.progress || 0);
+  bar.style.width = Math.max(0, Math.min(100, width)) + '%';
 });
 
 // ── Add Product btn ───────────────────────────────────────────────

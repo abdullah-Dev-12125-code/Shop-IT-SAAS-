@@ -23,21 +23,21 @@
       --green-bg: #f0faf4;
       --green-border: #b6e8c8;
       --red: #e8002d;
-      --red-bg: #fff0f0;
-      --red-border: #ffd0d0;
-      --border: #e8e8e8;
-      --border2: #d0d0d0;
-      --bg: #ffffff;
-      --bg2: #fafafa;
-      --bg3: #f4f4f6;
-      --text: #111111;
-      --muted: #6b7280;
-      --radius: 14px;
-      --radius-md: 9px;
-      --shadow: 0 4px 20px rgba(0, 0, 0, .06);
-    }
-
-    body {
+      var CART_API_URL = '{% url 'shop:cart-api' %}';
+      function getCSRFToken() {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, 10) === 'csrftoken=') {
+              cookieValue = decodeURIComponent(cookie.substring(10));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
       font-family: 'Inter', system-ui, sans-serif;
       color: var(--text);
       background: var(--bg3);
@@ -1729,6 +1729,15 @@
           if (res.success) {
             localStorage.removeItem("shopIT_cart");
             localStorage.removeItem("cart");
+            fetch(CART_API_URL, {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken() || ''
+              },
+              body: JSON.stringify({ cart: [] })
+            }).catch(function () {});
 
             document.getElementById('checkout-layout').style.display = 'none';
             document.getElementById('success-screen').classList.add('show');

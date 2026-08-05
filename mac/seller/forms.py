@@ -4,6 +4,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
+from shop.models import Product
+
 from .models import Seller
 
 
@@ -83,3 +85,45 @@ class SellerLoginForm(forms.Form):
     username = forms.CharField(label="Email or Username")
     password = forms.CharField(widget=forms.PasswordInput)
     remember = forms.BooleanField(required=False)
+
+
+class SellerProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        exclude = ("seller",)
+        widgets = {
+            "product_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Product name"}),
+            "category": forms.TextInput(attrs={"class": "form-control", "placeholder": "Category"}),
+            "sub_category": forms.TextInput(attrs={"class": "form-control", "placeholder": "Sub-category"}),
+            "price": forms.NumberInput(attrs={"class": "form-control", "min": 0, "step": "1"}),
+            "desc": forms.Textarea(attrs={"rows": 5}),
+            "available_now": forms.NumberInput(attrs={"class": "form-control", "min": 0, "step": "1"}),
+            "image_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "https://..."}),
+            "image": forms.ClearableFileInput(attrs={"class": "form-control", "accept": "image/*"}),
+        }
+
+    def clean_available_now(self):
+        available_now = self.cleaned_data.get("available_now")
+        if available_now is None or available_now < 0:
+            raise forms.ValidationError("Stock must be zero or a positive number.")
+        return available_now
+
+    def clean_price(self):
+        price = self.cleaned_data.get("price")
+        if price is None or price < 0:
+            raise forms.ValidationError("Price must be zero or a positive number.")
+        return price
+
+    def clean_image(self):
+        image = self.cleaned_data.get("image")
+        if not image:
+            return image
+
+        if image.size > 5 * 1024 * 1024:
+            raise forms.ValidationError("Image file size must not exceed 5MB.")
+
+        allowed_formats = {"image/jpeg", "image/png", "image/gif", "image/webp", "image/avif"}
+        if getattr(image, "content_type", None) not in allowed_formats:
+            raise forms.ValidationError("Upload a valid image file (JPG, PNG, GIF, WebP, or AVIF).")
+
+        return image

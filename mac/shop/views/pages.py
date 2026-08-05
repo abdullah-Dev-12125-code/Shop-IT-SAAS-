@@ -1,10 +1,13 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 from ..models import Contact
 
+@ensure_csrf_cookie
 def about(request):
     return render(request, 'shop/about.html')
 
 
+@ensure_csrf_cookie
 def contact(request):
     thank = False
     if request.method == "POST":

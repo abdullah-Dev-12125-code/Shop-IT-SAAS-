@@ -3,19 +3,28 @@ import json
 from decimal import Decimal, InvalidOperation
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import JsonResponse
+from django.db import transaction
 from django.shortcuts import render
 
-from ..models import Order, OrderUpdate, Product
+from ..models import Order, OrderItem, OrderUpdate, Product
 
 
 
 @login_required
 def orders(request):
-    return render(request, 'shop/orders.html')
+    orders = Order.objects.filter(
+        Q(user=request.user) | Q(email_linked=request.user.email)
+    ).order_by('-created_at')
 
+    return render(request, 'shop/orders.html', {'orders': orders})
+
+@login_required
 def order_list(request):
-    orders = Order.objects.filter(email_linked=request.user.email)
+    orders = Order.objects.filter(
+        Q(user=request.user) | Q(email_linked=request.user.email)
+    ).order_by('-created_at')
 
     return render(request, 'shop/orders.html', {"orders": orders})
 
@@ -74,6 +83,33 @@ def _normalize_cart_items(cart):
         total_price += item_price * quantity
 
     return normalized, total_price
+
+
+def _build_order_items(cart):
+    normalized_cart, total_price = _normalize_cart_items(cart)
+
+    if not normalized_cart:
+        return [], Decimal("0.00"), "Your cart is empty"
+
+    product_ids = [item["id"] for item in normalized_cart if item.get("id") is not None]
+    products = Product.objects.select_for_update().in_bulk(product_ids)
+
+    order_items = []
+
+    for item in normalized_cart:
+        product = products.get(item["id"])
+        if product is None:
+            return [], Decimal("0.00"), f"Product {item.get('id')} is no longer available"
+
+        quantity = int(item["qty"])
+        if quantity > product.available_now:
+            return [], Decimal("0.00"), f"{product.product_name} is out of stock"
+
+        unit_price = Decimal(str(product.price))
+        line_total = unit_price * quantity
+        order_items.append((product, quantity, unit_price, line_total))
+
+    return order_items, total_price, None
 
 
 
@@ -163,34 +199,57 @@ def create_order(request):
             return JsonResponse({"success": False, "error": "Invalid request payload"}, status=400)
 
         cart = data.get("cart", [])
-        normalized_cart, server_total = _normalize_cart_items(cart)
 
-        if not normalized_cart:
-            return JsonResponse({"success": False, "error": "Your cart is empty"}, status=400)
+        with transaction.atomic():
+            order_items, server_total, error = _build_order_items(cart)
+            if error:
+                return JsonResponse({"success": False, "error": error}, status=400)
 
-        order = Order.objects.create(
-            first_name = data["first_name"],
-            last_name = data["last_name"],
-            email = data["email"],
-            phone = data["phone"],
-            address = data["address"],
-            city = data["city"],
-            zip_code = data["zip_code"],
-            country = data["country"],
-            payment_method = data["payment_method"],
-            total_price = server_total,
-            item_json = json.dumps(normalized_cart),
-            email_linked = request.user.email
-        
-        )
+            normalized_cart = [
+                {
+                    "id": product.id,
+                    "name": product.product_name,
+                    "price": float(unit_price),
+                    "qty": quantity,
+                    "image": product.image_url or (product.image.url if product.has_image_file else ""),
+                }
+                for product, quantity, unit_price, _ in order_items
+            ]
 
-        update = OrderUpdate.objects.create(
-        order_id=order.id,
-        update_desc="The order has been placed" 
-        
-        )
-        update.save()
-    
+            order = Order.objects.create(
+                user=request.user,
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                email=data["email"],
+                phone=data["phone"],
+                address=data["address"],
+                city=data["city"],
+                zip_code=data["zip_code"],
+                country=data["country"],
+                payment_method=data["payment_method"],
+                total_price=server_total,
+                item_json=json.dumps(normalized_cart),
+                email_linked=request.user.email,
+            )
+
+            for product, quantity, unit_price, line_total in order_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    product_name_snapshot=product.product_name,
+                    quantity=quantity,
+                    unit_price=unit_price,
+                    line_total=line_total,
+                )
+                product.available_now = max(product.available_now - quantity, 0)
+                if product.available_now == 0:
+                    product.stock_status = "Out of Stock"
+                product.save(update_fields=["available_now", "stock_status"])
+
+            OrderUpdate.objects.create(
+                order_id=order.id,
+                update_desc="The order has been placed",
+            )
 
         return JsonResponse({
             "success": True,

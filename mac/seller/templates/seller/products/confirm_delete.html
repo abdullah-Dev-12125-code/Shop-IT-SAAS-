@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Product</title>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; margin: 0; background: linear-gradient(180deg, #f8fafc 0%, #f3f4f6 100%); color: #111; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px 48px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:18px; padding:24px; box-shadow: 0 8px 24px rgba(17,24,39,.06); }
+    .actions { display:flex; gap:12px; margin-top:20px; flex-wrap: wrap; }
+    .btn { padding:10px 14px; border:none; border-radius:10px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; }
+    .danger { background:#dc2626; color:#fff; }
+    .secondary { background:#111827; color:#fff; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Delete product</h1>
+      <p>Are you sure you want to delete <strong>{{ product.product_name }}</strong>?</p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="actions">
+          <button type="submit" class="btn danger">Delete</button>
+          <a class="btn secondary" href="{% url 'vendor:product-list' %}">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

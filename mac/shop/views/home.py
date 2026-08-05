@@ -1,11 +1,14 @@
 from collections import Counter, defaultdict
 from django.shortcuts import render
 from django.utils.text import slugify
+from django.db.models import Q
+from django.views.decorators.csrf import ensure_csrf_cookie
 from ..models import Product, Order
 from django.core.cache import cache
 import json
 
 
+@ensure_csrf_cookie
 def home(request):
     category_slug = request.GET.get("category")
     interest = request.GET.get("interest") == "1"
@@ -38,7 +41,18 @@ def search(request):
     products = Product.objects.all()
 
     if query:
-        products = [product for product in products if searchMatch(query, product)]
+        query_words = query.lower().split()
+        search_filter = Q()
+
+        for word in query_words:
+            search_filter &= (
+                Q(product_name__icontains=word)
+                | Q(category__icontains=word)
+                | Q(sub_category__icontains=word)
+                | Q(desc__icontains=word)
+            )
+
+        products = products.filter(search_filter)
 
     context = _build_home_context(products, query=query, category_slug=category_slug, interest=interest)
     return render(request, 'shop/index.html', context)
