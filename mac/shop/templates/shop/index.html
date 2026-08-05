@@ -668,6 +668,46 @@ If a variable isn't provided the section simply won't render (guarded with
     border-color: #d8d4c8;
   }
 
+  /* Seller button */
+  .shop-seller-btn {
+    display: flex;
+    justify-content: end;
+    width: 115%;
+
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+
+  .shop-seller-btn button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    width: 180px;
+    height: 42px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: var(--teal);
+    color: white;
+
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+
+  .shop-seller-btn button:hover {
+    background: var(--teal-deep);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 110, 92, .25);
+  }
+
+  .shop-seller-btn button:focus {
+    outline: none;
+  }
+
   #cart-toast {
     position: fixed;
     bottom: 24px;
@@ -738,6 +778,14 @@ If a variable isn't provided the section simply won't render (guarded with
 </div>
 
 <div class="container">
+  <div class="shop-seller-btn">
+    <a href="{% url 'vendor:login' %}">
+      <button>
+        <i data-lucide="store"></i>
+        Become a seller
+      </button>
+    </a>
+  </div>
 
   <div class="shop-hero">
     <div class="eyebrow">Curated · Delivered fast</div>

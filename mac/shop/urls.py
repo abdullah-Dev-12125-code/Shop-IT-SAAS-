@@ -28,6 +28,5 @@ path('order-list', views.order_list, name="order-list"),
 path('profile/', views.profile_view, name='profile'),
 path('profile/edit/', views.edit_profile_view, name='edit_profile'),
 path('profile/password/', views.change_password_view, name='change_password'),
-    
 ]
 

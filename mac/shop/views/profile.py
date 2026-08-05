@@ -252,3 +252,8 @@ def change_password_view(request):
     
     # Render and return the change password template
     return render(request, 'shop/change_password.html', context)
+
+
+
+
+
