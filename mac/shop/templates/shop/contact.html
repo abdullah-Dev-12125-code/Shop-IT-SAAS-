@@ -115,7 +115,7 @@ body{
 
 {% if thank %}
 alert('Thanks for contacting US. we will get back to you soon!');
-document.location = "/shop/contact";
+document.location = "{% url 'shop:contact' %}";
 {% endif %}
 
 </script>

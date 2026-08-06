@@ -2,14 +2,13 @@ from django.conf.urls.static import static
 from django.urls import path, include  # type: ignore
 from django.conf import settings
 from django.contrib import admin  # pyright: ignore[reportMissingModuleSource]
-from . import views
+
 
 
 
 urlpatterns = [
-    path('', views.index),
     path('admin/', admin.site.urls),
-    path('shop/', include("shop.urls")),
+    path('', include("shop.urls")),
     path('seller/', include("seller.urls")),
 ]
 

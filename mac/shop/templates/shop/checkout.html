@@ -18,26 +18,28 @@
     }
 
     :root {
+      /* Brand colors */
       --brand: #e8002d;
       --green: #16a34a;
       --green-bg: #f0faf4;
       --green-border: #b6e8c8;
       --red: #e8002d;
-      var CART_API_URL = '{% url 'shop:cart-api' %}';
-      function getCSRFToken() {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-          var cookies = document.cookie.split(';');
-          for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, 10) === 'csrftoken=') {
-              cookieValue = decodeURIComponent(cookie.substring(10));
-              break;
-            }
-          }
-        }
-        return cookieValue;
-      }
+      --red-bg: #fee2e2;
+      --red-border: #fca5a5;
+
+      /* Grays & neutrals */
+      --text: #111;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --border2: #d1d5db;
+      --bg2: #f9fafb;
+      --bg3: #f3f4f6;
+
+      /* Spacing & sizing */
+      --radius: 12px;
+      --radius-md: 10px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .1);
+
       font-family: 'Inter', system-ui, sans-serif;
       color: var(--text);
       background: var(--bg3);
@@ -757,7 +759,6 @@
       }
     }
 
-    /* soft brand glow behind the check mark */
     .success-screen::before {
       content: '';
       position: absolute;
@@ -846,7 +847,6 @@
       margin-bottom: 22px
     }
 
-    /* tracking id pill + copy */
     .order-num {
       display: flex;
       align-items: center;
@@ -914,7 +914,6 @@
       flex-shrink: 0
     }
 
-    /* mini "what's next" route, echoes the top checkout stepper */
     .next-route {
       display: flex;
       justify-content: space-between;
@@ -1361,9 +1360,26 @@
   <script>
     var CART_KEY = 'shopIT_cart';
     var LEGACY_CART_KEY = 'cart';
+    var CART_API_URL = '{% url "shop:cart-api" %}';
     var shipDone = false, payDone = false;
     var promoApplied = false;
     var payMethod = 'cod';
+
+    /* ── CSRF HELPER ── */
+    function getCSRFToken() {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, 10) === 'csrftoken=') {
+            cookieValue = decodeURIComponent(cookie.substring(10));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
 
     /* ── CART ── */
     function normalizeCart(cart) {
@@ -1527,8 +1543,6 @@
       }
     }
 
-
-
     /* ── UNLOCK PANEL ── */
     function unlockPanel(id) {
       var p = document.getElementById(id);
@@ -1657,23 +1671,6 @@
     }
 
     /* ── PLACE ORDER ── */
-    /* ── CSRF HELPER (Django FIX) ── */
-    function getCSRFToken() {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, 10) === 'csrftoken=') {
-            cookieValue = decodeURIComponent(cookie.substring(10));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    }
-
-    /* ── PLACE ORDER (FIXED FINAL VERSION) ── */
     function placeOrder() {
       if (!shipDone || !payDone) {
         showAlert('err', 'Please complete all steps first.');
@@ -1699,8 +1696,6 @@
         cart: cart
       };
 
-
-
       if (!cart.length) {
         showAlert('err', 'Your cart is empty.');
         return;
@@ -1708,16 +1703,15 @@
 
       fetch("{% url 'shop:create-order' %}", {
         method: "POST",
-        credentials: "same-origin",   // ✅ IMPORTANT for Django sessions
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRFToken": getCSRFToken() // ✅ FIX CSRF ISSUE
+          "X-CSRFToken": getCSRFToken()
         },
         body: JSON.stringify(data)
       })
         .then(async (res) => {
           const text = await res.text();
-
           try {
             return JSON.parse(text);
           } catch (e) {
@@ -1741,7 +1735,6 @@
 
             document.getElementById('checkout-layout').style.display = 'none';
             document.getElementById('success-screen').classList.add('show');
-
             document.getElementById('order-num-display').textContent = res.order_id;
           }
           else {
@@ -1752,9 +1745,6 @@
           console.error(err);
           showAlert('err', 'Server error (check console / Django logs)');
         });
-
-
-
     }
 
     /* ── COPY TRACKING ID ── */
@@ -1789,7 +1779,7 @@
       ta.style.left = '-9999px';
       document.body.appendChild(ta);
       ta.select();
-      try { document.execCommand('copy'); cb(); } catch (e) { /* no-op */ }
+      try { document.execCommand('copy'); cb(); } catch (e) { }
       document.body.removeChild(ta);
     }
 

@@ -1,15 +1,9 @@
-"""
-User Profile Views
-Handles profile display, editing, and password changes
-"""
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.db.models import Sum
-
 from ..forms import ProfileForm
 from ..models import Profile, Order
 
@@ -19,21 +13,7 @@ from ..models import Profile, Order
 
 
 @login_required(login_url='shop:login')
-def profile_view(request):
-    """
-    Display the user's profile page with:
-    - Personal information (name, bio, contact details)
-    - Member ID and join date
-    - Order statistics (total orders and total spent)
-    
-    Args:
-        request: The HTTP request object
-    
-    Returns:
-        Rendered profile.html template with user and stats context
-    """
-    
-    # Get the currently logged-in user
+def profile_view(request):    
     user = request.user
     
     # Try to get the user's profile, or create one if it doesn't exist
@@ -42,11 +22,10 @@ def profile_view(request):
     except Profile.DoesNotExist:
         # If profile doesn't exist, create it automatically
         profile = Profile.objects.create(user=user)
-    
-    # Get all orders for this user
+
+
     orders = Order.objects.filter(user=user)
-    
-    # Count total number of orders
+
     total_orders = orders.count()
     
     # Calculate total amount spent
@@ -56,7 +35,7 @@ def profile_view(request):
     total_spent = total_spent_data['total'] or 0
     total_spent = round(total_spent, 2)
     
-    # Prepare data to send to template
+   
     context = {
         'profile': profile,
         'total_orders': total_orders,
@@ -64,7 +43,7 @@ def profile_view(request):
         'user': user,
     }
     
-    # Render and return the profile template
+
     return render(request, 'shop/profile.html', context)
 
 
@@ -74,28 +53,6 @@ def profile_view(request):
 
 @login_required(login_url='shop:login')
 def edit_profile_view(request):
-    """
-    Handle profile editing with form validation and image upload.
-    Supports both GET (show form) and POST (save changes) requests.
-    
-    GET Request:
-        - Display the edit profile form pre-filled with current data
-    
-    POST Request:
-        - Validate the submitted form
-        - Update user information (first name, last name)
-        - Update profile information (bio, phone, address)
-        - Handle avatar image upload
-        - Show success message and redirect to profile page
-    
-    Args:
-        request: The HTTP request object
-    
-    Returns:
-        GET: Rendered edit_profile.html form
-        POST (valid): Redirect to profile page with success message
-        POST (invalid): Rendered form with error messages
-    """
     
     # Get the currently logged-in user
     user = request.user
@@ -186,30 +143,6 @@ def edit_profile_view(request):
 
 @login_required(login_url='shop:login')
 def change_password_view(request):
-    """
-    Handle password changes securely using Django's built-in PasswordChangeForm.
-    Supports both GET (show form) and POST (change password) requests.
-    
-    GET Request:
-        - Display the password change form (current password + new password fields)
-    
-    POST Request:
-        - Validate the submitted form
-        - Check current password is correct
-        - Verify new passwords match
-        - Update password in database
-        - Update session to keep user logged in
-        - Show success message
-    
-    Args:
-        request: The HTTP request object
-    
-    Returns:
-        GET: Rendered change_password.html form
-        POST (valid): Redirect to profile page with success message
-        POST (invalid): Rendered form with error messages
-    """
-    
     # Get the currently logged-in user
     user = request.user
     

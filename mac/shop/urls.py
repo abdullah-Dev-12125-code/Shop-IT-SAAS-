@@ -1,5 +1,6 @@
 from django.contrib import admin # type: ignore
 from django.urls import path # type: ignore
+from .services import cart_api, create_order
 from . import views
 
 
@@ -16,9 +17,9 @@ path('tracker/',views.tracker, name="TrackUs"),
 path('search/',views.search, name="search"),
 path('product/<int:id>/',views.product,name="product"),
 path('cart/',views.cart,name='cart'),
-path('cart/api/', views.cart_api, name='cart-api'),
+path('cart/api/', cart_api, name='cart-api'),
 path('checkout/',views.checkout,name="checkout"),
-path('api/create-order/',views.create_order, name="create-order"),
+path('api/create-order/',create_order, name="create-order"),
 path('signup/', views.signup_user, name="signup"),
 path('login/', views.login_user, name="login"),
 path('logout/', views.logout_user, name="logout"),

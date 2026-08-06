@@ -1,6 +1,5 @@
 {% extends 'shop/basic.html' %}
 {% load static %}
-
 {% comment %}
 ============================================================================
 CONTEXT VARIABLES THIS TEMPLATE EXPECTS FROM THE VIEW
@@ -13,15 +12,12 @@ allprods -> list of (category_name, slides) tuples grouped by category
 festival_products -> list of product dicts (the seasonal/festival shelf)
 festival_name -> string, e.g. "Eid-ul-Adha Specials" (used as the shelf title)
 discover_products -> list of product dicts (the big Amazon-style grid, unordered/random)
-
 Each product dict can carry (all optional except id/product_name/price):
 id, product_name, desc, price, original_price, stock_status, available_now,
 image_url, image, rating (0-5 float), review_count, is_fast_delivery (bool)
-
 If a variable isn't provided the section simply won't render (guarded with
 {% templatetag openblock %} if {% templatetag closeblock %}), so you can wire this up incrementally.
 {% endcomment %}
-
 {% block css %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link
@@ -43,110 +39,94 @@ If a variable isn't provided the section simply won't render (guarded with
     --shadow-hover: 0 16px 36px rgba(18, 21, 28, .14);
     font-family: 'Inter', sans-serif;
   }
-
   body {
     background: var(--paper);
     color: var(--ink);
   }
-
   .mono {
     font-family: 'JetBrains Mono', monospace;
   }
-
   .display {
     font-family: 'Fraunces', serif;
   }
 
+  .subnav a:focus,
+  .subnav a:focus-visible,
+  .subnav a:active {
+    outline: none;
+    box-shadow: none;
+  } 
   /* ---------- Category sub-nav (sits flush under main navbar) ---------- */
   .subnav-wrap {
     padding-top: 0;
     margin-top: 0;
-    background: var(--ink);
-    border-bottom: 1px solid #232733;
+    background: var(--paper);
+    border-bottom: 1px solid #cbd0e1;
   }
-
   .subnav {
     display: flex;
     align-items: center;
-    gap: 4px;
-
+    gap: 1px;
     width: max-content;
     min-width: 100%;
-
     overflow-x: auto;
     overflow-y: hidden;
-
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, .25) transparent;
-
+    scrollbar-color: rgba(255, 245, 245, 0.25) transparent;
     padding: 0 16px;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
-
   .subnav {
     touch-action: pan-x;
   }
-
   /* Chrome / Edge / Safari */
   .subnav::-webkit-scrollbar {
     height: 6px;
   }
-
   .subnav::-webkit-scrollbar-track {
     background: transparent;
   }
-
   .subnav::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, .25);
+    background: rgba(255, 255, 255, 0.25);
     border-radius: 10px;
   }
-
-
   .subnav a {
     display: flex;
     align-items: center;
     gap: 8px;
     white-space: nowrap;
     flex-shrink: 0;
-
-    color: #cfd3dc;
+    color: #000000;
     text-decoration: none;
     font-size: 13.5px;
     font-weight: 600;
-    padding: 13px 16px;
-
+    padding-top: 20px;
+    padding-bottom: 10px;
     border-bottom: 2px solid transparent;
-    transition: color .15s, border-color .15s, transform .1s;
+    transition: color .15s, border-color .15s, transform .1s ease-out;
+    box-sizing: border-box;
   }
-
-
-  .subnav a:hover {
-    color: white;
+  .subnav a:hover { 
+     color: rgb(87, 68, 68);
     transform: translateY(-2px);
   }
-
-
   .subnav a.is-active {
-    color: #fff;
+    color: #000000;
     border-bottom-color: var(--gold);
   }
-
   .subnav a.interest {
     color: var(--gold);
   }
-
   .subnav a.interest::before {
     content: "✦";
     font-size: 11px;
   }
-
   /* ---------- Hero strip ---------- */
   .shop-hero {
     text-align: center;
     padding: 44px 0 8px;
   }
-
   .shop-hero .eyebrow {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
@@ -155,7 +135,6 @@ If a variable isn't provided the section simply won't render (guarded with
     color: var(--teal);
     font-weight: 700;
   }
-
   .shop-hero h1 {
     font-family: 'Fraunces', serif;
     font-size: clamp(30px, 4.4vw, 46px);
@@ -164,18 +143,15 @@ If a variable isn't provided the section simply won't render (guarded with
     margin: 6px 0 6px;
     color: var(--ink);
   }
-
   .shop-hero p {
     color: var(--muted);
     font-size: 15px;
     margin: 0;
   }
-
   /* ---------- Themed shelves (hot / top-purchased / festival) ---------- */
   .shelf {
     margin: 40px 0;
   }
-
   .shelf-head {
     display: flex;
     align-items: baseline;
@@ -183,20 +159,17 @@ If a variable isn't provided the section simply won't render (guarded with
     margin-bottom: 16px;
     padding: 0 2px;
   }
-
   .shelf-head .title-group {
     display: flex;
     align-items: center;
     gap: 10px;
   }
-
   .shelf-head .controls {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-left: auto;
   }
-
   .shelf-tag {
     font-size: 11px;
     font-weight: 800;
@@ -206,7 +179,6 @@ If a variable isn't provided the section simply won't render (guarded with
     border-radius: 6px;
     color: #fff;
   }
-
   .shelf-head h3 {
     font-family: 'Fraunces', serif;
     font-size: 22px;
@@ -214,29 +186,23 @@ If a variable isn't provided the section simply won't render (guarded with
     margin: 0;
     color: var(--ink);
   }
-
   .shelf-head .sub {
     color: var(--muted);
     font-size: 12.5px;
     margin-left: 2px;
   }
-
   .shelf.hot .shelf-tag {
     background: var(--coral);
   }
-
   .shelf.top .shelf-tag {
     background: var(--teal);
   }
-
   .shelf.festival .shelf-tag {
     background: var(--gold);
   }
-
   .shelf.festival .shelf-head {
     position: relative;
   }
-
   .shelf-scroll {
     display: flex;
     gap: 16px;
@@ -244,34 +210,28 @@ If a variable isn't provided the section simply won't render (guarded with
     padding: 4px 2px 14px;
     scroll-snap-type: x proximity;
   }
-
   .shelf-scroll::-webkit-scrollbar {
     height: 6px;
   }
-
   .shelf-scroll::-webkit-scrollbar-thumb {
     background: var(--line);
     border-radius: 10px;
   }
-
   .shelf-scroll .card-slot {
     flex: 0 0 232px;
     scroll-snap-align: start;
   }
-
   .shelf.festival {
     background: linear-gradient(180deg, rgba(201, 147, 46, .08), rgba(201, 147, 46, 0));
     border-radius: 20px;
     padding: 22px 18px 6px;
   }
-
   .category-collections {
     display: flex;
     flex-direction: column;
     gap: 22px;
     margin: 48px 0;
   }
-
   .category-shelf {
     background: #fff;
     border: 1px solid var(--line);
@@ -279,19 +239,15 @@ If a variable isn't provided the section simply won't render (guarded with
     padding: 18px 18px 10px;
     box-shadow: var(--shadow-soft);
   }
-
   .category-shelf .shelf-head {
     margin-bottom: 14px;
   }
-
   .category-shelf .shelf-tag {
     background: var(--ink);
   }
-
   .category-shelf .shelf-scroll {
     padding-bottom: 8px;
   }
-
   .shelf-action,
   .layout-toggle {
     border: 1px solid var(--line);
@@ -306,68 +262,56 @@ If a variable isn't provided the section simply won't render (guarded with
     align-items: center;
     gap: 6px;
     cursor: pointer;
-    transition: background .15s, border-color .15s, transform .1s;
+    transition: background .15s, border-color .15s, transform .1s ease-out;
   }
-
   .shelf-action:hover,
   .layout-toggle:hover {
     background: #f7f5f1;
     border-color: #d8d4c8;
   }
-
   .shelf-action:active,
   .layout-toggle:active {
     transform: scale(.98);
   }
-
   .shelf-actions {
     display: flex;
     align-items: center;
     gap: 8px;
   }
-
   .shelf-nav {
     width: 34px;
     padding: 0;
     justify-content: center;
   }
-
   .category-collections.list-mode .category-shelf .shelf-scroll {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     overflow: visible;
   }
-
   .category-collections.list-mode .category-shelf .card-slot {
     flex: 1 1 auto;
     width: 100%;
   }
-
   .category-collections.list-mode .category-shelf .card {
     width: 100%;
   }
-
   .category-collections.list-mode .category-shelf .card-body {
     padding: 14px 16px 16px;
   }
-
   .category-collections.list-mode .category-shelf .btn-row {
     margin-top: auto;
   }
-
   @media (max-width: 991px) {
     .category-collections.list-mode .category-shelf .shelf-scroll {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
-
   @media (max-width: 576px) {
     .category-collections.list-mode .category-shelf .shelf-scroll {
       grid-template-columns: 1fr;
     }
   }
-
   /* ---------- Product card ---------- */
   .card {
     position: relative;
@@ -378,33 +322,28 @@ If a variable isn't provided the section simply won't render (guarded with
     display: flex;
     flex-direction: column;
     height: 100%;
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    transition: transform .2s ease-out, box-shadow .2s ease-out, border-color .2s ease-out;
   }
-
   .card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-hover);
     border-color: #d8d4c8;
   }
-
   .card-img-wrap {
     position: relative;
     height: 178px;
     background: #f4f2ec;
     overflow: hidden;
   }
-
   .card-img-top {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform .35s ease;
+    transition: transform .35s cubic-bezier(.4, 0, .2, 1);
   }
-
   .card:hover .card-img-top {
     transform: scale(1.05);
   }
-
   /* ribbon badge = signature element, used on shelf cards to mark why the item is here */
   .ribbon {
     position: absolute;
@@ -419,19 +358,15 @@ If a variable isn't provided the section simply won't render (guarded with
     clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 60%);
     box-shadow: 0 2px 6px rgba(0, 0, 0, .18);
   }
-
   .ribbon.hot {
     background: var(--coral);
   }
-
   .ribbon.top {
     background: var(--teal);
   }
-
   .ribbon.festival {
     background: var(--gold);
   }
-
   .wishlist-btn {
     position: absolute;
     top: 8px;
@@ -446,17 +381,18 @@ If a variable isn't provided the section simply won't render (guarded with
     justify-content: center;
     font-size: 14px;
     cursor: pointer;
-    transition: transform .15s;
+    transition: transform .15s ease-out, color .15s ease-out;
+    backdrop-filter: blur(4px);
   }
-
   .wishlist-btn:hover {
     transform: scale(1.1);
   }
-
+  .wishlist-btn:active {
+    transform: scale(.95);
+  }
   .wishlist-btn.active {
     color: var(--coral);
   }
-
   .card-body {
     padding: 13px 14px 15px;
     display: flex;
@@ -464,7 +400,6 @@ If a variable isn't provided the section simply won't render (guarded with
     flex: 1;
     gap: 4px;
   }
-
   .card-title {
     font-weight: 700;
     font-size: 14px;
@@ -474,7 +409,6 @@ If a variable isn't provided the section simply won't render (guarded with
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
   .card-desc {
     color: var(--muted);
     font-size: 12px;
@@ -485,7 +419,6 @@ If a variable isn't provided the section simply won't render (guarded with
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
   .rating-row {
     display: flex;
     align-items: center;
@@ -493,39 +426,33 @@ If a variable isn't provided the section simply won't render (guarded with
     font-size: 12px;
     margin: 1px 0;
   }
-
   .stars {
     color: var(--gold);
     letter-spacing: 1px;
     font-size: 11px;
   }
-
   .rating-row .count {
     color: var(--muted);
     font-size: 11.5px;
   }
-
   .price-row {
     display: flex;
     align-items: baseline;
     gap: 7px;
     margin-top: 4px;
   }
-
   .card-price {
     font-family: 'JetBrains Mono', monospace;
     font-size: 17px;
     font-weight: 700;
     color: var(--ink);
   }
-
   .card-price-old {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     color: var(--muted);
     text-decoration: line-through;
   }
-
   .discount-pill {
     font-size: 10.5px;
     font-weight: 800;
@@ -534,7 +461,6 @@ If a variable isn't provided the section simply won't render (guarded with
     padding: 2px 6px;
     border-radius: 5px;
   }
-
   .meta-row {
     display: flex;
     align-items: center;
@@ -543,12 +469,10 @@ If a variable isn't provided the section simply won't render (guarded with
     color: var(--muted);
     margin-top: 2px;
   }
-
   .meta-row .stock.low {
     color: var(--coral);
     font-weight: 700;
   }
-
   .fast-tag {
     display: flex;
     align-items: center;
@@ -556,13 +480,26 @@ If a variable isn't provided the section simply won't render (guarded with
     color: var(--teal-deep);
     font-weight: 700;
   }
-
   .btn-row {
     display: flex;
     gap: 7px;
     margin-top: 10px;
   }
-
+  /* Eye icon SVG styles */
+  .eye-shape {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+  }
+  .eye-pupil {
+    fill: currentColor;
+  }
+  .eye-glow {
+    fill: white;
+    transition: fill .2s ease-out;
+  }
+  /* Unified button styles */
   .btn-view {
     width: 36px;
     height: 36px;
@@ -574,17 +511,27 @@ If a variable isn't provided the section simply won't render (guarded with
     background: #fff;
     cursor: pointer;
     text-decoration: none;
-    font-size: 14px;
+    color: var(--teal);
     flex-shrink: 0;
-    transition: background .15s, border-color .15s;
+    transition: all .2s ease-out;
   }
-
+  .btn-view svg {
+    width: 20px;
+    height: 20px;
+  }
   .btn-view:hover {
-    background: var(--ink);
-    border-color: var(--ink);
-    filter: invert(0);
+    background: var(--teal);
+    color: white;
+    border-color: var(--teal);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(15, 110, 92, .2);
   }
-
+  .btn-view:active {
+    transform: translateY(0);
+  }
+  .btn-view:hover .eye-glow {
+    fill: var(--teal);
+  }
   .btn-cart {
     flex: 1;
     background: var(--ink);
@@ -597,23 +544,23 @@ If a variable isn't provided the section simply won't render (guarded with
     font-weight: 700;
     padding: 0 8px;
     height: 36px;
-    transition: opacity .18s, background .15s, transform .1s;
+    transition: opacity .18s, background .2s ease-out, transform .15s ease-out;
   }
-
   .btn-cart:hover {
     opacity: .88;
   }
-
-  .btn-cart.flash-added {
-    background: var(--teal) !important;
+  .btn-cart:active {
     transform: scale(.97);
   }
-
+  .btn-cart.flash-added {
+    background: var(--teal) !important;
+  }
   .btn-buy {
     flex: 1;
     background: var(--coral);
     border-radius: 9px;
     color: #fff;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -621,14 +568,15 @@ If a variable isn't provided the section simply won't render (guarded with
     font-size: 12.5px;
     font-weight: 700;
     height: 36px;
-    transition: opacity .18s;
+    cursor: pointer;
+    transition: opacity .18s, transform .15s ease-out;
   }
-
   .btn-buy:hover {
     opacity: .88;
-    color: #fff;
   }
-
+  .btn-buy:active {
+    transform: scale(.97);
+  }
   /* ---------- Discover grid: interconnected Amazon-style wall ---------- */
   .discover-head {
     display: flex;
@@ -637,77 +585,64 @@ If a variable isn't provided the section simply won't render (guarded with
     margin: 52px 0 4px;
     padding: 0 2px;
   }
-
   .discover-head h3 {
     font-family: 'Fraunces', serif;
     font-size: 24px;
     font-weight: 600;
     margin: 0;
   }
-
   .discover-head .sub {
     color: var(--muted);
     font-size: 13px;
   }
-
   .discover-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: 18px;
     margin-top: 16px;
   }
-
   .discover-grid .card {
     border: 1px solid var(--line);
     border-radius: var(--radius);
   }
-
   .discover-grid .card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-hover);
     border-color: #d8d4c8;
   }
-
   /* Seller button */
   .shop-seller-btn {
     display: flex;
-    justify-content: end;
-    width: 115%;
-
+    justify-content: flex-end;
     padding-top: 10px;
-    padding-left: 10px;
+    width: 116%;
   }
-
   .shop-seller-btn button {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     width: 180px;
     height: 42px;
-
     border: none;
     border-radius: 10px;
-
-    background: var(--teal);
+    background: black;
     color: white;
-
     font-weight: 700;
     cursor: pointer;
-    transition: all .2s ease;
+    transition: all .2s ease-out;
   }
-
   .shop-seller-btn button:hover {
     background: var(--teal-deep);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(15, 110, 92, .25);
   }
-
+  .shop-seller-btn button:active {
+    transform: translateY(0);
+  }
   .shop-seller-btn button:focus {
     outline: none;
   }
-
   #cart-toast {
     position: fixed;
     bottom: 24px;
@@ -721,62 +656,50 @@ If a variable isn't provided the section simply won't render (guarded with
     z-index: 99999;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity .22s ease, transform .22s ease;
+    transition: opacity .22s ease-out, transform .22s ease-out;
     pointer-events: none;
   }
-
   #cart-toast.show {
     opacity: 1;
     transform: translateY(0);
+    pointer-events: auto;
   }
-
   .empty-state {
     text-align: center;
     padding: 60px 0;
   }
-
   @media (max-width: 576px) {
     .shelf-scroll .card-slot {
       flex: 0 0 170px;
     }
-
     .card-img-wrap {
       height: 140px;
     }
   }
 </style>
 {% endblock %}
-
-
 {% block body %}
 <div class="subnav-wrap">
   <div class="container-fluid">
     <nav class="subnav" id="categoryNav">
-
       {% for cat in categories %}
       <a href="?category={{ cat.slug }}"
         class="category-pill {% if request.GET.category == cat.slug %}is-active{% endif %}" title="{{ cat.name }}">
-
         {% if cat.icon %}
         <i data-lucide="{{ cat.icon }}" class="cat-icon"></i>
         {% else %}
         <i data-lucide="shopping-bag" class="cat-icon"></i>
         {% endif %}
-
         <span>{{ cat.name }}</span>
       </a>
       {% endfor %}
-
-
       <a href="?interest=1" class="category-pill interest" title="For You">
         <i data-lucide="star" class="cat-icon"></i>
         <span>For You</span>
       </a>
-
     </nav>
   </div>
 </div>
-
 <div class="container">
   <div class="shop-seller-btn">
     <a href="{% url 'vendor:login' %}">
@@ -786,14 +709,15 @@ If a variable isn't provided the section simply won't render (guarded with
       </button>
     </a>
   </div>
-
   <div class="shop-hero">
     <div class="eyebrow">Curated · Delivered fast</div>
     <h1>Welcome to <span class="display">Shop IT</span></h1>
     <p>Everything trending, everything in demand, in one place.</p>
   </div>
+  {# PRODUCT CARD MACRO - inlined for efficiency #}
+  {# Renders: .card with optional .ribbon, image, rating, pricing, buttons #}
 
-  {# ---------------- Shelf: Hot Right Now ---------------- #}
+  {# ==================== HOT RIGHT NOW ==================== #}
   {% if hot_selling %}
   <div class="shelf hot">
     <div class="shelf-head">
@@ -812,16 +736,68 @@ If a variable isn't provided the section simply won't render (guarded with
     <div class="shelf-scroll" data-shelf-scroll="hot">
       {% for item in hot_selling %}
       <div class="card-slot">
-        {% include "shop/_product_card.html" with item=item ribbon="hot" ribbon_label="Hot" %}
+        <div class="card">
+          <div class="card-img-wrap">
+            <span class="ribbon hot">Hot</span>
+            <button class="wishlist-btn" data-id="{{ item.id }}" title="Save for later">♡</button>
+            {% if item.image_url %}
+              <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+            {% elif item.image %}
+              <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+            {% else %}
+              <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{ item.product_name }}</h5>
+            <p class="card-desc">{{ item.desc }}</p>
+            {% if item.rating %}
+            <div class="rating-row">
+              <span class="stars">
+                {% for i in "12345" %}{% if forloop.counter <= item.rating %}★{% else %}☆{% endif %}{% endfor %}
+              </span>
+              <span class="count">{{ item.rating }} {% if item.review_count %}· {{ item.review_count }} reviews{% endif %}</span>
+            </div>
+            {% endif %}
+            <div class="price-row">
+              <span class="card-price">${{ item.price }}</span>
+              {% if item.original_price and item.original_price > item.price %}
+                <span class="card-price-old">${{ item.original_price }}</span>
+                <span class="discount-pill">Save {{ item.original_price|add:"-0"|floatformat:0 }}</span>
+              {% endif %}
+            </div>
+            <div class="meta-row">
+              <span class="stock {% if item.available_now and item.available_now <= 5 %}low{% endif %}">
+                {{ item.stock_status|default:"In Stock" }}{% if item.available_now %} · {{ item.available_now }} left{% endif %}
+              </span>
+              {% if item.is_fast_delivery %}<span class="fast-tag">⚡ Fast</span>{% endif %}
+            </div>
+            <div class="btn-row">
+              <a href="{% url 'shop:product' item.id %}" class="btn-view" title="View product">
+                <svg viewBox="0 0 24 24">
+                  <path class="eye-shape" d="M2.2 12C4.4 7.8 7.8 5.5 12 5.5S19.6 7.8 21.8 12C19.6 16.2 16.2 18.5 12 18.5S4.4 16.2 2.2 12Z" />
+                  <circle class="eye-pupil" cx="12" cy="12" r="3.2" />
+                  <circle class="eye-glow" cx="13.2" cy="10.8" r="1" />
+                </svg>
+              </a>
+              <button class="btn-cart"
+                data-id="{{ item.id }}"
+                data-name="{{ item.product_name|escapejs }}"
+                data-price="{{ item.price }}"
+                data-image="{% if item.image_url %}{{ item.image_url }}{% elif item.image %}/media/{{ item.image }}{% endif %}">
+                Add to Cart
+              </button>
+              <a href="{% url 'shop:checkout' %}" class="btn-buy">Buy</a>
+            </div>
+          </div>
+        </div>
       </div>
       {% endfor %}
     </div>
   </div>
   {% endif %}
 
-
-
-  {# ---------------- Category shelves: grouped by category ---------------- #}
+  {# ==================== CATEGORY SHELVES ==================== #}
   {% if allprods %}
   <div class="category-collections">
     <div class="shelf-head" style="margin-bottom: 0;">
@@ -834,7 +810,6 @@ If a variable isn't provided the section simply won't render (guarded with
         <button class="layout-toggle" type="button" data-layout-toggle aria-pressed="false">Show rows</button>
       </div>
     </div>
-
     {% for cat, slides in allprods %}
     <section class="category-shelf">
       <div class="shelf-head">
@@ -854,7 +829,60 @@ If a variable isn't provided the section simply won't render (guarded with
         {% for slide in slides %}
         {% for item in slide %}
         <div class="card-slot">
-          {% include "shop/_product_card.html" with item=item %}
+          <div class="card">
+            <div class="card-img-wrap">
+              <button class="wishlist-btn" data-id="{{ item.id }}" title="Save for later">♡</button>
+              {% if item.image_url %}
+                <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+              {% elif item.image %}
+                <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+              {% else %}
+                <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ item.product_name }}</h5>
+              <p class="card-desc">{{ item.desc }}</p>
+              {% if item.rating %}
+              <div class="rating-row">
+                <span class="stars">
+                  {% for i in "12345" %}{% if forloop.counter <= item.rating %}★{% else %}☆{% endif %}{% endfor %}
+                </span>
+                <span class="count">{{ item.rating }} {% if item.review_count %}· {{ item.review_count }} reviews{% endif %}</span>
+              </div>
+              {% endif %}
+              <div class="price-row">
+                <span class="card-price">${{ item.price }}</span>
+                {% if item.original_price and item.original_price > item.price %}
+                  <span class="card-price-old">${{ item.original_price }}</span>
+                  <span class="discount-pill">Save {{ item.original_price|add:"-0"|floatformat:0 }}</span>
+                {% endif %}
+              </div>
+              <div class="meta-row">
+                <span class="stock {% if item.available_now and item.available_now <= 5 %}low{% endif %}">
+                  {{ item.stock_status|default:"In Stock" }}{% if item.available_now %} · {{ item.available_now }} left{% endif %}
+                </span>
+                {% if item.is_fast_delivery %}<span class="fast-tag">⚡ Fast</span>{% endif %}
+              </div>
+              <div class="btn-row">
+                <a href="{% url 'shop:product' item.id %}" class="btn-view" title="View product">
+                  <svg viewBox="0 0 24 24">
+                    <path class="eye-shape" d="M2.2 12C4.4 7.8 7.8 5.5 12 5.5S19.6 7.8 21.8 12C19.6 16.2 16.2 18.5 12 18.5S4.4 16.2 2.2 12Z" />
+                    <circle class="eye-pupil" cx="12" cy="12" r="3.2" />
+                    <circle class="eye-glow" cx="13.2" cy="10.8" r="1" />
+                  </svg>
+                </a>
+                <button class="btn-cart"
+                  data-id="{{ item.id }}"
+                  data-name="{{ item.product_name|escapejs }}"
+                  data-price="{{ item.price }}"
+                  data-image="{% if item.image_url %}{{ item.image_url }}{% elif item.image %}/media/{{ item.image }}{% endif %}">
+                  Add to Cart
+                </button>
+                <a href="{% url 'shop:checkout' %}" class="btn-buy">Buy</a>
+              </div>
+            </div>
+          </div>
         </div>
         {% endfor %}
         {% endfor %}
@@ -864,7 +892,7 @@ If a variable isn't provided the section simply won't render (guarded with
   </div>
   {% endif %}
 
-  {# ---------------- Shelf: Festival Special ---------------- #}
+  {# ==================== FESTIVAL SPECIAL ==================== #}
   {% if festival_products %}
   <div class="shelf festival">
     <div class="shelf-head">
@@ -877,14 +905,68 @@ If a variable isn't provided the section simply won't render (guarded with
     <div class="shelf-scroll">
       {% for item in festival_products %}
       <div class="card-slot">
-        {% include "shop/_product_card.html" with item=item ribbon="festival" ribbon_label="Eid Special" %}
+        <div class="card">
+          <div class="card-img-wrap">
+            <span class="ribbon festival">{{ festival_name|default:"Eid Special" }}</span>
+            <button class="wishlist-btn" data-id="{{ item.id }}" title="Save for later">♡</button>
+            {% if item.image_url %}
+              <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+            {% elif item.image %}
+              <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+            {% else %}
+              <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{ item.product_name }}</h5>
+            <p class="card-desc">{{ item.desc }}</p>
+            {% if item.rating %}
+            <div class="rating-row">
+              <span class="stars">
+                {% for i in "12345" %}{% if forloop.counter <= item.rating %}★{% else %}☆{% endif %}{% endfor %}
+              </span>
+              <span class="count">{{ item.rating }} {% if item.review_count %}· {{ item.review_count }} reviews{% endif %}</span>
+            </div>
+            {% endif %}
+            <div class="price-row">
+              <span class="card-price">${{ item.price }}</span>
+              {% if item.original_price and item.original_price > item.price %}
+                <span class="card-price-old">${{ item.original_price }}</span>
+                <span class="discount-pill">Save {{ item.original_price|add:"-0"|floatformat:0 }}</span>
+              {% endif %}
+            </div>
+            <div class="meta-row">
+              <span class="stock {% if item.available_now and item.available_now <= 5 %}low{% endif %}">
+                {{ item.stock_status|default:"In Stock" }}{% if item.available_now %} · {{ item.available_now }} left{% endif %}
+              </span>
+              {% if item.is_fast_delivery %}<span class="fast-tag">⚡ Fast</span>{% endif %}
+            </div>
+            <div class="btn-row">
+              <a href="{% url 'shop:product' item.id }" class="btn-view" title="View product">
+                <svg viewBox="0 0 24 24">
+                  <path class="eye-shape" d="M2.2 12C4.4 7.8 7.8 5.5 12 5.5S19.6 7.8 21.8 12C19.6 16.2 16.2 18.5 12 18.5S4.4 16.2 2.2 12Z" />
+                  <circle class="eye-pupil" cx="12" cy="12" r="3.2" />
+                  <circle class="eye-glow" cx="13.2" cy="10.8" r="1" />
+                </svg>
+              </a>
+              <button class="btn-cart"
+                data-id="{{ item.id }}"
+                data-name="{{ item.product_name|escapejs }}"
+                data-price="{{ item.price }}"
+                data-image="{% if item.image_url %}{{ item.image_url }}{% elif item.image %}/media/{{ item.image }}{% endif %}">
+                Add to Cart
+              </button>
+              <a href="{% url 'shop:checkout' %}" class="btn-buy">Buy</a>
+            </div>
+          </div>
+        </div>
       </div>
       {% endfor %}
     </div>
   </div>
   {% endif %}
 
-  {# ---------------- Discover: Amazon-style open grid ---------------- #}
+  {# ==================== DISCOVER GRID ==================== #}
   {% if discover_products %}
   <div class="discover-head">
     <h3>Discover Something New</h3>
@@ -892,30 +974,81 @@ If a variable isn't provided the section simply won't render (guarded with
   </div>
   <div class="discover-grid">
     {% for item in discover_products %}
-    {% include "shop/_product_card.html" with item=item %}
+    <div class="card">
+      <div class="card-img-wrap">
+        <button class="wishlist-btn" data-id="{{ item.id }}" title="Save for later">♡</button>
+        {% if item.image_url %}
+          <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+        {% elif item.image %}
+          <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+        {% else %}
+          <img src="{% static 'shop/assets/logo.png' %}" class="card-img-top" alt="{{ item.product_name }}" loading="lazy">
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ item.product_name }}</h5>
+        <p class="card-desc">{{ item.desc }}</p>
+        {% if item.rating %}
+        <div class="rating-row">
+          <span class="stars">
+            {% for i in "12345" %}{% if forloop.counter <= item.rating %}★{% else %}☆{% endif %}{% endfor %}
+          </span>
+          <span class="count">{{ item.rating }} {% if item.review_count %}· {{ item.review_count }} reviews{% endif %}</span>
+        </div>
+        {% endif %}
+        <div class="price-row">
+          <span class="card-price">${{ item.price }}</span>
+          {% if item.original_price and item.original_price > item.price %}
+            <span class="card-price-old">${{ item.original_price }}</span>
+            <span class="discount-pill">Save {{ item.original_price|add:"-0"|floatformat:0 }}</span>
+          {% endif %}
+        </div>
+        <div class="meta-row">
+          <span class="stock {% if item.available_now and item.available_now <= 5 %}low{% endif %}">
+            {{ item.stock_status|default:"In Stock" }}{% if item.available_now %} · {{ item.available_now }} left{% endif %}
+          </span>
+          {% if item.is_fast_delivery %}<span class="fast-tag">⚡ Fast</span>{% endif %}
+        </div>
+        <div class="btn-row">
+          <a href="{% url 'shop:product' item.id %}" class="btn-view" title="View product">
+            <svg viewBox="0 0 24 24">
+              <path class="eye-shape" d="M2.2 12C4.4 7.8 7.8 5.5 12 5.5S19.6 7.8 21.8 12C19.6 16.2 16.2 18.5 12 18.5S4.4 16.2 2.2 12Z" />
+              <circle class="eye-pupil" cx="12" cy="12" r="3.2" />
+              <circle class="eye-glow" cx="13.2" cy="10.8" r="1" />
+            </svg>
+          </a>
+          <button class="btn-cart"
+            data-id="{{ item.id }}"
+            data-name="{{ item.product_name|escapejs }}"
+            data-price="{{ item.price }}"
+            data-image="{% if item.image_url %}{{ item.image_url }}{% elif item.image %}/media/{{ item.image }}{% endif %}">
+            Add to Cart
+          </button>
+          <a href="{% url 'shop:checkout' %}" class="btn-buy">Buy</a>
+        </div>
+      </div>
+    </div>
     {% endfor %}
   </div>
   {% endif %}
 
+  {# ==================== EMPTY STATE ==================== #}
   {% if not hot_selling and not top_purchased and not festival_products and not discover_products %}
   <div class="empty-state">
     <h3 class="mb-3 display">No products found{% if query %} for "{{ query }}"{% endif %}.</h3>
     <p class="text-muted mb-0">Try a different search term or browse a category above.</p>
   </div>
   {% endif %}
-
 </div>
-
 <div id="cart-toast">Added to cart ✓</div>
 {% endblock %}
-
 {% block js %}
+
 <script>
   (() => {
     const WISH_KEY = "shopIT_wishlist";
     const getWishlist = () => JSON.parse(localStorage.getItem(WISH_KEY)) || [];
     const saveWishlist = (w) => localStorage.setItem(WISH_KEY, JSON.stringify(w));
-
     const showToast = (msg) => {
       const toast = document.getElementById("cart-toast");
       if (!toast) return;
@@ -924,14 +1057,12 @@ If a variable isn't provided the section simply won't render (guarded with
       clearTimeout(toast._t);
       toast._t = setTimeout(() => toast.classList.remove("show"), 2000);
     };
-
     const flashButton = (btn) => {
       btn.textContent = "Added ✓";
       btn.classList.add("flash-added");
       btn.disabled = true;
       setTimeout(() => { btn.textContent = "Add to Cart"; btn.classList.remove("flash-added"); btn.disabled = false; }, 1200);
     };
-
     const addToCart = (id, name, price, image) => {
       const cart = getCart();
       const item = cart.find(p => String(p.id) === String(id));
@@ -939,14 +1070,12 @@ If a variable isn't provided the section simply won't render (guarded with
       else { cart.push({ id, name, price, qty: 1, image: image || "" }); }
       saveCart(cart);
     };
-
     const scrollShelf = (target, direction) => {
       const shelf = document.querySelector(`[data-shelf-scroll="${target}"]`);
       if (!shelf) return;
       const distance = Math.max(240, Math.floor(shelf.clientWidth * 0.8));
       shelf.scrollBy({ left: direction === "next" ? distance : -distance, behavior: "smooth" });
     };
-
     const toggleCategoryLayout = () => {
       const container = document.querySelector('.category-collections');
       const toggle = document.querySelector('[data-layout-toggle]');
@@ -956,20 +1085,17 @@ If a variable isn't provided the section simply won't render (guarded with
       toggle.setAttribute('aria-pressed', String(nextState));
       toggle.textContent = nextState ? 'Show cards' : 'Show rows';
     };
-
     document.addEventListener("click", (e) => {
       const shelfButton = e.target.closest("[data-shelf-target]");
       if (shelfButton) {
         scrollShelf(shelfButton.dataset.shelfTarget, shelfButton.dataset.direction);
         return;
       }
-
       const layoutButton = e.target.closest("[data-layout-toggle]");
       if (layoutButton) {
         toggleCategoryLayout();
         return;
       }
-
       const cartBtn = e.target.closest(".btn-cart");
       if (cartBtn) {
         const { id, name, price, image } = cartBtn.dataset;
@@ -980,7 +1106,6 @@ If a variable isn't provided the section simply won't render (guarded with
         if (typeof updateCartUI === "function") updateCartUI();
         return;
       }
-
       const wishBtn = e.target.closest(".wishlist-btn");
       if (wishBtn) {
         const id = wishBtn.dataset.id;
@@ -997,7 +1122,6 @@ If a variable isn't provided the section simply won't render (guarded with
         saveWishlist(wishlist);
       }
     });
-
     // restore wishlist state on load
     document.addEventListener("DOMContentLoaded", () => {
       const wishlist = getWishlist();
@@ -1009,7 +1133,8 @@ If a variable isn't provided the section simply won't render (guarded with
       });
     });
   })();
-
-
 </script>
 {% endblock %}
+
+
+

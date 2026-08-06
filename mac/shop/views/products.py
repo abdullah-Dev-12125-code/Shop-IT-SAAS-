@@ -6,5 +6,7 @@ from ..models import Product
 
 @ensure_csrf_cookie
 def product(request,id):
-    context = { 'product': get_object_or_404(Product.objects.select_related('seller'), id=id) }
+    products = get_object_or_404(Product.objects.select_related('seller'), id=id)
+
+    context = { 'product': products}
     return render(request, 'shop/product.html', context)
