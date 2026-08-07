@@ -1,137 +1,169 @@
 {% extends 'shop/basic.html' %}
 
 {% block css %}
+
 <style>
-    .wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
+    * {
+        box-sizing: border-box;
     }
 
-    .wrapper h1 {
-        margin-top: 20px;
-        margin-bottom: 3px;
+    .orders-wrapper {
+        width: min(95%, 1100px);
+        margin: 30px auto 50px;
+    }
+
+    /* =========================
+       PAGE HEADER
+    ========================= */
+
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+    .page-header h1 {
+        margin: 0;
         font-family: 'Fraunces', serif;
         letter-spacing: 1px;
+        font-size: 32px;
     }
 
-    .wrapper span {
-        color: #666;
+    .page-header p {
+        margin: 5px 0 0;
+        color: #777;
         font-family: 'Gill Sans', sans-serif;
-        margin-bottom: 15px;
-    }
-
-    .order-page {
-        width: min(95%, 1200px);
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
     }
 
 
-    /* Navigation */
+    /* =========================
+       NAVIGATION
+    ========================= */
 
-    .nav {
-        height: 55px;
+    .order-nav {
         background: #1f1e20;
+        border-radius: 12px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+    }
+
+    .order-nav ul {
         display: flex;
         justify-content: center;
-        align-items: center;
-    }
-
-    .nav-items ul {
-        display: flex;
-        gap: 50px;
+        gap: 45px;
         list-style: none;
         padding: 0;
         margin: 0;
     }
 
-    .nav-items a {
+    .order-nav a {
         color: white;
         text-decoration: none;
         font-family: 'Gill Sans', sans-serif;
         transition: .2s;
     }
 
-    .nav-items a:hover {
+    .order-nav a:hover {
         color: #4da3ff;
     }
 
 
-    /* Orders */
-
-    .orders-content {
-        padding: 20px;
-    }
-
-    .orders-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-    }
-
+    /* =========================
+       ORDER CARD
+    ========================= */
 
     .order-card {
-        background: #fafafa;
-        border: 1px solid #eee;
-        border-radius: 12px;
-        padding: 18px;
-        transition: .25s;
-    }
-
-    .order-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, .1);
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        margin-bottom: 18px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, .05);
     }
 
 
-    .order-header {
+    /* =========================
+       ORDER SUMMARY
+    ========================= */
+
+    .order-summary {
+        padding: 22px;
+    }
+
+    .summary-top {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 18px;
     }
 
-
-    .order-header h3 {
+    .order-number {
         margin: 0;
-        font-size: 17px;
         font-family: 'Gill Sans', sans-serif;
+        font-size: 19px;
     }
 
+    .order-date {
+        color: #777;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+
+    /* =========================
+       STATUS
+    ========================= */
 
     .status {
-        background: #e8f7ed;
-        color: #218739;
-        padding: 4px 10px;
-        border-radius: 15px;
+        padding: 6px 13px;
+        border-radius: 20px;
         font-size: 12px;
-    }
-
-
-    .order-details {
-        margin-top: 15px;
-        color: #555;
         font-family: 'Gill Sans', sans-serif;
+        background: #fff3cd;
+        color: #856404;
+        white-space: nowrap;
+    }
+
+
+    /* =========================
+       SUMMARY INFO
+    ========================= */
+
+    .summary-info {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        padding: 15px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+
+    .summary-item strong {
+        display: block;
+        color: #888;
+        font-size: 12px;
+        font-weight: normal;
+        margin-bottom: 5px;
+    }
+
+    .summary-item span {
         font-size: 14px;
+        color: #222;
     }
 
-    .order-details p {
-        margin: 6px 0;
-    }
 
+    /* =========================
+       BUTTON
+    ========================= */
 
     .details-btn {
-        margin-top: 15px;
-        width: 100%;
-        padding: 8px;
+        margin-top: 18px;
+        padding: 9px 18px;
         border: none;
         border-radius: 7px;
         background: #1f1e20;
         color: white;
         cursor: pointer;
+        font-family: 'Gill Sans', sans-serif;
+        transition: .2s;
     }
 
     .details-btn:hover {
@@ -139,82 +171,638 @@
     }
 
 
-    @media(max-width:900px) {
-        .orders-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
+    /* =========================
+       EXPANDED DETAILS
+    ========================= */
+
+    .order-details {
+        display: none;
+        border-top: 1px solid #e5e5e5;
+        background: #ffffff;
+        padding: 25px;
     }
 
-    @media(max-width:600px) {
-        .orders-grid {
+
+    .details-title {
+        margin: 0 0 20px;
+        font-family: 'Gill Sans', sans-serif;
+        font-size: 20px;
+    }
+
+
+    /* =========================
+       INFORMATION SECTIONS
+    ========================= */
+
+    .information-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .information-box {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 10px;
+        padding: 16px;
+    }
+
+    .information-box h4 {
+        margin: 0 0 12px;
+        font-size: 14px;
+        font-family: 'Gill Sans', sans-serif;
+    }
+
+    .information-box p {
+        margin: 7px 0;
+        color: #555;
+        font-size: 13px;
+    }
+
+    .information-box strong {
+        color: #222;
+    }
+
+
+    /* =========================
+       PRODUCTS
+    ========================= */
+
+    .details-section {
+        margin-bottom: 30px;
+    }
+
+    .details-section h3 {
+        font-family: 'Gill Sans', sans-serif;
+        font-size: 17px;
+        margin-bottom: 12px;
+    }
+
+    .product-list {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .product-row {
+        display: grid;
+        grid-template-columns: 1fr 120px 120px 120px;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .product-row:last-child {
+        border-bottom: none;
+    }
+
+    .product-name {
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .product-price,
+    .product-quantity,
+    .product-total {
+        font-size: 13px;
+        color: #555;
+    }
+
+    .product-total {
+        text-align: right;
+        font-weight: 600;
+        color: #222;
+    }
+
+
+    /* =========================
+       TOTAL
+    ========================= */
+
+    .order-total {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+    .order-total strong {
+        font-size: 20px;
+    }
+
+
+    /* =========================
+       UPDATES / TIMELINE
+    ========================= */
+
+    .updates {
+        margin-top: 10px;
+    }
+
+    .update {
+        position: relative;
+        padding: 0 0 18px 22px;
+        border-left: 2px solid #ddd;
+    }
+
+    .update:last-child {
+        border-left: none;
+    }
+
+    .update::before {
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: 2px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4da3ff;
+    }
+
+    .update p {
+        margin: 0 0 4px;
+        font-size: 14px;
+    }
+
+    .update-date {
+        color: #888;
+        font-size: 12px !important;
+    }
+
+
+    /* =========================
+       EMPTY
+    ========================= */
+
+    .empty-orders {
+        text-align: center;
+        padding: 50px;
+        color: #777;
+        background: white;
+        border-radius: 12px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media(max-width: 850px) {
+
+        .summary-info {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .information-grid {
             grid-template-columns: 1fr;
         }
 
-        .nav-items ul {
+        .product-row {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .product-total {
+            text-align: left;
+        }
+
+    }
+
+
+    @media(max-width: 600px) {
+
+        .orders-wrapper {
+            width: 94%;
+        }
+
+        .summary-top {
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .summary-info {
+            grid-template-columns: 1fr;
+        }
+
+        .order-nav ul {
             gap: 20px;
         }
+
+        .order-details {
+            padding: 18px;
+        }
+
+        .product-row {
+            grid-template-columns: 1fr;
+        }
+
     }
 </style>
+
 {% endblock %}
 
 
 {% block body %}
 
-<div class="container">
+<div class="orders-wrapper">
 
-    <div class="wrapper">
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
 
         <h1>Orders</h1>
-        <span>We keep track of every order</span>
+
+        <p>
+            We keep track of every order
+        </p>
+
+    </div>
 
 
-        <div class="order-page">
+    <!-- NAVIGATION -->
+
+    <div class="order-nav">
+
+        <ul>
+
+            <li>
+                <a href="{% url 'shop:orders' %}">
+                    Orders
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    Order History
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    Returns
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
 
 
-            <div class="nav">
-                <div class="nav-items">
-                    <ul>
-                        <li><a href="{% url 'shop:order-list' %}">Orders</a></li>
-                        <li><a href="#">Order History</a></li>
-                        <li><a href="#">Returns</a></li>
-                    </ul>
+    <!-- ORDERS -->
+
+    {% for order in orders %}
+
+
+    <div class="order-card">
+
+
+        <!-- =========================
+             ORDER SUMMARY
+        ========================== -->
+
+        <div class="order-summary">
+
+            <div class="summary-top">
+
+                <div>
+
+                    <h2 class="order-number">
+                        Order #{{ order.id }}
+                    </h2>
+
+                    <div class="order-date">
+                        {{ order.created_at|date:"F d, Y — h:i A" }}
+                    </div>
+
                 </div>
+
+
+                <span class="status">
+                    {{ order.get_status_display }}
+                </span>
+
             </div>
 
 
-            <div class="orders-content">
+            <div class="summary-info">
 
-                <div class="orders-grid">
 
-                    {% for order in orders %}
+                <div class="summary-item">
 
-                    <div class="order-card">
+                    <strong>
+                        Customer
+                    </strong>
 
-                        <div class="order-header">
-                            <h3>Order #{{ order.id }}</h3>
-                            <span class="status">
-                                Processing
-                            </span>
+                    <span>
+                        {{ order.first_name }}
+                        {{ order.last_name }}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <strong>
+                        Payment
+                    </strong>
+
+                    <span>
+                        {{ order.payment_method }}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <strong>
+                        Payment Status
+                    </strong>
+
+                    <span>
+                        {{ order.get_payment_status_display }}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <strong>
+                        Total
+                    </strong>
+
+                    <span>
+                        Rs {{ order.total_price }}
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <button type="button" class="details-btn" onclick="toggleOrderDetails({{ order.id }}, this)">
+                View Details
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             COMPLETE ORDER DETAILS
+        ========================== -->
+
+        <div class="order-details" id="order-details-{{ order.id }}">
+
+
+            <h2 class="details-title">
+                Order Details
+            </h2>
+
+
+            <!-- =========================
+                 CUSTOMER / SHIPPING / PAYMENT
+            ========================== -->
+
+            <div class="information-grid">
+
+
+                <!-- CUSTOMER -->
+
+                <div class="information-box">
+
+                    <h4>
+                        Customer
+                    </h4>
+
+                    <p>
+                        <strong>Name:</strong>
+                        {{ order.first_name }}
+                        {{ order.last_name }}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        {{ order.email }}
+                    </p>
+
+                    <p>
+                        <strong>Phone:</strong>
+                        {{ order.phone }}
+                    </p>
+
+                </div>
+
+
+                <!-- SHIPPING -->
+
+                <div class="information-box">
+
+                    <h4>
+                        Shipping Address
+                    </h4>
+
+                    <p>
+                        <strong>Address:</strong>
+                        {{ order.address }}
+                    </p>
+
+                    <p>
+                        <strong>City:</strong>
+                        {{ order.city }}
+                    </p>
+
+                    <p>
+                        <strong>ZIP:</strong>
+                        {{ order.zip_code }}
+                    </p>
+
+                    <p>
+                        <strong>Country:</strong>
+                        {{ order.country }}
+                    </p>
+
+                </div>
+
+
+                <!-- PAYMENT -->
+
+                <div class="information-box">
+
+                    <h4>
+                        Payment
+                    </h4>
+
+                    <p>
+                        <strong>Method:</strong>
+                        {{ order.payment_method }}
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        {{ order.get_payment_status_display }}
+                    </p>
+
+                    <p>
+                        <strong>Order Status:</strong>
+                        {{ order.get_status_display }}
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =========================
+                 PRODUCTS
+            ========================== -->
+
+            <div class="details-section">
+
+                <h3>
+                    Items in this order
+                </h3>
+
+
+                <div class="product-list">
+
+
+                    <!-- Header -->
+
+                    <div class="product-row">
+
+                        <div>
+                            <strong>Product</strong>
                         </div>
 
-                        <div class="order-details">
-                            <p>Date: {{ order.created_at }}</p>
-                            <p>Total: Rs {{ order.total_price }}</p>
-                            <p>Payment: {{ order.payment_method }}</p>
-                            <p>Name: {{ order.first_name }} {{ order.last_name }}</p>
+                        <div>
+                            <strong>Unit Price</strong>
                         </div>
 
-                        <button class="details-btn">
-                            View Details
-                        </button>
+                        <div>
+                            <strong>Quantity</strong>
+                        </div>
+
+                        <div>
+                            <strong>Total</strong>
+                        </div>
 
                     </div>
 
+
+                    {% for item in order.items.all %}
+
+
+                    <div class="product-row">
+
+
+                        <div class="product-name">
+
+                            {{ item.product_name_snapshot }}
+
+                        </div>
+
+
+                        <div class="product-price">
+
+                            Rs {{ item.unit_price }}
+
+                        </div>
+
+
+                        <div class="product-quantity">
+
+                            × {{ item.quantity }}
+
+                        </div>
+
+
+                        <div class="product-total">
+
+                            Rs {{ item.line_total }}
+
+                        </div>
+
+
+                    </div>
+
+
                     {% empty %}
 
-                    <p>No orders found.</p>
+                    <div style="padding: 20px; color: #777;">
+
+                        No items found for this order.
+
+                    </div>
 
                     {% endfor %}
+
+
+                </div>
+
+
+                <div class="order-total">
+
+                    <span>
+                        Order Total
+                    </span>
+
+                    <strong>
+                        Rs {{ order.total_price }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 ORDER UPDATES
+            ========================== -->
+
+            <div class="details-section">
+
+                <h3>
+                    Order Updates
+                </h3>
+
+
+                <div class="updates">
+
+
+                    {% for update in order.updates.all %}
+
+
+                    <div class="update">
+
+                        <p>
+                            {{ update.update_desc }}
+                        </p>
+
+                        <p class="update-date">
+                            {{ update.timestamp|date:"F d, Y" }}
+                        </p>
+
+                    </div>
+
+
+                    {% empty %}
+
+                    <p style="color: #777;">
+                        No updates available for this order.
+                    </p>
+
+                    {% endfor %}
+
 
                 </div>
 
@@ -225,6 +813,56 @@
 
     </div>
 
+
+    {% empty %}
+
+
+    <div class="empty-orders">
+
+        <h3>
+            No orders found
+        </h3>
+
+        <p>
+            You haven't placed any orders yet.
+        </p>
+
+    </div>
+
+
+    {% endfor %}
+
+
 </div>
+
+
+<script>
+
+    function toggleOrderDetails(orderId, button) {
+
+        const details = document.getElementById(
+            "order-details-" + orderId
+        );
+
+        const isOpen = details.style.display === "block";
+
+
+        if (isOpen) {
+
+            details.style.display = "none";
+
+            button.textContent = "View Details";
+
+        } else {
+
+            details.style.display = "block";
+
+            button.textContent = "Hide Details";
+
+        }
+
+    }
+
+</script>
 
 {% endblock %}

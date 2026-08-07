@@ -85,3 +85,27 @@ class OrderUpdate(models.Model):
 
     def __str__(self):
         return self.update_desc[0:10] + '...'
+
+
+class ReturnRequest(models.Model):
+    STATUS_CHOICES = [
+        ("requested", "Requested"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+        ("received", "Received"),
+        ("refunded", "Refunded"),
+    ]
+
+    order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name="return_request")
+
+    reason = models.TextField()
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="requested")
+
+    requested_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return f"Return #{self.id} - Order #{self.order_item.order.id}"

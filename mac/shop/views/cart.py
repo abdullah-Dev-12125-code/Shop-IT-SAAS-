@@ -9,7 +9,7 @@ from django.views.decorators.http import require_http_methods
 
 
 @ensure_csrf_cookie
-@login_required
+@login_required(login_url='shop:login')
 def checkout(request):
     return render(request, 'shop/checkout.html')
 

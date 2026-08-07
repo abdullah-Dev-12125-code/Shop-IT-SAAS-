@@ -592,187 +592,7 @@
       background: var(--teal-deep);
     }
 
-    /* ════════════════════════════════════════════════════════════════ */
-    /* CATEGORY SUBNAV - SMOOTH SCROLLABLE STYLES */
-    /* ════════════════════════════════════════════════════════════════ */
 
-    .subnav-wrap {
-      padding: 0;
-      margin: 0;
-      background: var(--ink);
-      border-bottom: 1px solid #232733;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .subnav {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-      padding: 0 16px;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      max-width: 100%;
-      position: relative;
-    }
-
-    /* WEBKIT SCROLLBAR (Chrome, Safari, Edge) */
-    .subnav::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    .subnav::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .subnav::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      transition: background 0.3s ease;
-    }
-
-    .subnav::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.35);
-    }
-
-    /* CATEGORY PILLS */
-    .category-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-      color: #cfd3dc;
-      text-decoration: none;
-      font-size: 13.5px;
-      font-weight: 600;
-      padding: 13px 16px;
-      border-bottom: 2px solid transparent;
-      transition: color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
-      cursor: pointer;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .category-pill:hover {
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .category-pill.is-active {
-      color: #fff;
-      border-bottom-color: var(--gold);
-    }
-
-    .category-pill.interest {
-      margin-left: auto;
-      color: var(--gold);
-      flex-shrink: 0;
-    }
-
-    .category-pill.interest:hover {
-      color: #ffd700;
-      transform: translateY(-2px);
-    }
-
-    /* CATEGORY ICON */
-    .cat-icon {
-      width: 16px;
-      height: 16px;
-      stroke-width: 2;
-      display: inline-block;
-      flex-shrink: 0;
-      stroke: currentColor;
-      fill: none;
-    }
-
-    /* SCROLL SNAP */
-    .subnav {
-      scroll-snap-type: x proximity;
-    }
-
-    .category-pill {
-      scroll-snap-align: start;
-      scroll-snap-stop: auto;
-    }
-
-    /* ACCESSIBILITY */
-    .category-pill:focus,
-    .nav-link:focus {
-      outline: 2px solid var(--gold);
-      outline-offset: -2px;
-      border-radius: 4px;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .subnav {
-        padding: 0 12px;
-      }
-
-      .category-pill {
-        font-size: 12.5px;
-        padding: 11px 12px;
-      }
-
-      .search-wrap {
-        margin: 0.8rem 0 0;
-        max-width: 100%;
-      }
-
-      .cart-popover {
-        display: none !important;
-      }
-
-      .nav-account-wrap {
-        margin-left: auto;
-      }
-    }
-
-    @media (max-width: 576px) {
-      .category-pill {
-        font-size: 12px;
-        padding: 10px 10px;
-        gap: 5px;
-      }
-
-      .category-pill span {
-        display: none;
-      }
-
-      .category-pill.is-active span,
-      .category-pill.interest span {
-        display: inline;
-      }
-
-      .cat-icon {
-        width: 14px;
-        height: 14px;
-      }
-
-      .nav-icon {
-        width: 14px;
-        height: 14px;
-        margin-right: 3px;
-      }
-
-      .subnav {
-        padding: 0 8px;
-        gap: 2px;
-      }
-
-      .search-wrap {
-        max-width: 100%;
-      }
-
-      .footer-container {
-        flex-direction: column;
-        gap: 1.5rem;
-      }
-    }
 
     /* ── FOOTER ── */
     .site-footer {
@@ -842,6 +662,8 @@
         gap: 1.5rem;
       }
     }
+
+
   </style>
 
   {% block css %}{% endblock %}
@@ -985,6 +807,7 @@
     </div>
 
   </nav>
+
 
 
   <!-- CONTENT -->
@@ -1149,15 +972,6 @@
     window.addEventListener("storage", function (e) {
       if (e.key === CART_KEY) updateCartUI();
     });
-
-    // Smooth scrolling for category nav
-    const categoryNav = document.getElementById('categoryNav');
-    if (categoryNav) {
-      categoryNav.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        categoryNav.scrollLeft += e.deltaY;
-      }, { passive: false });
-    }
   </script>
 
   {% block js %}{% endblock %}

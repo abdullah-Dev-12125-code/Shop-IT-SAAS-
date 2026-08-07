@@ -26,9 +26,10 @@ path('logout/', views.logout_user, name="logout"),
 path('forgot/', views.forgot_pass, name="forgot"),
 path('verify/', views.verification, name="verification"),
 path('orders/', views.orders, name="orders"),
-path('order-list', views.order_list, name="order-list"),
+# path('order-list', views.order_list, name="order-list"),
 path('profile/', views.profile_view, name='profile'),
 path('profile/edit/', views.edit_profile_view, name='edit_profile'),
 path('profile/password/', views.change_password_view, name='change_password'),
+path('order-info/<int:id>/', views.order_details, name="order_info")
 ]
 
